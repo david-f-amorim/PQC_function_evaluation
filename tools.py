@@ -140,9 +140,35 @@ def conv_layer_AA(m, par_label):
     return circuit 
 
 """
+Digitally encode an n-bit binary number onto an n-qubit register. 
+The encoding is set by assigning the value 0 to the i-th component of the
+parameter vector to represent a bit value of "0" for the i-th bit and assigning
+pi for the case of "1". 
+
+"""
+
+def digital_encoding(n):
+
+    qc = QuantumCircuit(n,name="Digital Encoding")
+    qubits = list(range(n))
+    params = ParameterVector("enc", length=n)
+
+    for i in np.arange(n):
+        qc.rx(params[i], qubits[i]) 
+        qc.p(params[i]/2, qubits[i])
+
+    qc_inst = qc.to_instruction()
+    circuit = QuantumCircuit(n)
+    circuit.append(qc_inst, qubits)    
+
+    return circuit 
+
+"""
 Set up a network consisting of input and convolutional layers acting on n input 
 qubits and m target qubits. For now, use a single input layer and alternating quadratic 
-and linear convolutional layers, with L convolutional layers in total.  
+and linear convolutional layers, with L convolutional layers in total. 
+Both the input state and the circuit weights can be set by accessing circuit parameters
+after initialisation.  
 """
 
 def generate_network(n,m,L):
@@ -151,7 +177,10 @@ def generate_network(n,m,L):
     input_register = QuantumRegister(n, "input")
     target_register = QuantumRegister(m, "target")
     circuit = QuantumCircuit(input_register, target_register) 
+
+    # prepare registers 
     circuit.h(target_register)
+    circuit.compose(digital_encoding(n), input_register, inplace=True)
 
     # apply input layer 
     circuit.compose(input_layer(n,m, u"\u03B8_IN"), circuit.qubits, inplace=True)
@@ -172,7 +201,9 @@ def generate_network(n,m,L):
 
 ####
 
-"""
+circ = digital_encoding(2)
+print(circ)
+circ = circ.assign_parameters([0, np.pi])
+#circ = circ.bind_parameters([0, np.pi])
+print(circ)
 
-THINK ABOUT WAYS TO ALLOW INPUT REGISTER TO BE SET FOR TRAINING!! (INPUT PARAMETERS???)
-"""
