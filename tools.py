@@ -164,6 +164,25 @@ def digital_encoding(n):
     return circuit 
 
 """
+Convert an n-bit binary string to the associated parameter array to feed 
+into the digital encoding circuit. 
+"""
+
+def binary_to_encode_param(binary):
+
+    params = np.empty(len(binary))
+
+    for i in np.arange(len(binary)):
+        if binary[i]=="0":
+            params[i]=0 
+        elif binary[i]=="1":
+            params[i]=np.pi 
+        else: 
+            raise ValueError("Binary string should only include characters '0' and '1'.")        
+
+    return params 
+
+"""
 Set up a network consisting of input and convolutional layers acting on n input 
 qubits and m target qubits. For now, use a single input layer and alternating quadratic 
 and linear convolutional layers, with L convolutional layers in total. 
@@ -171,7 +190,7 @@ Both the input state and the circuit weights can be set by accessing circuit par
 after initialisation.  
 """
 
-def generate_network(n,m,L):
+def generate_network(n,m,L, encode=True):
 
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")
@@ -180,7 +199,8 @@ def generate_network(n,m,L):
 
     # prepare registers 
     circuit.h(target_register)
-    circuit.compose(digital_encoding(n), input_register, inplace=True)
+    if encode:
+        circuit.compose(digital_encoding(n), input_register, inplace=True)
 
     # apply input layer 
     circuit.compose(input_layer(n,m, u"\u03B8_IN"), circuit.qubits, inplace=True)
@@ -201,9 +221,9 @@ def generate_network(n,m,L):
 
 ####
 
-circ = digital_encoding(2)
-print(circ)
-circ = circ.assign_parameters([0, np.pi])
-#circ = circ.bind_parameters([0, np.pi])
-print(circ)
+### use samplerQNN ; maybe split up encoding circuit for easier inputs v weights distiction ...
+
+circ = generate_network(3,4,5)
+
+print(circ.ParameterVector("enc"))
 
