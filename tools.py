@@ -4,6 +4,7 @@ from qiskit.circuit import ParameterVector
 from itertools import combinations
 from qiskit_machine_learning.neural_networks import SamplerQNN
 from qiskit_machine_learning.connectors import TorchConnector
+from qiskit.circuit.library import CU3Gate, U3Gate
 from qiskit.utils import algorithm_globals
 from qiskit.primitives import Sampler
 from torch.optim import Adam
@@ -12,7 +13,7 @@ from torch import Tensor, no_grad
 import sys, time, os 
 
 """
-Construct an input layer consisting of controlled Ry rotations
+Construct an input layer consisting of controlled single-qubit rotations
 with the n input qubits acting as controls and the m target qubits
 acting as targets. 
 """
@@ -24,13 +25,14 @@ def input_layer(n, m, par_label):
     qubits = list(range(n+m))
 
     # number of parameters used by each gate 
-    num_par = 1 
+    num_par = 3 
 
     # number of gates applied per layer 
     num_gates = n
 
     # set up parameter vector 
     params = ParameterVector(par_label, length= num_par * num_gates)
+    param_index = 0
 
     # apply gates to qubits 
     for i in qubits[:n]:
@@ -39,7 +41,12 @@ def input_layer(n, m, par_label):
         if j >=m:
             j -= m
 
-        qc.cry(params[i], qubits[i], qubits[j+n])
+        par = params[int(param_index) : int(param_index + num_par)]    
+
+        cu3 = U3Gate(par[0],par[1],par[2]).control(1)
+        qc.append(cu3, [qubits[i], qubits[j+n]])
+
+        param_index += num_par
         
 
     # package as instruction
@@ -198,7 +205,7 @@ Both the input state and the circuit weights can be set by accessing circuit par
 after initialisation.  
 """
 
-def generate_network(n,m,L, encode=False):
+def generate_network(n,m,L, encode=False, toggle_IL=False):
 
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")
@@ -215,13 +222,26 @@ def generate_network(n,m,L, encode=False):
     circuit.barrier()
 
     # apply convolutional layers (alternating between AA and NN)
+    # if toggle_IL is True, additional input layers are added after 
+    # each NN
     for i in np.arange(L):
 
-        if i % 2 ==0:
-            circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2)), target_register, inplace=True)
-        elif i % 2 ==1:
-            circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2)), target_register, inplace=True)
+        if toggle_IL==False:
+
+            if i % 2 ==0:
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2)), target_register, inplace=True)
+            elif i % 2 ==1:
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2)), target_register, inplace=True)
         
+        if toggle_IL==True:
+
+            if i % 3 ==0:
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3)), target_register, inplace=True)
+            elif i % 3 ==1:
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3)), target_register, inplace=True)
+            elif i % 3 ==2:
+                circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3)), circuit.qubits, inplace=True)  
+
         if i != L-1:
             circuit.barrier()
 
@@ -238,7 +258,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=True)
+    qc = generate_network(n,m,L, encode=True, toggle_IL=True)
     qnn = SamplerQNN(
             circuit=qc.decompose(),            # decompose to avoid data copying (?)
             sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -291,7 +311,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
         loss_vals[i]=loss.item()
 
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=True)
+        circ = generate_network(n,m,L, encode=True,toggle_IL=True)
 
         with no_grad():
             generated_weights = model.weight.detach().numpy()
@@ -361,7 +381,7 @@ def f(x):
 
 ####
 
-train_QNN(n=2,m=2,L=8, seed=1680458526, shots=500, lr=0.01, b1=0.7, b2=0.99, epochs=200, func=f)
+train_QNN(n=2,m=2,L=3, seed=1680458526, shots=500, lr=0.01, b1=0.7, b2=0.99, epochs=200, func=f)
 
 
 """
