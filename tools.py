@@ -240,9 +240,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
     # generate circuit and set up as QNN 
     qc = generate_network(n,m,L, encode=True)
     qnn = SamplerQNN(
-            circuit=qc.decompose(),             # decompose to avoid data copying (?)
+            circuit=qc.decompose(),            # decompose to avoid data copying (?)
             sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
-            input_params=qc.parameters[:n],   # encoding params treated as input params
+            input_params=qc.parameters[:n],    # encoding params treated as input params
             weight_params=qc.parameters[n:],   # encoding params not selected as weights
             input_gradients=True # ?? 
         )
@@ -263,6 +263,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
     x_min = 0
     x_max = 2**n 
     x_arr = rng.integers(x_min, x_max, size=epochs)
+    x_arr =0 * np.ones(epochs, dtype=int)
     fx_arr = [func(i) for i in x_arr]
 
     # start training 
@@ -338,6 +339,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
     time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}" 
 
     print(f"\nTraining completed in {time_str}\n\n")
+    ## GIVE MORE INFO... NUMBER OF CX GATES ETC
 
     # save outputs (FIND BETTER NAMING CONVENTIONS!)
     with no_grad():
@@ -359,7 +361,18 @@ def f(x):
 
 ####
 
-train_QNN(n=2,m=2,L=10, seed=1680458526, shots=500, lr=0.01, b1=0.7, b2=0.99, epochs=2000, func=f)
+train_QNN(n=2,m=2,L=8, seed=1680458526, shots=500, lr=0.01, b1=0.7, b2=0.99, epochs=200, func=f)
+
+
+"""
+NOTES:
+    - when given fixed input of 3 (11): learns well; when given 2 (10) or 1 (01): does not learn at all [loss always 1.25, mismatch always 1]; given 1 (01):
+       does not learn at all [loss always 0.73, mismatch always 0.5]
+        --> related to random seed/initial weights? something about circuit layout??
+        ----> try add more input layers? 
+
+
+"""
 
 
 

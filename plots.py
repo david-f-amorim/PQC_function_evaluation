@@ -12,9 +12,12 @@ fontsize=16
 ticksize=22
 figsize=(10,10)
 
+## specifier string
+s ="_2_2_8_200"
+
 # import data
-loss_file = os.path.join("outputs","loss_2_2_2_2000.npy")
-mismatch_file = os.path.join("outputs","mismatch_2_2_2_2000.npy")
+loss_file = os.path.join("outputs","loss"+s+".npy")
+mismatch_file = os.path.join("outputs","mismatch"+s+".npy")
 
 # configure arrays
 loss_arr = np.load(loss_file)
@@ -36,8 +39,8 @@ for i in np.arange(len(axs)):
     axs[i].set_ylabel(labels[i], fontsize=fontsize)
     axs[i].set_xlabel("Epochs", fontsize=fontsize)
 
-plt.savefig(os.path.join("plots","plots_2_2_2_2000.png"), dpi=500)
-#plt.show()
+plt.savefig(os.path.join("plots","plots"+s+".png"), dpi=500)
+plt.show()
 
 # get indices of three regions 
 seed = 1680458526
