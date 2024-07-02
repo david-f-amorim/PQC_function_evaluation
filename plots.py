@@ -1,5 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
+from tools import test_QNN, f
 from matplotlib import rcParams
 import os 
 
@@ -8,82 +9,96 @@ rcParams['mathtext.fontset'] = 'stix'
 rcParams['font.family'] = 'STIXGeneral'
 width=0.75
 color='black'
-fontsize=16
+fontsize=28
+titlesize=32
 ticksize=22
 figsize=(10,10)
 
-## specifier string
-s ="_2_2_8_200"
 
-# import data
-loss_file = os.path.join("outputs","loss"+s+".npy")
-mismatch_file = os.path.join("outputs","mismatch"+s+".npy")
+"""
+Plot performance for single-input use 
+"""
 
-# configure arrays
-loss_arr = np.load(loss_file)
-mismatch_arr = np.load(mismatch_file)
-fidelity_arr = 1- mismatch_arr
-epochs = np.arange(len(loss_arr))+1
+def single_input(n,m,L,epochs,func_str, comp=False): 
 
-# set up plots 
-fig, axs = plt.subplots(1,3,figsize = [15,10])
-fig.subplots_adjust(left=0.05, bottom=0.15, right=0.95, hspace=.65)
-axs = axs.ravel()
+    arr = range(2**n)
+    
+    str_arr = [f"_{n}_{m}_{L}_{epochs}_{func_str}_s{i}" for i in arr]
 
-arrs= [loss_arr, mismatch_arr, fidelity_arr]
-labels = ["Loss", "Mismatch", "Fidelity"]
+    mis_arr = [np.load(os.path.join("outputs", f"mismatch{str_arr[i]}.npy")) for i in arr]
+    epoch_arr = np.arange(len(mis_arr[0]))+1 
 
-for i in np.arange(len(axs)):
+    if comp:
+        mix_arr = np.load(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}.npy"))
 
-    axs[i].scatter(epochs, arrs[i], color="black", s=10)
-    axs[i].set_ylabel(labels[i], fontsize=fontsize)
-    axs[i].set_xlabel("Epochs", fontsize=fontsize)
+    plt.figure(figsize=figsize)
+    for i in arr:
+        plt.scatter(epoch_arr, mis_arr[i], label=f"x={bin(i)[2:]}")
 
-plt.savefig(os.path.join("plots","plots"+s+".png"), dpi=500)
-plt.show()
+    if comp:
+        plt.scatter(epoch_arr, mix_arr, label="all x")
 
-# get indices of three regions 
-seed = 1680458526
-rng = np.random.default_rng(seed=seed)
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel("Epoch", fontsize=fontsize)
+    plt.legend(fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+    plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}", fontsize=titlesize)
 
-n =2 
-epochs = 2000 
+    plt.savefig(os.path.join("plots", f"_{n}_{m}_{L}_{epochs}_{func_str}_s"), dpi=500)
+    plt.show()
 
-x_min = 0
-x_max = 2**n 
-x_arr = rng.integers(x_min, x_max, size=epochs)
+    return 0
 
+"""
+Show standard result (mismatch as function of epoch)
+"""
 
-low_mismatch_cluster = np.where(mismatch_arr < 0.45)
-mid_mismatch_cluster = np.where((mismatch_arr > 0.45) * (mismatch_arr < 0.8))
-high_mismatch_cluster = np.where(mismatch_arr > 0.8)
+def standard(n,m,L,epochs,func_str):
 
-low_x = [] 
-mid_x = []
-high_x = [] 
+    mismatch = np.load(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}.npy"))
 
-for i in low_mismatch_cluster:
+    plt.figure(figsize=figsize)
+    
+    plt.scatter(np.arange(len(mismatch))+1, mismatch, label=f"Final: {mismatch[-1]:.2e}", color="blue")
 
-    low_x.append(x_arr[i])
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel("Epoch", fontsize=fontsize)
+    plt.legend(fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+    plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}", fontsize=titlesize)
 
-for i in mid_mismatch_cluster:
+    plt.savefig(os.path.join("plots", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}"), dpi=500)
+    plt.show()
 
-    mid_x.append(x_arr[i])
+    return 0
 
-for i in high_mismatch_cluster:
+"""
+Show mismatch for various input states after training  
+"""
 
-    high_x.append(x_arr[i]) 
+def standard_hist(n,m,L,epochs,func_str, func=f):
 
-unique, counts = np.unique(low_x, return_counts=True)    
-low_dict = dict(zip(unique, counts))
+    dict = test_QNN(n,m,L,epochs,f, func_str)
+    xaxis = list(dict.keys())
+    yaxis = list(dict.values())
 
-unique, counts = np.unique(mid_x, return_counts=True)    
-mid_dict = dict(zip(unique, counts))
+    label_arr = [f"{np.binary_repr(i)}" for i in xaxis]
 
-unique, counts = np.unique(high_x, return_counts=True)    
-high_dict = dict(zip(unique, counts))
-         
-print("low",low_dict)
-print("mid",mid_dict)
-print("high",high_dict)
+    plt.figure(figsize=figsize)
+    plt.bar(xaxis, yaxis, color="blue")
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel("Input State", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+    plt.xticks(xaxis, labels=label_arr)
 
+    plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}", fontsize=titlesize)
+    plt.savefig(os.path.join("plots", f"hist_mismatch_{n}_{m}_{L}_{epochs}_{func_str}"), dpi=500)
+    plt.show()
+    
+    return 0
+
+####
+
+#single_input(2,3,6,100,"2x+1", comp=True)
+
+standard_hist(2,2,6,100,"x")

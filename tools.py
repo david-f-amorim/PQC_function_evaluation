@@ -18,7 +18,7 @@ with the n input qubits acting as controls and the m target qubits
 acting as targets. 
 """
 
-def input_layer(n, m, par_label):
+def input_layer(n, m, par_label, ctrl_state=0):
 
     # set up circuit 
     qc = QuantumCircuit(n+m, name="Input Layer")
@@ -43,7 +43,7 @@ def input_layer(n, m, par_label):
 
         par = params[int(param_index) : int(param_index + num_par)]    
 
-        cu3 = U3Gate(par[0],par[1],par[2]).control(1)
+        cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
         qc.append(cu3, [qubits[i], qubits[j+n]])
 
         param_index += num_par
@@ -187,6 +187,8 @@ def binary_to_encode_param(binary):
 
     params = np.empty(len(binary))
 
+    binary = binary[::-1]  # reverse binary string (small endian for binary, big endian for arrays)
+
     for i in np.arange(len(binary)):
         if binary[i]=="0":
             params[i]=0 
@@ -240,7 +242,11 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
             elif i % 3 ==1:
                 circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3)), target_register, inplace=True)
             elif i % 3 ==2:
-                circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3)), circuit.qubits, inplace=True)  
+                # alternate between layers with control states 0 and 1 
+                if i % 2 == 1:
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1), circuit.qubits, inplace=True) 
+                elif i % 2 == 0:
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0), circuit.qubits, inplace=True)     
 
         if i != L-1:
             circuit.barrier()
@@ -251,7 +257,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 Initialise circuit as QNN for training purposes.
 """
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str, sing_val=None):
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -273,7 +279,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
 
     # choose optimiser and loss function 
     optimizer = Adam(model.parameters(), lr=lr, betas=(b1, b2), weight_decay=0.005) # Adam optimizer 
-    criterion = MSELoss(reduction="sum") # MSE loss 
+    criterion = MSELoss(reduction="mean") # MSE loss 
 
     # set up arrays to store training outputs 
     mismatch_vals = np.empty(epochs)
@@ -283,11 +289,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
     x_min = 0
     x_max = 2**n 
     x_arr = rng.integers(x_min, x_max, size=epochs)
-    x_arr =0 * np.ones(epochs, dtype=int)
+
+    if sing_val != None:
+        x_arr =int(sing_val) * np.ones(epochs, dtype=int)
     fx_arr = [func(i) for i in x_arr]
 
     # start training 
-    print("\n\nTraining started \n")
+    print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
 
     for i in np.arange(epochs):
@@ -295,9 +303,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
         # get input data
         input = Tensor(binary_to_encode_param(np.binary_repr(x_arr[i],n))) 
 
-        # get target data (RETHINK THIS!!!)
+        # get target data 
         target_arr = np.zeros(2**(n+m))
-        index = int(np.binary_repr(x_arr[i],n)+np.binary_repr(fx_arr[i],m),2)
+        index = int(np.binary_repr(fx_arr[i],m)+np.binary_repr(x_arr[i],n),2)
         target_arr[index]=1 
         target=Tensor(target_arr)
 
@@ -317,8 +325,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
             generated_weights = model.weight.detach().numpy()
 
         input_params = binary_to_encode_param(np.binary_repr(x_arr[i],n))
-        params = np.concatenate((input_params, generated_weights))    
-        
+        params = np.concatenate((input_params, generated_weights))           
         circ = circ.assign_parameters(params)    
 
         # get statevector 
@@ -328,7 +335,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
         state_vector = np.asarray(result.get_statevector()) 
 
         # calculate fidelity and mismatch 
-        fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
+        fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
 
         # save mismatch for plotting 
@@ -348,27 +355,35 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func):
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
 
         prefix="\t" 
-        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2f} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
+        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
         
-    print(" ", flush=True, file=sys.stdout) 
-
+    print(" ", flush=True, file=sys.stdout)
+    
     elapsed = time.time()-start
     mins, sec = divmod(elapsed, 60)
     hours, mins = divmod(mins, 60)
     time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}" 
 
-    print(f"\nTraining completed in {time_str}\n\n")
-    ## GIVE MORE INFO... NUMBER OF CX GATES ETC
+    # decompose circuit for gate count 
+    num_CX = dict(circ.decompose(reps=4).count_ops())["cx"]
+    num_gates = num_CX + dict(circ.decompose(reps=4).count_ops())["u"]
+
+    print(f"\nTraining completed in {time_str}. Number of weights: {len(generated_weights)}. Number of gates: {num_gates} (of which CX gates: {num_CX}). \n\n")
 
     # save outputs (FIND BETTER NAMING CONVENTIONS!)
     with no_grad():
             generated_weights = model.weight.detach().numpy()
 
-    np.save(os.path.join("outputs", "weights_"+str(int(n))+"_"+str(int(m))+"_"+str(int(L))+"_"+str(int(epochs))),generated_weights)
-    np.save(os.path.join("outputs", "mismatch_"+str(int(n))+"_"+str(int(m))+"_"+str(int(L))+"_"+str(int(epochs))),mismatch_vals)
-    np.save(os.path.join("outputs", "loss_"+str(int(n))+"_"+str(int(m))+"_"+str(int(L))+"_"+str(int(epochs))),loss_vals)
-    
+    if sing_val==None: 
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}"),loss_vals)
+    else: 
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),loss_vals)    
+
     return 0 
 
 """
@@ -379,17 +394,78 @@ def f(x):
 
     return x
 
+"""
+Test performance of trained QNN for the various input states
+"""
+
+def test_QNN(n,m,L,epochs, func, func_str): 
+
+    # load weights 
+    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}.npy"))
+
+    # initialise array to store results 
+    mismatch = np.empty(2**n)
+
+    # iterate over input states 
+    x_arr = np.arange(2**n)
+
+    for i in x_arr:
+        
+        # prepare circuit 
+        enc=binary_to_encode_param(np.binary_repr(i,n))
+        params=np.concatenate((enc, weights))  
+
+        circ = generate_network(n,m,L, encode=True,toggle_IL=True)
+        circ = circ.assign_parameters(params) 
+
+        # get target array 
+        target_arr = np.zeros(2**(n+m))
+        index = int(np.binary_repr(func(i),m)+np.binary_repr(i,n),2)
+        target_arr[index]=1 
+
+        # get statevector 
+        backend = Aer.get_backend('statevector_simulator')
+        job = execute(circ, backend)
+        result = job.result()
+        state_vector = np.asarray(result.get_statevector()) 
+
+        # calculate fidelity and mismatch 
+        fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
+        mismatch[i] = 1. - np.sqrt(fidelity) 
+        
+    
+    return dict(zip(x_arr, mismatch)) 
+
 ####
 
-train_QNN(n=2,m=2,L=3, seed=1680458526, shots=500, lr=0.01, b1=0.7, b2=0.99, epochs=200, func=f)
+train_QNN(n=2,m=2,L=9, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=100, func=f, func_str="x")
+#print(test_QNN(n=2,m=2,L=6,epochs=100, func=f))
 
+"""
+n =2
+for i in np.arange(2**n):
+    train_QNN(n=n,m=3,L=6, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=100, func=f, sing_val=i)
+"""
 
 """
 NOTES:
-    - when given fixed input of 3 (11): learns well; when given 2 (10) or 1 (01): does not learn at all [loss always 1.25, mismatch always 1]; given 1 (01):
-       does not learn at all [loss always 0.73, mismatch always 0.5]
-        --> related to random seed/initial weights? something about circuit layout??
-        ----> try add more input layers? 
+    
+IMPROVE NAMING CONVENTION for files 
+    -> add meta data (function type!!)
+
+add more sophisticated binary encoding!!    
+
+-----
+for single-x:  f(x)=x n=2=m L=100
+
+
+LOSS MIGHT NOT BE BEST METRIC.... CHANGE TO MISMATCH??
+
+potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
+
+
+-----
+test QCNN by loading weights and testing accuracy for all input states (histogram w average fidelity)
 
 
 """
