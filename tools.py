@@ -8,7 +8,7 @@ from qiskit.circuit.library import CU3Gate, U3Gate
 from qiskit.utils import algorithm_globals
 from qiskit.primitives import Sampler
 from torch.optim import Adam
-from torch.nn import MSELoss
+from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
 from torch import Tensor, no_grad 
 import sys, time, os 
 
@@ -257,7 +257,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 Initialise circuit as QNN for training purposes.
 """
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str, sing_val=None):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss, sing_val=None):
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -279,8 +279,18 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str, sing_val=No
 
     # choose optimiser and loss function 
     optimizer = Adam(model.parameters(), lr=lr, betas=(b1, b2), weight_decay=0.005) # Adam optimizer 
-    criterion = MSELoss(reduction="mean") # MSE loss 
 
+    if loss=="MSE":
+        criterion=MSELoss() 
+    elif loss=="L1":
+        criterion=L1Loss() 
+    elif loss=="KLD":
+        criterion=KLDivLoss()
+    elif loss=="CE":
+        criterion=CrossEntropyLoss()
+    else:
+        raise ValueError("Loss function not recognised. Should be one of 'MSE', 'L1', 'KLD', 'CE'.")                
+    
     # set up arrays to store training outputs 
     mismatch_vals = np.empty(epochs)
     loss_vals = np.empty(epochs)
@@ -376,13 +386,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str, sing_val=No
             generated_weights = model.weight.detach().numpy()
 
     if sing_val==None: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}"),loss_vals)
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),loss_vals)
     else: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_s{sing_val}"),loss_vals)    
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),loss_vals)    
 
     return 0 
 
@@ -398,10 +408,10 @@ def f(x):
 Test performance of trained QNN for the various input states
 """
 
-def test_QNN(n,m,L,epochs, func, func_str): 
+def test_QNN(n,m,L,epochs, func, func_str,loss, verbose=True): 
 
     # load weights 
-    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}.npy"))
+    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}.npy"))
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
@@ -432,40 +442,50 @@ def test_QNN(n,m,L,epochs, func, func_str):
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
         mismatch[i] = 1. - np.sqrt(fidelity) 
-        
+
+        # save as dictionary 
+        dic = dict(zip(x_arr, mismatch)) 
+        np.save(os.path.join("outputs",f"bar_{n}_{m}_{L}_{epochs}_{func_str}_{loss}.npy"), dic)
     
-    return dict(zip(x_arr, mismatch)) 
+    if verbose:
+        print("Mismatch by input state:")
+        for i in x_arr:
+            print(f"\t{np.binary_repr(i,n)}:  {mismatch[i]:.2e}")
+        print("")
+        print("")    
+
+    return 0 
 
 ####
 
-train_QNN(n=2,m=2,L=9, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=100, func=f, func_str="x")
-#print(test_QNN(n=2,m=2,L=6,epochs=100, func=f))
+train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss="CE")
+test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss="CE")
 
-"""
-n =2
-for i in np.arange(2**n):
-    train_QNN(n=n,m=3,L=6, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=100, func=f, sing_val=i)
-"""
 
 """
 NOTES:
+
+----- CODE ISSUES ------
     
 IMPROVE NAMING CONVENTION for files 
     -> add meta data (function type!!)
 
 add more sophisticated binary encoding!!    
 
------
-for single-x:  f(x)=x n=2=m L=100
+add better handling of seed 
+
+work with argparser etc 
 
 
-LOSS MIGHT NOT BE BEST METRIC.... CHANGE TO MISMATCH??
+--- MORE CONCEPTUAL ------
+
+USE DIFFERENT LOSS FUNCTION??
+
+look into switching of control state again...
+
 
 potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
 
-
------
-test QCNN by loading weights and testing accuracy for all input states (histogram w average fidelity)
 
 
 """
