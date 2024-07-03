@@ -257,7 +257,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 Initialise circuit as QNN for training purposes.
 """
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss, sing_val=None):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, sing_val=None):
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -280,13 +280,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss, sing_v
     # choose optimiser and loss function 
     optimizer = Adam(model.parameters(), lr=lr, betas=(b1, b2), weight_decay=0.005) # Adam optimizer 
 
-    if loss=="MSE":
+    if loss_str=="MSE":
         criterion=MSELoss() 
-    elif loss=="L1":
+    elif loss_str=="L1":
         criterion=L1Loss() 
-    elif loss=="KLD":
+    elif loss_str=="KLD":
         criterion=KLDivLoss()
-    elif loss=="CE":
+    elif loss_str=="CE":
         criterion=CrossEntropyLoss()
     else:
         raise ValueError("Loss function not recognised. Should be one of 'MSE', 'L1', 'KLD', 'CE'.")                
@@ -386,13 +386,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss, sing_v
             generated_weights = model.weight.detach().numpy()
 
     if sing_val==None: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss}"),loss_vals)
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
     else: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_s{sing_val}"),loss_vals)    
+        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),generated_weights)
+        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),mismatch_vals)
+        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),loss_vals)    
 
     return 0 
 
@@ -408,10 +408,10 @@ def f(x):
 Test performance of trained QNN for the various input states
 """
 
-def test_QNN(n,m,L,epochs, func, func_str,loss, verbose=True): 
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True): 
 
     # load weights 
-    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss}.npy"))
+    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
@@ -445,7 +445,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss, verbose=True):
 
         # save as dictionary 
         dic = dict(zip(x_arr, mismatch)) 
-        np.save(os.path.join("outputs",f"bar_{n}_{m}_{L}_{epochs}_{func_str}_{loss}.npy"), dic)
+        np.save(os.path.join("outputs",f"bar_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"), dic)
     
     if verbose:
         print("Mismatch by input state:")
@@ -458,8 +458,8 @@ def test_QNN(n,m,L,epochs, func, func_str,loss, verbose=True):
 
 ####
 
-train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss="CE")
-test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss="CE")
+#train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss_str="CE", meta="")
+#test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss_str="CE", meta="")
 
 
 """
