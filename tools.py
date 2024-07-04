@@ -456,41 +456,6 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True):
 
     return 0 
 
-####
-
-train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss_str="CE", meta="")
-test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss_str="CE", meta="")
-
-
-"""
-NOTES:
-
------ CODE ISSUES ------
-    
-IMPROVE NAMING CONVENTION for files 
-    -> add meta data (function type!!)
-
-add more sophisticated binary encoding!!    
-
-add better handling of seed 
-
-work with argparser etc 
-
-
---- MORE CONCEPTUAL ------
-
-USE DIFFERENT LOSS FUNCTION??
-
-look into switching of control state again...
-
-
-potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
-
-
-
-"""
-
-
 
 
 

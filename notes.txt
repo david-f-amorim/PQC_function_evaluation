@@ -1,0 +1,22 @@
+NOTES
+=======
+
+----- CODE ISSUES ------
+    
+IMPROVE NAMING CONVENTION for files 
+    -> add meta data (function type!!)
+
+add more sophisticated binary encoding!!    
+
+add better handling of seed 
+
+work with argparser etc 
+
+
+--- MORE CONCEPTUAL ------
+
+potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
+
+
+
+
