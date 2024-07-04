@@ -458,8 +458,8 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True):
 
 ####
 
-#train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss_str="CE", meta="")
-#test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss_str="CE", meta="")
+train_QNN(n=2,m=2,L=12, seed=1680458526, shots=300, lr=0.01, b1=0.7, b2=0.99, epochs=300, func=f, func_str="x", loss_str="CE", meta="")
+test_QNN(n=2,m=2,L=12,epochs=300, func=f, func_str="x", loss_str="CE", meta="")
 
 
 """
