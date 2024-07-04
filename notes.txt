@@ -6,11 +6,14 @@ NOTES
 IMPROVE NAMING CONVENTION for files 
     -> add meta data (function type!!)
 
+	for large L, epochs : save weights in temp files in between ? to recover data in case interrupted?
+		-> add option to start training with existing weights?
+
 add more sophisticated binary encoding!!    
 
 add better handling of seed 
 
-work with argparser etc 
+
 
 
 --- MORE CONCEPTUAL ------
