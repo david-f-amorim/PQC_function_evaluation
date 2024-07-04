@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from tools import test_QNN, f
 from matplotlib import rcParams
-import os 
+import os, argparse 
 
 # general settings
 rcParams['mathtext.fontset'] = 'stix'
@@ -58,7 +58,7 @@ def single_input(n,m,L,epochs,func_str, comp=False):
 Show standard result (mismatch and loss as functions of epoch)
 """
 
-def standard(n,m,L,epochs,func_str, loss_str, meta):
+def standard(n,m,L,epochs,func_str, loss_str, meta, show):
 
     # mismatch 
     mismatch = np.load(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -74,7 +74,9 @@ def standard(n,m,L,epochs,func_str, loss_str, meta):
     plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}, {loss_str}, {meta}", fontsize=titlesize)
 
     plt.savefig(os.path.join("plots", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"), dpi=500)
-    plt.show()
+    
+    if show:
+        plt.show()
 
     # loss
     loss = np.load(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -90,7 +92,8 @@ def standard(n,m,L,epochs,func_str, loss_str, meta):
     plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}, {loss_str}, {meta}", fontsize=titlesize)
 
     plt.savefig(os.path.join("plots", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"), dpi=500)
-    plt.show()
+    if show:
+        plt.show()
 
     return 0
 
@@ -98,7 +101,7 @@ def standard(n,m,L,epochs,func_str, loss_str, meta):
 Show mismatch for various input states after training  
 """
 
-def standard_bar(n,m,L,epochs,func_str,loss,meta):
+def standard_bar(n,m,L,epochs,func_str,loss,meta, show):
 
     dic = np.load(os.path.join("outputs",f"bar_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_{meta}.npy"),allow_pickle='TRUE').item()
     xaxis = list(dic.keys())
@@ -115,7 +118,8 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta):
 
     plt.title(f"n={n}, m={m}, L={L}, epochs={epochs}, f(x)={func_str}, {loss}, {meta}", fontsize=titlesize)
     plt.savefig(os.path.join("plots", f"bar_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss}_{meta}"), dpi=500)
-    plt.show()
+    if show:
+        plt.show()
     
     return 0
 
@@ -123,7 +127,7 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta):
 Compare mismatch for different loss functions
 """
 
-def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta):
+def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show):
 
     mismatch_arr = np.empty(len(loss_str_arr), dtype=object)
     bar_arr = np.empty(len(loss_str_arr), dtype=object)
@@ -148,7 +152,8 @@ def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta):
 
     plt.legend(fontsize=fontsize)
     plt.savefig(os.path.join("plots", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_lfcomp_{meta}"), dpi=500)
-    plt.show()  
+    if show:
+        plt.show()  
 
     plt.figure(figsize=figsize)
     plt.ylabel("Mismatch", fontsize=fontsize)
@@ -164,7 +169,8 @@ def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta):
 
     plt.legend(fontsize=fontsize)
     plt.savefig(os.path.join("plots", f"bar_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_lfcomp_{meta}"), dpi=500)
-    plt.show()
+    if show:
+        plt.show()
 
     return 0
 
@@ -173,7 +179,7 @@ Compare results for QCNNs with different numbers of layers
 (expecting everything else to be identical)
 """
 
-def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta):
+def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show):
 
     mismatch_arr = np.empty(len(L_arr), dtype=object)
     loss_arr = np.empty(len(L_arr), dtype=object)
@@ -201,7 +207,8 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta):
 
     plt.legend(fontsize=fontsize)
     plt.savefig(os.path.join("plots", f"mismatch_{n}_{m}_{epochs}_{func_str}_{loss_str}_Lcomp_{meta}"), dpi=500)
-    plt.show()  
+    if show:
+        plt.show()
 
     plt.figure(figsize=figsize)
     plt.ylabel("Loss", fontsize=fontsize)
@@ -214,7 +221,8 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta):
 
     plt.legend(fontsize=fontsize)
     plt.savefig(os.path.join("plots", f"loss_{n}_{m}_{epochs}_{func_str}_{loss_str}_Lcomp_{meta}"), dpi=500)
-    plt.show()  
+    if show:
+        plt.show()  
 
     plt.figure(figsize=figsize)
     plt.ylabel("Mismatch", fontsize=fontsize)
@@ -230,15 +238,34 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta):
 
     plt.legend(fontsize=fontsize)
     plt.savefig(os.path.join("plots", f"bar_mismatch_{n}_{m}_{epochs}_{func_str}_{loss_str}_Lcomp_{meta}"), dpi=500)
-    plt.show()
+    if show:
+        plt.show()
 
     return 0
 
 ####
 
-#standard(2,2,8,300,"x", "CE", meta="")
-#standard_bar(2,2,8,300,"x", "CE", meta="")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
+    parser.add_argument('--n', help="Number of input qubits.", default=2, type=int)
+    parser.add_argument('--m', help="Number of target qubits.", default=2, type=int)
+    parser.add_argument('--L', help="Number of network layers.", default=[6],type=int, nargs="+")
+    parser.add_argument('--loss', help="Loss function.", default="CE", choices=["CE", "MSE", "L1", "KLD"])
+    parser.add_argument('--f_str', help="String describing function.", default="x")
+    parser.add_argument('--epochs', help="Number of epochs.", default=300,type=int)
+    parser.add_argument('--compL', help="Compare different L values (pass multiple).", default=False, type=bool)
+    parser.add_argument('--show', help="Display plots in terminal.", default=False, type=bool)
+    parser.add_argument('--meta', help="String with meta data.", default="")
 
-comp_L(n=2,m=2,L_arr=[6,9,12],epochs=300, func_str="x",loss_str="CE", meta="")
+    opt = parser.parse_args()
 
-#comp_loss_funcs(2,2,9,300, "x", ["MSE", "L1", "KLD","CE"])
+    if opt.compL:
+        comp_L(n=opt.n,m=opt.m,L_arr=opt.L,epochs=opt.epochs, func_str=opt.f_str,loss_str=opt.loss, meta=opt.meta, show=opt.show)
+    else:
+        standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss_str=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str)
+        standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str)
+
+
+
+
+
