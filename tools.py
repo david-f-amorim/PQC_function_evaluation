@@ -257,7 +257,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 Initialise circuit as QNN for training purposes.
 """
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, sing_val=None):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp):
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -273,8 +273,31 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             input_gradients=True # ?? 
         )
 
-    # choose random initial weights and initalise TorchConnector 
-    initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
+    # choose initial weights
+    recovered_k =0
+
+    if recover_temp:    
+        recovered_weights=None
+        recovered_mismatch=None 
+        recovered_loss=None 
+        for k in np.arange(100,epochs, step=100):
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_weights=os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
+                recovered_k=k+1
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_mismatch=os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_loss=os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")        
+        
+        if recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
+            initial_weights=np.load(recovered_weights)
+        else:
+            initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))    
+    
+    else:
+        initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
+    
+    # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
 
     # choose optimiser and loss function 
@@ -288,20 +311,19 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         criterion=KLDivLoss()
     elif loss_str=="CE":
         criterion=CrossEntropyLoss()
-    else:
-        raise ValueError("Loss function not recognised. Should be one of 'MSE', 'L1', 'KLD', 'CE'.")                
-    
+                    
     # set up arrays to store training outputs 
-    mismatch_vals = np.empty(epochs)
-    loss_vals = np.empty(epochs)
+    if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
+        mismatch_vals=np.load(recovered_mismatch)
+        loss_vals=np.load(recovered_loss)
+    else:    
+        mismatch_vals = np.empty(epochs)
+        loss_vals = np.empty(epochs)
 
     # generate x and f(x) values (IMPROVE LATER!!)
     x_min = 0
     x_max = 2**n 
     x_arr = rng.integers(x_min, x_max, size=epochs)
-
-    if sing_val != None:
-        x_arr =int(sing_val) * np.ones(epochs, dtype=int)
     fx_arr = [func(i) for i in x_arr]
 
     if np.log2(np.max(fx_arr))> m:
@@ -311,7 +333,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
 
-    for i in np.arange(epochs):
+    for i in np.arange(epochs)[recovered_k:]:
 
         # get input data
         input = Tensor(binary_to_encode_param(np.binary_repr(x_arr[i],n))) 
@@ -354,27 +376,44 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # save mismatch for plotting 
         mismatch_vals[i]=mismatch
 
-        # temporarily save weights every hundred iterations
-        if (i % 100 ==0) and (i != 0): 
-            np.save(os.path.join("outputs", f"TEMP{i}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-            
-            # delete previous temp file
-            previous_file=f"TEMP{i-100}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"
-            if os.path.isfile(os.path.join("outputs", previous_file)):
-                os.remove(os.path.join("outputs", previous_file))
+        # temporarily save outputs every hundred iterations
+        if recover_temp:
+            temp_ind = recovered_k -1
 
-            # make not of last created temp file
-            temp_ind = i    
+        if (i % 100 ==0) and (i != 0) and (i != epochs-1): 
+            np.save(os.path.join("outputs", f"__TEMP{i}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+            np.save(os.path.join("outputs", f"__TEMP{i}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
+            np.save(os.path.join("outputs", f"__TEMP{i}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+            
+            # delete previous temp files
+            prev_weights=f"__TEMP{i-100}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_mismatch=f"__TEMP{i-100}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_loss=f"__TEMP{i-100}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+
+            if os.path.isfile(os.path.join("outputs", prev_weights)):
+                os.remove(os.path.join("outputs", prev_weights))
+
+            if os.path.isfile(os.path.join("outputs", prev_mismatch)):
+                os.remove(os.path.join("outputs", prev_mismatch))
+
+            if os.path.isfile(os.path.join("outputs", prev_loss)):
+                os.remove(os.path.join("outputs", prev_loss))        
+
+            # make not of last created temp files
+            temp_ind = i   
 
         # print status
         a = int(20*(i+1)/epochs)
 
-        if i==0:
+        if i==recovered_k:
             time_str="--:--:--.--"
         elif i==epochs-1:
             time_str="00:00:00.00"    
         else:
-            remaining = ((time.time() - start) / i) * (epochs - i)
+            if recover_temp:
+                    remaining = ((time.time() - start) / (i-recovered_k)) * (epochs - i)
+            else:
+                remaining = ((time.time() - start) / i) * (epochs - i)
             mins, sec = divmod(remaining, 60)
             hours, mins = divmod(mins, 60)
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
@@ -397,22 +436,25 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     print(f"\nTraining completed in {time_str}. Number of weights: {len(generated_weights)}. Number of gates: {num_gates} (of which CX gates: {num_CX}). \n\n")
 
     # delete temp files 
-    temp_file=f"TEMP{temp_ind}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"
-    if os.path.isfile(os.path.join("outputs", temp_file)):
-            os.remove(os.path.join("outputs", temp_file))
+    temp_weights=f"__TEMP{temp_ind}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_loss=f"__TEMP{temp_ind}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
 
-    # save outputs (FIND BETTER NAMING CONVENTIONS!)
+    if os.path.isfile(os.path.join("outputs", temp_weights)):
+            os.remove(os.path.join("outputs", temp_weights))
+    if os.path.isfile(os.path.join("outputs", temp_mismatch)):
+            os.remove(os.path.join("outputs", temp_mismatch))
+    if os.path.isfile(os.path.join("outputs", temp_loss)):
+            os.remove(os.path.join("outputs", temp_loss))               
+
+    # save outputs 
     with no_grad():
             generated_weights = model.weight.detach().numpy()
 
-    if sing_val==None: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
-    else: 
-        np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),generated_weights)
-        np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),mismatch_vals)
-        np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}_s{sing_val}"),loss_vals)    
+    np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+    np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
+    np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+    
 
     return 0 
 
