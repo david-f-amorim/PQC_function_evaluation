@@ -6,12 +6,9 @@ NOTES
 
 add more sophisticated binary encoding!!  
 
+long-term: work towards integration with Fergus' code!
+
  
-
-add better handling of seed 
-
-
-
 
 --- MORE CONCEPTUAL ------
 

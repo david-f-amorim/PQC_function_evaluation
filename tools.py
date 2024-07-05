@@ -459,14 +459,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     return 0 
 
 """
-Analytical test function
-"""
-
-def f(x):
-
-    return x
-
-"""
 Test performance of trained QNN for the various input states
 """
 
@@ -518,6 +510,56 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True):
 
     return 0 
 
+"""
+For a given set of input parameters, check if training and testing results already exist. 
+"""
 
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta):
 
+    check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_loss = os.path.isfile(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    
+    return check_mismatch & check_weights & check_loss
 
+"""
+For a given set of input parameters, check if temp files already exist. 
+"""
+
+def check_temp(n,m,L,epochs,func_str,loss_str,meta):
+
+    check_mismatch=False 
+    check_weights=False 
+    check_loss=False
+
+    for k in np.arange(100,epochs, step=100):
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+            check_weights=True 
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+            check_mismatch=True 
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+            check_loss=True         
+    
+    return check_mismatch & check_weights & check_loss
+
+"""
+For a given set of input parameters, check if plots already exist (excluding compare plots). 
+"""
+
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log):
+
+    log_str= ("" if log==False else "log_")
+
+    check_mismatch =os.path.isfile(os.path.join("plots", f"{log_str}mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+    check_loss=os.path.isfile(os.path.join("plots", f"{log_str}loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+    check_bars=os.path.isfile(os.path.join("plots", f"{log_str}bar_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+
+    return check_mismatch & check_loss & check_bars 
+
+"""
+Generate random seed from timestamp
+"""
+
+def generate_seed():
+    
+    return int(time.time())

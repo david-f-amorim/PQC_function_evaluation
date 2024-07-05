@@ -1,6 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
-from tools import test_QNN, f
+from tools import check_plots
 from matplotlib import rcParams
 import os, argparse 
 
@@ -398,6 +398,7 @@ if __name__ == '__main__':
     parser.add_argument('-lg','--log', help="Take logarithm of values.", action='store_true')
     parser.add_argument('-s','--show', help="Display plots in terminal.", action='store_true')
     parser.add_argument('-M','--meta', help="String with meta data.", default="")
+    parser.add_argument('-I','--ignore_duplicates', help="Ignore and overwrite duplicate files.", action='store_true')
 
     opt = parser.parse_args()
 
@@ -409,8 +410,13 @@ if __name__ == '__main__':
     elif opt.compf:
         comp_f(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs, func_str_arr=opt.f_str,loss_str=opt.loss, meta=opt.meta, show=opt.show, log=opt.log)
     else:
-        standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss_str=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str[0], log=opt.log)
-        standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str[0], log=opt.log)
+        dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs,func_str=opt.f_str,loss_str=opt.loss,meta=opt.meta, log=opt.log)
+
+        if dupl_files and opt.ignore_duplicates==False:
+            print("\nThe required plots already exist and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
+        else: 
+            standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss_str=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str[0], log=opt.log)
+            standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs, loss=opt.loss, meta=opt.meta, show=opt.show, func_str=opt.f_str[0], log=opt.log)
 
 
 
