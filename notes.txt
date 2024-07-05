@@ -4,12 +4,16 @@ NOTES
 ----- CODE ISSUES ------
     
 IMPROVE NAMING CONVENTION for files 
-    -> add meta data (function type!!)
-
+   
 	for large L, epochs : save weights in temp files in between ? to recover data in case interrupted?
 		-> add option to start training with existing weights?
 
-add more sophisticated binary encoding!!    
+!!!!
+
+
+add more sophisticated binary encoding!!  
+
+ 
 
 add better handling of seed 
 
@@ -19,6 +23,7 @@ add better handling of seed
 --- MORE CONCEPTUAL ------
 
 potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
+		--> experiment with excluding states from training!!
 
 
 

@@ -304,6 +304,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         x_arr =int(sing_val) * np.ones(epochs, dtype=int)
     fx_arr = [func(i) for i in x_arr]
 
+    if np.log2(np.max(fx_arr))> m:
+        raise ValueError(f"Insufficient number of target qubits: at least {int(np.ceil(np.log2(np.max(fx_arr))))} required")
+
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
@@ -351,6 +354,18 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # save mismatch for plotting 
         mismatch_vals[i]=mismatch
 
+        # temporarily save weights every hundred iterations
+        if (i % 100 ==0) and (i != 0): 
+            np.save(os.path.join("outputs", f"TEMP{i}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+            
+            # delete previous temp file
+            previous_file=f"TEMP{i-100}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"
+            if os.path.isfile(os.path.join("outputs", previous_file)):
+                os.remove(os.path.join("outputs", previous_file))
+
+            # make not of last created temp file
+            temp_ind = i    
+
         # print status
         a = int(20*(i+1)/epochs)
 
@@ -380,6 +395,11 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     num_gates = num_CX + dict(circ.decompose(reps=4).count_ops())["u"]
 
     print(f"\nTraining completed in {time_str}. Number of weights: {len(generated_weights)}. Number of gates: {num_gates} (of which CX gates: {num_CX}). \n\n")
+
+    # delete temp files 
+    temp_file=f"TEMP{temp_ind}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"
+    if os.path.isfile(os.path.join("outputs", temp_file)):
+            os.remove(os.path.join("outputs", temp_file))
 
     # save outputs (FIND BETTER NAMING CONVENTIONS!)
     with no_grad():
