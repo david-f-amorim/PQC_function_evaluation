@@ -16,7 +16,7 @@ parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Over
 parser.add_argument('--lr', help="Learning rate.", default=0.01,type=float)
 parser.add_argument('--b1', help="Adam optimizer b1 parameter.", default=0.7,type=float)
 parser.add_argument('--b2', help="Adam optimizer b2 parameter.", default=0.999,type=float)
-parser.add_argument('--shots', help="Number of shots used by sampler.", default=300,type=int)
+parser.add_argument('--shots', help="Number of shots used by sampler.", default=10000,type=int)
 
 parser.add_argument('-I','--ignore_duplicates', help="Ignore and overwrite duplicate files.", action='store_true')
 parser.add_argument('-R','--recover', help="Continue training from existing TEMP files.", action='store_true')

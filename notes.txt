@@ -3,23 +3,15 @@ NOTES
 
 ----- CODE ISSUES ------
     
-add function to recover all temp
-
-add log to catch errors !
-
 add more sophisticated binary encoding!!  
 
 long-term: work towards integration with Fergus' code!
 
- 
 
---- MORE CONCEPTUAL ------
++++++++++++
 
-potential long-term scaling issue: need to train for all possible x-inputs? that would require 2^n epochs (exponential!!!)
-		--> experiment with excluding states from training!!
+next step: COMPARE BENCHMARK TO LPF !!!
 
++++++++++++++++++ 
 
-EXPERIMENT WITH LOSS FUNC AND OPTIMIZER ; DO READING !!
-
-THINK ABOUT USING FEWER EPOCHS … IS THERE EVEN A POINT BEYOND A CERTAIN VALUE ??
 
