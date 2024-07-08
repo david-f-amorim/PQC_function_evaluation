@@ -377,6 +377,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mismatch_vals[i]=mismatch
 
         # temporarily save outputs every hundred iterations
+        temp_ind = epochs - 100 
+        
         if recover_temp:
             temp_ind = recovered_k -1
 
@@ -399,7 +401,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             if os.path.isfile(os.path.join("outputs", prev_loss)):
                 os.remove(os.path.join("outputs", prev_loss))        
 
-            # make not of last created temp files
+            # make note of last created temp files
             temp_ind = i   
 
         # print status
