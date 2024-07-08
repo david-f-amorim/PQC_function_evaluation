@@ -10,6 +10,9 @@ long-term: work towards integration with Fergus' code!
 
 +++++++++++
 
+PLOT AVERAGE MISMATCH PER EPOCH FOR DIFFERENT L VALUES !!!
+
+
 next step: COMPARE BENCHMARK TO LPF !!!
 
 +++++++++++++++++ 

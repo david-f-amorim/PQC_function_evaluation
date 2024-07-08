@@ -121,13 +121,14 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show, log):
     
     plt.figure(figsize=figsize)
     
-    plt.bar(xaxis, yaxis, color="blue",align='center')
+    plt.bar(xaxis, yaxis, color="blue",align='center', label=f"Mean: {np.mean(yaxis):.2e}\nSTDEV: {np.std(yaxis):.2e}")
    
     if log:
         plt.yscale('log')
         ticks = 10**np.arange(np.floor(np.log10(np.min(yaxis))), np.ceil(np.log10(np.max(yaxis)))+1)
         plt.yticks(ticks=ticks)
  
+    plt.legend(fontsize=fontsize, loc='upper right')
     plt.ylabel("Mismatch", fontsize=fontsize)
     plt.xlabel("Input State", fontsize=fontsize)
     plt.tick_params(axis="both", labelsize=ticksize)
@@ -474,7 +475,7 @@ def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show, log):
 
 
 """
-Compare results for QCNNs with different epochs strings. 
+Compare results for QCNNs with different epochs. 
 (expecting everything else to be identical)
 """
 
@@ -521,6 +522,69 @@ def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show, log):
 
     return 0
 
+
+"""
+Compare average mismatch for QCNNs with different epochs and L values 
+(expecting everything else to be identical)
+"""
+
+def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show, log):
+
+    log_str= ("" if log==False else "log_") 
+
+    mean_arr = np.empty(shape=(len(L_arr), len(epochs_arr)))
+    stdev_arr= np.empty(shape=(len(L_arr), len(epochs_arr)))
+
+    for i in range(len(L_arr)):
+        for j in range(len(epochs_arr)):
+            dict = np.load(os.path.join("outputs",f"bar_{n}_{m}_{L_arr[i]}_{epochs_arr[j]}_{func_str}_{loss}_{meta}.npy"),allow_pickle='TRUE').item()
+            vals = list(dict.values())
+
+            mean_arr[i,j] = np.mean(vals)
+            stdev_arr[i,j] = np.std(vals) 
+    
+    plt.figure(figsize=figsize)
+    plt.ylabel("Mean Mismatch", fontsize=fontsize)
+    plt.xlabel("Epochs", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+
+    plt.title(f"n={n}, m={m} f(x)={func_str}, {loss}, {meta}", fontsize=titlesize)
+
+    for i in range(len(L_arr)):
+        plt.errorbar(epochs_arr, mean_arr[i,:], yerr=None, label=f"L={L_arr[i]}", fmt='o', linestyle='--', capsize=4, markersize=10)
+
+    if log:
+        plt.yscale('log')
+        ticks = 10**np.arange(np.floor(np.log10(np.min(mean_arr))), np.ceil(np.log10(np.max(mean_arr)))+1)
+        plt.yticks(ticks=ticks) 
+       
+    plt.legend(fontsize=fontsize, loc='upper right')
+    plt.savefig(os.path.join("plots", f"{log_str}mean_mismatch_{n}_{m}_{func_str}_{loss}_{meta}"), dpi=500)
+    if show:
+        plt.show()
+    
+    plt.figure(figsize=figsize)
+
+    for i in range(len(L_arr)):
+        plt.errorbar(epochs_arr, stdev_arr[i,:], yerr=None, label=f"L={L_arr[i]}", fmt='o', linestyle='--', capsize=4, markersize=10)
+    
+    if log:
+        plt.yscale('log')
+        ticks = 10**np.arange(np.floor(np.log10(np.min(stdev_arr))), np.ceil(np.log10(np.max(stdev_arr)))+1)
+        plt.yticks(ticks=ticks) 
+        
+    plt.ylabel("STDEV Mismatch", fontsize=fontsize)
+    plt.xlabel("Epochs", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+
+    plt.legend(fontsize=fontsize, loc='upper right')
+    plt.title(f"n={n}, m={m} f(x)={func_str}, {loss}, {meta}", fontsize=titlesize)
+    plt.savefig(os.path.join("plots", f"{log_str}stdev_mismatch_{n}_{m}_{func_str}_{loss}_{meta}"), dpi=500)
+    if show:
+        plt.show()    
+
+    return 0 
+
 ####
 
 if __name__ == '__main__':
@@ -530,12 +594,13 @@ if __name__ == '__main__':
     parser.add_argument('-L','--L', help="Number of network layers.", default=[6],type=int, nargs="+")
     parser.add_argument('-l','--loss', help="Loss function.", default=["CE"], nargs="+")
     parser.add_argument('-fs','--f_str', help="String describing function.",nargs="+", default=["x"])
-    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[300],nargs="+")
+    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[300],nargs="+", type=int)
     parser.add_argument('-cL','--compL', help="Compare different L values (pass multiple).", action='store_true')
     parser.add_argument('-cf','--compf', help="Compare different f_str values (pass multiple).", action='store_true')
     parser.add_argument('-cM','--compM', help="Compare different meta values (pass multiple).", action='store_true')
     parser.add_argument('-cl','--compl', help="Compare different loss values (pass multiple).", action='store_true')
     parser.add_argument('-ce','--compe', help="Compare different epoch values (pass multiple).", action='store_true')
+    parser.add_argument('-ceL','--compeL', help="Compare different epoch and L values (pass multiple).", action='store_true')
 
     parser.add_argument('-lg','--log', help="Take logarithm of values.", action='store_true')
     parser.add_argument('-s','--show', help="Display plots in terminal.", action='store_true')
@@ -544,7 +609,7 @@ if __name__ == '__main__':
 
     opt = parser.parse_args()
 
-    if int(opt.compL)+int(opt.compf)+int(opt.compM)+int(opt.compl)+int(opt.compe) > 1:
+    if int(opt.compL)+int(opt.compf)+int(opt.compM)+int(opt.compl)+int(opt.compe)+int(opt.compeL) > 1:
         raise ValueError("Cannot do two comparisons at once.")
 
     if opt.compL:
@@ -557,6 +622,8 @@ if __name__ == '__main__':
         comp_loss_funcs(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str_arr=opt.loss, meta=opt.meta[0], show=opt.show, log=opt.log)
     elif opt.compe:
         comp_epochs(n=opt.n,m=opt.m,L=opt.L[0],epochs_arr=opt.epochs, func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log)
+    elif opt.compeL:
+        comp_mean_mismatch(n=opt.n,m=opt.m,L_arr=opt.L,epochs_arr=opt.epochs, func_str=opt.f_str[0],loss=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log)
     else:
         dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0],func_str=opt.f_str[0],loss_str=opt.loss[0],meta=opt.meta[0], log=opt.log)
 
