@@ -8,7 +8,7 @@ parser.add_argument('-L','--L', help="Number of network layers. If multiple valu
 parser.add_argument('-l','--loss', help="Loss function.", default="CE", choices=["CE", "MSE", "L1", "KLD"])
 parser.add_argument('-f','--f', help="Function to evaluate (variable: x).", default="x")
 parser.add_argument('-fs','--f_str', help="String describing function.")
-parser.add_argument('-e','--epochs', help="Number of epochs.", default=300,type=int)
+parser.add_argument('-e','--epochs', help="Number of epochs.", default=800,type=int)
 parser.add_argument('-M','--meta', help="String with meta data.", default="")
 
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
