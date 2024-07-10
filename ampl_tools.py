@@ -12,7 +12,8 @@ from torch import Tensor, no_grad
 import sys, time, os 
 import argparse 
 from tools import check_duplicates, generate_seed 
-
+import torch
+import warnings
 
 def RN_gate(params):
     """
@@ -213,6 +214,8 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Function range: [{x_min},{x_max}]. QCNN layers: {L}. \n")
     start = time.time() 
 
+    warnings.filterwarnings("ignore", category=UserWarning)
+
     for i in np.arange(epochs)[recovered_k:]:
 
         # get input data
@@ -221,9 +224,15 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         # get target data 
         target=Tensor(target_arr)
 
+        # set sign_tensor 
+        if i==recovered_k:
+            sign_tensor=Tensor(np.ones(2**n))
+        else:
+            sign_tensor=Tensor(sign_arr)
+
         # train model  
         optimizer.zero_grad()
-        loss = criterion(model(input), target)
+        loss = criterion(torch.mul(torch.sqrt(torch.abs(model(input))), sign_tensor), torch.sqrt(target))
         loss.backward()
         optimizer.step()
 
@@ -244,6 +253,9 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         result = job.result()
         state_vector = np.asarray(result.get_statevector()) 
 
+        # get signs of states:
+        sign_arr= np.ones(2**n, dtype=float) * np.sign(state_vector) 
+        
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
@@ -278,7 +290,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
 
             # make note of last created temp files
             temp_ind = i   
-
+        
         # print status
         a = int(20*(i+1)/epochs)
 
@@ -298,7 +310,8 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         prefix="\t" 
         print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
-        
+    warnings.filterwarnings("default", category=UserWarning)
+
     print(" ", flush=True, file=sys.stdout)
 
     elapsed = time.time()-start
