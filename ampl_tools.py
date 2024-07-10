@@ -25,9 +25,7 @@ def RN_gate(params):
     circuit.ry(params[0], 0)
     circuit.ry(params[1], 1)
     circuit.cx(0, 1)
-    circuit.ry(params[2], 1)
-    circuit.cx(1, 0)
-
+    
     return circuit 
 
 def R_conv_layer_NN(m, par_label):
@@ -210,8 +208,6 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
     dx = (x_max-x_min)/(2**n)
     target_arr = np.array([func(i) for i in np.arange(x_min,x_max, dx)])
     target_arr = target_arr / np.sum(target_arr)
-
-    print(target_arr)
     
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Function range: [{x_min},{x_max}]. QCNN layers: {L}. \n")
@@ -304,7 +300,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         
         
     print(" ", flush=True, file=sys.stdout)
-    
+
     elapsed = time.time()-start
     mins, sec = divmod(elapsed, 60)
     hours, mins = divmod(mins, 60)
@@ -343,8 +339,8 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
     parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=int)
-    parser.add_argument('-L','--L', help="Number of network layers. If multiple values given will execute sequentially.", default=[6],type=int, nargs="+")
-    parser.add_argument('-l','--loss', help="Loss function.", default="CE", choices=["CE", "MSE", "L1", "KLD"])
+    parser.add_argument('-L','--L', help="Number of network layers. If multiple values given will execute sequentially.", default=[15],type=int, nargs="+")
+    parser.add_argument('-l','--loss', help="Loss function.", default="MSE", choices=["CE", "MSE", "L1", "KLD"])
     parser.add_argument('-f','--f', help="Function to evaluate (variable: x).", default="x")
     parser.add_argument('-fs','--f_str', help="String describing function.")
     parser.add_argument('-e','--epochs', help="Number of epochs.", default=800,type=int)
