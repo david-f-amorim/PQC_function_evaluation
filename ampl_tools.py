@@ -207,7 +207,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
 
     # calculate target and normalise 
     dx = (x_max-x_min)/(2**n)
-    target_arr = np.array([func(i) for i in np.arange(x_min,x_max, dx)])
+    target_arr = np.array([func(i) for i in np.arange(x_min,x_max, dx)])**2
     target_arr = target_arr / np.sum(target_arr)
     
     # start training 
@@ -273,14 +273,14 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
             temp_ind = recovered_k -1
 
         if (i % 100 ==0) and (i != 0) and (i != epochs-1): 
-            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
-            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),generated_weights)
+            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),mismatch_vals)
+            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}__{x_min}_{x_max}{meta}"),loss_vals)
             
             # delete previous temp files
-            prev_weights=f"__TEMP{i-100}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-            prev_mismatch=f"__TEMP{i-100}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-            prev_loss=f"__TEMP{i-100}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_weights=f"__TEMP{i-100}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
+            prev_mismatch=f"__TEMP{i-100}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
+            prev_loss=f"__TEMP{i-100}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
 
             if os.path.isfile(os.path.join("ampl_outputs", prev_weights)):
                 os.remove(os.path.join("ampl_outputs", prev_weights))
@@ -329,9 +329,9 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
     print(f"\nTraining completed in {time_str}. Number of weights: {len(generated_weights)}. Number of gates: {num_gates} (of which CX gates: {num_CX}). \n\n")
 
     # delete temp files 
-    temp_weights=f"__TEMP{temp_ind}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-    temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-    temp_loss=f"__TEMP{temp_ind}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_weights=f"__TEMP{temp_ind}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
+    temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
+    temp_loss=f"__TEMP{temp_ind}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"
 
     if os.path.isfile(os.path.join("ampl_outputs", temp_weights)):
             os.remove(os.path.join("ampl_outputs", temp_weights))
@@ -344,10 +344,11 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
     with no_grad():
             generated_weights = model.weight.detach().numpy()
 
-    np.save(os.path.join("ampl_outputs", f"weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-    np.save(os.path.join("ampl_outputs", f"mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
-    np.save(os.path.join("ampl_outputs", f"loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
-    
+    np.save(os.path.join("ampl_outputs", f"weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),generated_weights)
+    np.save(os.path.join("ampl_outputs", f"mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}__{x_min}_{x_max}{meta}"),mismatch_vals)
+    np.save(os.path.join("ampl_outputs", f"loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),loss_vals)
+    np.save(os.path.join("ampl_outputs", f"statevec_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),np.abs(state_vector))
+
     return 0
 
 ####

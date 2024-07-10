@@ -11,9 +11,9 @@ Original work uses 6 qubits for x and 10 for y
 
 +++++++++++
 
-CAN QCNN ALSO BE USED FOR AMPL ENCODING ???
-	->> design own version of Real Amplitudes ?? CX and Ry ??
+TRY AND WRITE COMPLETE AMPLITUDE ENCODING ALGORITHM !! DO SOME TESTS WITH AMPL QCNN !!!
 
+write function to translate qubit to phase (paper) 
 
 next step: COMPARE BENCHMARK TO LPF !!!
 	->> work at a much higher level !! import functions from Fergus !!
