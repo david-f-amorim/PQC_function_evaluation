@@ -1,4 +1,6 @@
 import numpy as np 
+from qiskit.circuit.library import IntegerComparator, DraperQFTAdder
+from qiskit import QuantumCircuit, QuantumRegister
 
 """
 FUNCTIONS ASSOCIATED WITH CLASSICAL BINARY OPERATIONS 
@@ -137,15 +139,97 @@ def twos_complement(binary):
     
     return compl 
 
+def bin_to_qubits(binary,inverse=False):
+    """
+    Prepare a quantum register corresponding to a classical bit string `binary`.  
+
+    If `inverse` is `True`, the inverse operation is applied.
+    """
+    
+    n = len(binary)
+    qreg = QuantumRegister(n)
+    circ = QuantumCircuit(qreg)
+    
+    for i in np.arange(n):
+        if int(binary[::-1][i])==1:
+            circ.x(qreg[i])
+
+    circ = circ.to_gate()
+    circ.label ="bin_to_qubits"
+
+    if inverse:
+        circ = circ.inverse()
+
+    return circ
+
+""""
+FUNCTIONS ASSOCIATED WITH LPF EVALUATION
+"""
+
+def label_gate(circ, q_x,q_label,q_anc,bounds,inverse=False):
+    """
+    Implementation of the LABEL gate, as described in Haener 2018. 
+
+    Given a register `q_x` encoding a value in a domain partitioned
+    into subdomains with boundaries specified in `bounds`, the LABEL
+    gate determines into which subdomain `q_x` falls. The result is 
+    stored in the label register `q_label`. An ancillary register 
+    `q_anc` is required as part of the routine. The register are 
+    taken to be part of the QuantumCircuit `circ`.  
+
+    PRESENTLY REQUIRES POSITIVE INTEGER VALUES. GENERALISE THIS LATER!
+    
+    If `inverse` is `True`, the inverse operation is applied.
+    """
+
+    n=len(q_x) 
+    nlab=len(q_label)
+
+    if len(q_anc) < n+ nlab:
+        raise ValueError("Ancilla register must be as large as the input register and the label register combined.")
+    if len(q_label) != int(np.ceil(np.log2(len(bounds)))):
+        raise ValueError("There must be one label for each subdomain.")
+    if np.max(bounds)>=2**n:
+        raise ValueError(f"Domain out of bounds for {n} qubits.")
+    
+    # encode the number 1 into the ancilla register 
+    circ.x(q_anc[n])
+
+    for i, bound in enumerate(bounds):
+
+        # set up circuit to compare q_x to the bound value 
+        comp_gate = IntegerComparator(n, bound, geq=True, name=f'P{i}').to_gate()
+        circ.append(comp_gate, [*q_x, *q_anc[:n]])
+
+        # increment the label gate if ancilla qubit has been flipped 
+        incr_gate = DraperQFTAdder(nlab, name=f'SET{i}').to_gate().control(1)
+        circ.append(incr_gate, [q_anc[0],*q_anc[n:], *q_label])
+
+        # undo comparison 
+        comp_gate_inv = IntegerComparator(n, bound, geq=True, name=f'P{i}').inverse().to_gate()
+        comp_gate_inv.name = f'P{i}†'
+        circ.append(comp_gate_inv, [*q_x, *q_anc[:n]])
+
+    circ.name= "LABEL"
+    circ = circ.to_gate()
+    
+    if inverse:
+        circ = circ.inverse()
+
+    return circ 
+
 #####
 # 
 #  NEXT UP: 
-#   - input_bits_to_qubits ; integer_compare ; QFTBinaryAdd ; TwosCompliment ; QFTMultiply ; QFTAddition_
-#       which are required for label_gate ; first_gate ; QFTPosMultiplicand ; QFTAddition 
+#   - integer_compare ; QFTBinaryAdd ; TwosCompliment ; QFTMultiply ; QFTAddition_ ;  QFTPosMultiplicand ; QFTAddition ;
+
+#   USE DraperQFTAdder, IntegerComparator, and RGQFTMultiplier ???!!!
+#       
+#       which are required for label_gate ; first_gate ; increment_gate
 #       which are required for piecewise_function_posmulti 
  
 
-b =dec_to_bin(-1.499999,4,nint=2, encoding="twos comp")
 
-print(b)
+
+
 
