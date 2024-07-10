@@ -329,8 +329,7 @@ def binary_to_encode_param(binary):
 def generate_network(n,m,L, encode=False, toggle_IL=False):
     """
     Set up a network consisting of input and convolutional layers acting on n input 
-    qubits and m target qubits. For now, use a single input layer and alternating quadratic 
-    and linear convolutional layers, with L convolutional layers in total. 
+    qubits and m target qubits.  
     Both the input state and the circuit weights can be set by accessing circuit parameters
     after initialisation.  
     """

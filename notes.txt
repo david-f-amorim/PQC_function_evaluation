@@ -4,14 +4,15 @@ NOTES
 
 ----- CODE ISSUES ------
     
-add more sophisticated binary encoding!!  
-
 long-term: work towards integration with Fergus' code!
 
 Original work uses 6 qubits for x and 10 for y 
 
 
 +++++++++++
+
+CAN QCNN ALSO BE USED FOR AMPL ENCODING ???
+	->> design own version of Real Amplitudes ?? CX and Ry ??
 
 
 next step: COMPARE BENCHMARK TO LPF !!!
