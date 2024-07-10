@@ -230,9 +230,12 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         else:
             sign_tensor=Tensor(sign_arr)
 
+        with no_grad():
+            generated_weights = model.weight.detach().numpy()
+       
         # train model  
         optimizer.zero_grad()
-        loss = criterion(torch.mul(torch.sqrt(torch.abs(model(input))), sign_tensor), torch.sqrt(target))
+        loss = criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target)) # adding 1e-10 to prevent taking sqrt(0) ??!!
         loss.backward()
         optimizer.step()
 
