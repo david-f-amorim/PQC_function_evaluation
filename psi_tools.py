@@ -174,7 +174,7 @@ def label_gate(circ, q_x,q_label,q_anc,bounds,inverse=False):
     into subdomains with boundaries specified in `bounds`, the LABEL
     gate determines into which subdomain `q_x` falls. The result is 
     stored in the label register `q_label`. An ancillary register 
-    `q_anc` is required as part of the routine. The register are 
+    `q_anc` is required as part of the routine. The registers are 
     taken to be part of the QuantumCircuit `circ`.  
 
     PRESENTLY REQUIRES POSITIVE INTEGER VALUES. GENERALISE THIS LATER!
@@ -217,6 +217,20 @@ def label_gate(circ, q_x,q_label,q_anc,bounds,inverse=False):
         circ = circ.inverse()
 
     return circ 
+
+
+def next_gate(circ, q_coeff, q_label, coeffs,inverse=False):
+    """
+    Implementation of the NEXT gate, as described in Haener 2018. 
+    SIMPLIFIED VERSION!  
+
+    Given a list of coefficients, `coeff`,   The registers are 
+    taken to be part of the QuantumCircuit `circ`.  
+
+    PRESENTLY REQUIRES POSITIVE INTEGER VALUES. GENERALISE THIS LATER!
+    
+    If `inverse` is `True`, the inverse operation is applied.
+    """
 
 #####
 # 

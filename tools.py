@@ -12,13 +12,146 @@ from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
 from torch import Tensor, no_grad 
 import sys, time, os 
 
-"""
-Construct an input layer consisting of controlled single-qubit rotations
-with the n input qubits acting as controls and the m target qubits
-acting as targets. 
-"""
 
-def input_layer(n, m, par_label, ctrl_state=0):
+def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
+    """
+    Encode a float `digits` in base-10 to a binary string `bits`. 
+     
+    Binary encoding must be specified as  `'unsigned mag'`, `'signed mag'`, 
+    or `'twos comp'` for unsigned magnitude, signed magnitude, and two's
+    complement representations, respectively. The fractional part is rounded to 
+    the available precision: unless otherwise specified via `nint`, all bits (apart 
+    from the sign bit) are assumed to be integer bits. Little endian convention is used.
+    
+    """
+
+    # set number of integer bits
+    if nint==None:
+        nint=n 
+
+    # at least one bit is reserved to store the sign 
+    if nint==n and (encoding=='signed mag' or encoding=='twos comp'):
+        nint-= 1 
+
+    # determine number of precision bits 
+    if encoding=='signed mag' or encoding=='twos comp': 
+        p = n - nint - 1
+    elif encoding=='unsigned mag':
+        p = n - nint 
+    else: 
+        raise ValueError("Unrecognised type of binary encoding. Should be 'unsigned mag', 'signed mag', or 'twos comp'.")
+
+    # raise overflow error if float is out of range for given encoding
+    if overflow_error:
+
+        if encoding=='unsigned mag':
+            min_val = 0
+            max_val = (2.**nint) - (2.**(-p)) 
+        elif encoding=='signed mag':
+            min_val = - (2.**nint - 2.**(-p))
+            max_val = + (2.**nint - 2.**(-p))     
+        elif encoding=='twos comp':
+            min_val = - (2.**nint)
+            max_val = + (2.**nint - 2.**(-p)) 
+
+        if digits>max_val or digits<min_val:
+            raise ValueError(f"Float {digits} out of available range [{min_val},{max_val}].")   
+
+    
+    # take absolute value and separate integer and fractional part:
+    digits_int = np.modf(np.abs(digits))[1]
+    digits_frac = np.modf(np.abs(digits))[0] 
+
+    # add fractional parts
+    bits_frac=''
+    for i in range(p):
+        bits_frac +=str(int(np.modf(digits_frac * 2)[1])) 
+        digits_frac =np.modf(digits_frac * 2)[0]
+
+    # add integer parts
+    bits_int=''
+    for i in range(nint):
+        bits_int +=str(int(digits_int % 2))
+        digits_int = digits_int // 2 
+
+    bits_int= bits_int[::-1]    
+
+    if encoding=="unsigned mag":
+        bits = bits_int + bits_frac 
+    if encoding=="signed mag":
+        if digits >= 0:
+            bits = '0' +  bits_int + bits_frac
+        else:
+            bits = '1' +  bits_int + bits_frac  
+    if encoding=="twos comp":
+        if digits >=0:
+            bits = '0' +  bits_int + bits_frac
+        elif digits== min_val:
+            bits = '1' +  bits_int + bits_frac   
+        else:
+            bits = twos_complement('0' +  bits_int + bits_frac)                         
+
+    return bits
+
+def bin_to_dec(bits,encoding,nint=None):
+    """
+    Decode a binary string `bits` to a float `digits` in base-10. 
+    
+    Binary encoding must be specified as 
+    `'unsigned mag'`, `'signed mag'`, or `'twos comp'` for unsigned magnitude, signed magnitude, and two's
+    complement representations, respectively. Unless the number of integer bits is specified using `nint`,
+    all bits (apart from the sign bit) are assumed to be integer bits. Little endian convention is used.
+    """
+
+    n = len(bits)
+    if nint==None:
+        nint=n
+
+    bits=bits[::-1]
+          
+    bit_arr = np.array(list(bits)).astype('int')
+
+    if encoding=="unsigned mag":
+        p = n - nint 
+        digits = np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n)])
+    elif encoding=="signed mag":
+        if nint==n: 
+            nint -= 1
+        p = n - nint -1
+        digits = ((-1.)**bit_arr[-1] ) * np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n-1)])
+    elif encoding=="twos comp":
+        if nint==n: 
+            nint -= 1
+        p = n - nint -1
+        digits = (-1.)*bit_arr[-1]*2**nint + np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n-1)])
+    else: 
+        raise ValueError("Unrecognised type of binary encoding. Should be 'unsigned mag', 'signed mag', or 'twos comp'.") 
+
+    return digits 
+
+def twos_complement(binary):
+    """
+    For a bit string `binary` calculate the two's complement binary string `compl`. 
+    
+    Little endian convention is used. An all-zero bit string is its own complement.
+    """   
+    binary_to_array = np.array(list(binary)).astype(int)
+   
+    if np.sum(binary_to_array)==0:
+        return binary 
+   
+    inverted_bits = ''.join((np.logical_not(binary_to_array).astype(int)).astype(str))
+
+    compl = dec_to_bin(bin_to_dec(inverted_bits, encoding='unsigned mag')+ 1,len(binary),encoding='unsigned mag', round=False) 
+    
+    return compl
+
+def input_layer(n, m, par_label, ctrl_state=0): 
+    """
+    Construct an input layer consisting of controlled single-qubit rotations
+    with the n input qubits acting as controls and the m target qubits
+    acting as targets. 
+    """
 
     # set up circuit 
     qc = QuantumCircuit(n+m, name="Input Layer")
@@ -56,12 +189,11 @@ def input_layer(n, m, par_label, ctrl_state=0):
     
     return circuit 
 
-"""
-Construct the two-qubit N gate (as defined in Vatan 2004)
-in terms of three parameters, stored in list or tuple 'params'
-"""
-
 def N_gate(params):
+    """
+    Construct the two-qubit N gate (as defined in Vatan 2004)
+    in terms of three parameters, stored in list or tuple 'params'
+    """
 
     circuit = QuantumCircuit(2, name="N Gate")
     circuit.rz(-np.pi / 2, 1)
@@ -75,13 +207,12 @@ def N_gate(params):
 
     return circuit 
 
-"""
-Construct a linear (neighbour-to-neighbour) convolutional layer
-via the cascaded application of the N gate to the m-qubit target 
-register.   
-"""
-
 def conv_layer_NN(m, par_label):
+    """
+    Construct a linear (neighbour-to-neighbour) convolutional layer
+    via the cascaded application of the N gate to the m-qubit target 
+    register.   
+    """
 
     # set up circuit 
     qc = QuantumCircuit(m, name="Convolutional Layer (NN)")
@@ -115,14 +246,12 @@ def conv_layer_NN(m, par_label):
     
     return circuit 
 
-"""
-Construct a quadratic (all-to-all) convolutional layer
-via the cascaded application of the N gate to the m-qubit target 
-register.   
-"""
-
-def conv_layer_AA(m, par_label):
-
+def conv_layer_AA(m, par_label): 
+    """
+    Construct a quadratic (all-to-all) convolutional layer
+    via the cascaded application of the N gate to the m-qubit target 
+    register.   
+    """
     # set up circuit 
     qc = QuantumCircuit(m, name="Convolutional Layer (AA)")
     qubits = list(range(m))
@@ -154,15 +283,14 @@ def conv_layer_AA(m, par_label):
     
     return circuit 
 
-"""
-Digitally encode an n-bit binary number onto an n-qubit register. 
-The encoding is set by assigning the value 0 to the i-th component of the
-parameter vector to represent a bit value of "0" for the i-th bit and assigning
-pi for the case of "1". 
+def digital_encoding(n):   
+    """
+    Digitally encode an n-bit binary number onto an n-qubit register. 
+    The encoding is set by assigning the value 0 to the i-th component of the
+    parameter vector to represent a bit value of "0" for the i-th bit and assigning
+    pi for the case of "1". 
 
-"""
-
-def digital_encoding(n):
+    """
 
     qc = QuantumCircuit(n,name="Digital Encoding")
     qubits = list(range(n))
@@ -178,12 +306,11 @@ def digital_encoding(n):
 
     return circuit 
 
-"""
-Convert an n-bit binary string to the associated parameter array to feed 
-into the digital encoding circuit. 
-"""
-
-def binary_to_encode_param(binary):
+def binary_to_encode_param(binary):        
+    """
+    Convert an n-bit binary string to the associated parameter array to feed 
+    into the digital encoding circuit. 
+    """
 
     params = np.empty(len(binary))
 
@@ -199,15 +326,14 @@ def binary_to_encode_param(binary):
 
     return params 
 
-"""
-Set up a network consisting of input and convolutional layers acting on n input 
-qubits and m target qubits. For now, use a single input layer and alternating quadratic 
-and linear convolutional layers, with L convolutional layers in total. 
-Both the input state and the circuit weights can be set by accessing circuit parameters
-after initialisation.  
-"""
-
 def generate_network(n,m,L, encode=False, toggle_IL=False):
+    """
+    Set up a network consisting of input and convolutional layers acting on n input 
+    qubits and m target qubits. For now, use a single input layer and alternating quadratic 
+    and linear convolutional layers, with L convolutional layers in total. 
+    Both the input state and the circuit weights can be set by accessing circuit parameters
+    after initialisation.  
+    """
 
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")
@@ -253,11 +379,10 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 
     return circuit 
 
-"""
-Initialise circuit as QNN for training purposes.
-"""
-
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint):
+    """
+    Initialise circuit as QNN for training purposes.
+    """
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -272,6 +397,20 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             weight_params=qc.parameters[n:],   # encoding params not selected as weights
             input_gradients=True # ?? 
         )
+    
+    # set precision strings 
+    if nint==None:
+        nint=n 
+    if mint==None:
+        mint=m  
+    if nint==n:
+        nis=""
+    else:
+        nis=f"({nint})"
+    if mint==m:
+        mis=""
+    else:
+        mis=f"({mint})"
 
     # choose initial weights
     recovered_k =0
@@ -281,13 +420,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         recovered_mismatch=None 
         recovered_loss=None 
         for k in np.arange(100,epochs, step=100):
-            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
-                recovered_weights=os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_weights=os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
                 recovered_k=k+1
-            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
-                recovered_mismatch=os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
-            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
-                recovered_loss=os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")        
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_mismatch=os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_loss=os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")        
         
         if recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
             initial_weights=np.load(recovered_weights)
@@ -321,14 +460,17 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         loss_vals = np.empty(epochs)
 
     # generate x and f(x) values (IMPROVE LATER!!)
+    pn =n - nint
+    pm =m - mint
+
     x_min = 0
-    x_max = 2**n 
-    x_arr = rng.integers(x_min, x_max, size=epochs)
+    x_max = 2.**nint - 2.**(-pn) 
+    x_arr = np.array(x_min + (x_max - x_min) *rng.random(size=epochs))
     fx_arr = [func(i) for i in x_arr]
 
-    if np.log2(np.max(fx_arr))> m:
-        raise ValueError(f"Insufficient number of target qubits: at least {int(np.ceil(np.log2(np.max(fx_arr))))} required")
-
+    if np.max(fx_arr)> 2.**mint - 2.**(-pm):
+        raise ValueError(f"Insufficient number of target (integer) qubits.")
+    
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
@@ -336,11 +478,11 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     for i in np.arange(epochs)[recovered_k:]:
 
         # get input data
-        input = Tensor(binary_to_encode_param(np.binary_repr(x_arr[i],n))) 
+        input = Tensor(binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))) 
 
         # get target data 
         target_arr = np.zeros(2**(n+m))
-        index = int(np.binary_repr(fx_arr[i],m)+np.binary_repr(x_arr[i],n),2)
+        index = int(dec_to_bin(fx_arr[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint),2)
         target_arr[index]=1 
         target=Tensor(target_arr)
 
@@ -359,7 +501,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         with no_grad():
             generated_weights = model.weight.detach().numpy()
 
-        input_params = binary_to_encode_param(np.binary_repr(x_arr[i],n))
+        input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
         params = np.concatenate((input_params, generated_weights))           
         circ = circ.assign_parameters(params)    
 
@@ -383,14 +525,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             temp_ind = recovered_k -1
 
         if (i % 100 ==0) and (i != 0) and (i != epochs-1): 
-            np.save(os.path.join("outputs", f"__TEMP{i}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-            np.save(os.path.join("outputs", f"__TEMP{i}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
-            np.save(os.path.join("outputs", f"__TEMP{i}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+            np.save(os.path.join("outputs", f"__TEMP{i}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+            np.save(os.path.join("outputs", f"__TEMP{i}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
+            np.save(os.path.join("outputs", f"__TEMP{i}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
             
             # delete previous temp files
-            prev_weights=f"__TEMP{i-100}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-            prev_mismatch=f"__TEMP{i-100}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-            prev_loss=f"__TEMP{i-100}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_weights=f"__TEMP{i-100}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_mismatch=f"__TEMP{i-100}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_loss=f"__TEMP{i-100}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
 
             if os.path.isfile(os.path.join("outputs", prev_weights)):
                 os.remove(os.path.join("outputs", prev_weights))
@@ -438,9 +580,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     print(f"\nTraining completed in {time_str}. Number of weights: {len(generated_weights)}. Number of gates: {num_gates} (of which CX gates: {num_CX}). \n\n")
 
     # delete temp files 
-    temp_weights=f"__TEMP{temp_ind}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-    temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
-    temp_loss=f"__TEMP{temp_ind}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_weights=f"__TEMP{temp_ind}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_loss=f"__TEMP{temp_ind}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
 
     if os.path.isfile(os.path.join("outputs", temp_weights)):
             os.remove(os.path.join("outputs", temp_weights))
@@ -453,21 +595,29 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     with no_grad():
             generated_weights = model.weight.detach().numpy()
 
-    np.save(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
-    np.save(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
-    np.save(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+    np.save(os.path.join("outputs", f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
+    np.save(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
+    np.save(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
     
 
     return 0 
 
-"""
-Test performance of trained QNN for the various input states
-"""
-
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True): 
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,verbose=True):   
+    """
+    Test performance of trained QNN for the various input states
+    """
+    # set precision strings 
+    if nint==None or nint==n:
+        nis=""
+    else:
+        nis=f"({nint})"
+    if mint==None or mint==m:
+        mis=""
+    else:
+        mis=f"({mint})"          
 
     # load weights 
-    weights = np.load(os.path.join("outputs",f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
@@ -501,7 +651,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True):
 
         # save as dictionary 
         dic = dict(zip(x_arr, mismatch)) 
-        np.save(os.path.join("outputs",f"bar_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"), dic)
+        np.save(os.path.join("outputs",f"bar_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"), dic)
     
     if verbose:
         print("Mismatch by input state:")
@@ -512,56 +662,80 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,verbose=True):
 
     return 0 
 
-"""
-For a given set of input parameters, check if training and testing results already exist. 
-"""
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint):
+    """
+    For a given set of input parameters, check if training and testing results already exist. 
+    """
+    # set precision strings 
+    if nint==None or nint==n:
+        nis=""
+    else:
+        nis=f"({nint})"
+    if mint==None or mint==m:
+        mis=""
+    else:
+        mis=f"({mint})"
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta):
-
-    check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
-    check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
-    check_loss = os.path.isfile(os.path.join("outputs", f"weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_loss = os.path.isfile(os.path.join("outputs", f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     
     return check_mismatch & check_weights & check_loss
 
-"""
-For a given set of input parameters, check if temp files already exist. 
-"""
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint):   
+    """
+    For a given set of input parameters, check if temp files already exist. 
+    """
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta):
+    # set precision strings 
+    if nint==None or nint==n:
+        nis=""
+    else:
+        nis=f"({nint})"
+    if mint==None or mint==m:
+        mis=""
+    else:
+        mis=f"({mint})"
 
     check_mismatch=False 
     check_weights=False 
     check_loss=False
 
     for k in np.arange(100,epochs, step=100):
-        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
             check_weights=True 
-        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
             check_mismatch=True 
-        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
             check_loss=True         
     
     return check_mismatch & check_weights & check_loss
 
-"""
-For a given set of input parameters, check if plots already exist (excluding compare plots). 
-"""
-
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log):
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint):    
+    """
+    For a given set of input parameters, check if plots already exist (excluding compare plots). 
+    """
+    # set precision strings 
+    if nint==None or nint==n:
+        nis=""
+    else:
+        nis=f"({nint})"
+    if mint==None or mint==m:
+        mis=""
+    else:
+        mis=f"({mint})"
 
     log_str= ("" if log==False else "log_")
 
-    check_mismatch =os.path.isfile(os.path.join("plots", f"{log_str}mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
-    check_loss=os.path.isfile(os.path.join("plots", f"{log_str}loss_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
-    check_bars=os.path.isfile(os.path.join("plots", f"{log_str}bar_mismatch_{n}_{m}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+    check_mismatch =os.path.isfile(os.path.join("plots", f"{log_str}mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+    check_loss=os.path.isfile(os.path.join("plots", f"{log_str}loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
+    check_bars=os.path.isfile(os.path.join("plots", f"{log_str}bar_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.png"))
 
     return check_mismatch & check_loss & check_bars 
 
-"""
-Generate random seed from timestamp
-"""
+def generate_seed():   
+    """
+    Generate random seed from timestamp
+    """
 
-def generate_seed():
-    
     return int(time.time())

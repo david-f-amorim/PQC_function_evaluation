@@ -1,3 +1,4 @@
+
 NOTES
 =======
 
@@ -7,13 +8,17 @@ add more sophisticated binary encoding!!
 
 long-term: work towards integration with Fergus' code!
 
+Original work uses 6 qubits for x and 10 for y 
+
 
 +++++++++++
 
-PLOT AVERAGE MISMATCH PER EPOCH FOR DIFFERENT L VALUES !!!
-
 
 next step: COMPARE BENCHMARK TO LPF !!!
+	->> work at a much higher level !! import functions from Fergus !!
+
+possible advantage: much fewer qubits! 
+
 
 +++++++++++++++++ 
 
