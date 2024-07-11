@@ -30,7 +30,6 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -100,7 +99,6 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if real:
         meta+='(r)' 
@@ -151,7 +149,6 @@ def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show,  log, nint,
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -238,7 +235,6 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, ph
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -345,7 +341,6 @@ def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, ph
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -453,7 +448,6 @@ def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint,
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -561,7 +555,6 @@ def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, min
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -629,7 +622,6 @@ def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, ni
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0

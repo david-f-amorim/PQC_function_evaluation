@@ -13,7 +13,7 @@ from torch import Tensor, no_grad
 import sys, time, os 
 import torch 
 import warnings
-from ampl_tools import R_generate_network
+#from ampl_tools import R_generate_network
 
 def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
     """
@@ -415,7 +415,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'    
     if phase_reduce:
         mint = 0
@@ -518,10 +517,15 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # apply function and reduce to phase value between 0 and 1 
         # (run with phase_reduce=True !)
         fx_arr = [func(i) for i in x_arr]
-        fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
+
+        if phase_reduce:
+            fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
 
         # convert fx_arr to binary at available target register precision 
-        fx_arr_bin = [dec_to_bin(i,m,nint=0,encoding="unsigned mag") for i in fx_arr]
+        fx_arr_bin = [dec_to_bin(i,m,nint=mint,encoding="unsigned mag") for i in fx_arr]
+
+        if np.max(fx_arr)> 2.**mint - 2.**(-pm) and mint != 0:
+            raise ValueError(f"Insufficient number of target (integer) qubits.")
         
         # get bit strings corresponding to target arrays and convert to indices
         target_bin = [fx_arr_bin[i]+x_arr_bin[i] for i in x_arr]
@@ -727,7 +731,6 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
     else:
         mis=f"({mint})"    
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -801,7 +804,6 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'
     if phase_reduce:
         mint = 0
@@ -831,7 +833,6 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'    
     if phase_reduce:
         mint = 0
@@ -868,7 +869,6 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
     else:
         mis=f"({mint})"
     if train_superpos:
-        phase_reduce=True
         meta+='(S)'    
     if phase_reduce:
         mint = 0
@@ -917,6 +917,8 @@ def extract_phase(n):
     return circuit 
 
 def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file):
+
+    raise DeprecationWarning("FIX CIRCULAR IMPORT PROBLEM")
 
     # set up registers 
     input_register = QuantumRegister(n, "input")
