@@ -13,6 +13,7 @@ from torch import Tensor, no_grad
 import sys, time, os 
 import torch 
 import warnings
+from ampl_tools import R_generate_network
 
 def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
     """
@@ -336,7 +337,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False, inverse=False):
     """
     Set up a network consisting of input and convolutional layers acting on n input 
     qubits and m target qubits.  
@@ -389,6 +390,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
         if i != L-1:
             circuit.barrier()
+
+        if inverse:
+            circuit=circuit.inverse()    
 
     return circuit 
 
@@ -910,4 +914,42 @@ def extract_phase(n):
     circuit = QuantumCircuit(n)
     circuit.append(qc_inst, qubits)    
 
-    return 0 
+    return circuit 
+
+def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file):
+
+    # set up registers 
+    input_register = QuantumRegister(n, "input")
+    target_register = QuantumRegister(m, "target")
+    circuit = QuantumCircuit(input_register, target_register) 
+
+    # load weights 
+    weights_A = np.load(weights_A_str)
+    weights_p = np.load(weights_p_str)
+
+    # encode amplitudes 
+    circuit.compose(R_generate_network(n, L_A), input_register, inplace=True)
+    circuit = circuit.assign_parameters(weights_A)
+
+    # evaluate function
+    circuit.compose(generate_network(n,m, L_p, real=real_p), [input_register,target_register], inplace=True) 
+
+    # extract phases 
+    circuit.compose(extract_phase(m),target_register, inplace=True) 
+
+    # clear ancilla register 
+    circuit.compose(generate_network(n,m, L_p, real=real_p, inverse=True), [input_register,target_register], inplace=True) 
+
+    # get resulting statevector 
+    backend = Aer.get_backend('statevector_simulator')
+    job = execute(circuit, backend)
+    result = job.result()
+    state_vector = result.get_statevector()
+
+    state_vector = np.asarray(state_vector).reshape((2**m,2**n))
+    state_v = state_vector[0,:].flatten()
+
+    # save to file 
+    np.save(state_vec_file, state_v)
+
+    return 0
