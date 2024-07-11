@@ -557,7 +557,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # train model  
         optimizer.zero_grad()
 
-        if train_superpos and loss_str=="MM":
+        if loss_str=="MM":
             if i==recovered_k:
                 angle_tensor = Tensor(np.zeros(2**(n+m)))
             else: 
