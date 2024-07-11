@@ -620,8 +620,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
 
-        print(np.abs(state_vector)**2, mismatch)
-
         # save mismatch for plotting 
         mismatch_vals[i]=mismatch
 
@@ -670,7 +668,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
 
         prefix="\t" 
-        #print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
+        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
         
     print(" ", flush=True, file=sys.stdout)
