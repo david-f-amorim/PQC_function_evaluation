@@ -229,9 +229,6 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
             sign_tensor=Tensor(np.ones(2**n))
         else:
             sign_tensor=Tensor(sign_arr)
-
-        with no_grad():
-            generated_weights = model.weight.detach().numpy()
        
         # train model  
         optimizer.zero_grad()

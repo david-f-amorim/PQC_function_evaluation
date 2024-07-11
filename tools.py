@@ -11,7 +11,7 @@ from torch.optim import Adam
 from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
 from torch import Tensor, no_grad 
 import sys, time, os 
-
+import torch 
 
 def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
     """
@@ -326,7 +326,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=False):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False):
     """
     Set up a network consisting of input and convolutional layers acting on n input 
     qubits and m target qubits.  
@@ -344,9 +344,13 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
     if encode:
         circuit.compose(digital_encoding(n), input_register, inplace=True)
 
-    # apply input layer 
-    circuit.compose(input_layer(n,m, u"\u03B8_IN"), circuit.qubits, inplace=True)
-    circuit.barrier()
+    if initial_IL: 
+        # apply input layer 
+        circuit.compose(input_layer(n,m, u"\u03B8_IN"), circuit.qubits, inplace=True)
+        circuit.barrier()
+
+    if input_H:
+        circuit.h(input_register)    
 
     # apply convolutional layers (alternating between AA and NN)
     # if toggle_IL is True, additional input layers are added after 
@@ -378,24 +382,10 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos):
     """
     Initialise circuit as QNN for training purposes.
     """
-
-    # set seed for PRNG 
-    algorithm_globals.random_seed= seed
-    rng = np.random.default_rng(seed=seed)
-
-    # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=True, toggle_IL=True)
-    qnn = SamplerQNN(
-            circuit=qc.decompose(),            # decompose to avoid data copying (?)
-            sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
-            input_params=qc.parameters[:n],    # encoding params treated as input params
-            weight_params=qc.parameters[n:],   # encoding params not selected as weights
-            input_gradients=True # ?? 
-        )
     
     # set precision strings 
     if nint==None:
@@ -410,10 +400,37 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mis=""
     else:
         mis=f"({mint})"
+    if train_superpos:
+        phase_reduce=True
+        meta+='(S)'    
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
-        meta+='(PR)'    
+        meta+='(PR)'
+
+    # set seed for PRNG 
+    algorithm_globals.random_seed= seed
+    rng = np.random.default_rng(seed=seed)
+
+    # generate circuit and set up as QNN 
+    if train_superpos: 
+        qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True)
+        qnn = SamplerQNN(
+                circuit=qc.decompose(),            # decompose to avoid data copying (?)
+                sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
+                input_params=[],    # no input params
+                weight_params=qc.parameters,   # weights
+                input_gradients=False # ?? 
+            ) 
+    else:     
+        qc = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True)
+        qnn = SamplerQNN(
+                circuit=qc.decompose(),            # decompose to avoid data copying (?)
+                sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
+                input_params=qc.parameters[:n],    # encoding params treated as input params
+                weight_params=qc.parameters[n:],   # encoding params not selected as weights
+                input_gradients=True # ?? 
+            )        
 
     # choose initial weights
     recovered_k =0
@@ -434,10 +451,16 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         if recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
             initial_weights=np.load(recovered_weights)
         else:
-            initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))    
+            if train_superpos: 
+                 initial_weights = algorithm_globals.random.random(len(qc.parameters))
+            else:    
+                initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))    
     
     else:
-        initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
+        if train_superpos: 
+            initial_weights = algorithm_globals.random.random(len(qc.parameters))
+        else:    
+            initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
     
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -453,6 +476,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         criterion=KLDivLoss()
     elif loss_str=="CE":
         criterion=CrossEntropyLoss()
+    elif loss_str=="MM":
+
+        def criterion(output, target):
+
+            val = 1. - torch.abs(torch.sum(torch.mul(output, target)))
+
+            return val 
+      
                     
     # set up arrays to store training outputs 
     if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
@@ -466,36 +497,77 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     pn =n - nint
     pm =m - mint
 
-    x_min = 0
-    x_max = 2.**nint - 2.**(-pn) 
-    x_arr = np.array(x_min + (x_max - x_min) *rng.random(size=epochs))
-    fx_arr = [func(i) for i in x_arr]
+    if train_superpos:
 
-    # reduce to phase value between 0 and 1:
-    if phase_reduce: 
+        # sample all basis states of input register and convert to binary 
+        x_arr = np.arange(0, 2**n)
+        x_arr_bin =[dec_to_bin(i,n,encoding="unsigned mag") for i in x_arr]
+
+        # apply function and reduce to phase value between 0 and 1 
+        # (run with phase_reduce=True !)
+        fx_arr = [func(i) for i in x_arr]
         fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
 
-    if np.max(fx_arr)> 2.**mint - 2.**(-pm) and mint != 0:
-        raise ValueError(f"Insufficient number of target (integer) qubits.")
-    
+        # convert fx_arr to binary at available target register precision 
+        fx_arr_bin = [dec_to_bin(i,m,nint=0,encoding="unsigned mag") for i in fx_arr]
+        
+        # get bit strings corresponding to target arrays and convert to indices
+        target_bin = [fx_arr_bin[i]+x_arr_bin[i] for i in x_arr]
+        target_ind = [bin_to_dec(i, encoding='unsigned mag') for i in target_bin]
+
+        # prepare target array and normalise 
+        target_arr = np.zeros(2**(n+m))
+        for k in target_ind:
+            target_arr[int(k)]=1 
+        target_arr = target_arr / (2.**n) 
+
+        # define input and target tensors 
+        input = Tensor([]) 
+        target=Tensor(target_arr)
+
+    else:        
+        x_min = 0
+        x_max = 2.**nint - 2.**(-pn) 
+        x_arr = np.array(x_min + (x_max - x_min) *rng.random(size=epochs))
+        fx_arr = [func(i) for i in x_arr]
+
+        # reduce to phase value between 0 and 1:
+        if phase_reduce: 
+            fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
+        
+        if np.max(fx_arr)> 2.**mint - 2.**(-pm) and mint != 0:
+            raise ValueError(f"Insufficient number of target (integer) qubits.")
+       
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
 
     for i in np.arange(epochs)[recovered_k:]:
 
-        # get input data
-        input = Tensor(binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))) 
+        if train_superpos == False:
+            # get input data
+            input = Tensor(binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))) 
 
-        # get target data 
-        target_arr = np.zeros(2**(n+m))
-        index = int(dec_to_bin(fx_arr[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint),2)
-        target_arr[index]=1 
-        target=Tensor(target_arr)
+            # get target data 
+            target_arr = np.zeros(2**(n+m))
+            index = int(dec_to_bin(fx_arr[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint),2)
+            target_arr[index]=1 
+            target=Tensor(target_arr)
 
         # train model  
         optimizer.zero_grad()
-        loss = criterion(model(input), target)
+
+        if train_superpos and loss_str=="MM":
+            if i==recovered_k:
+                angle_tensor = Tensor(np.zeros(2**(n+m)))
+            else: 
+                angle_tensor = Tensor(angle_arr)   
+
+            loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number 
+
+        else:
+            loss = criterion(model(input), target)
+
         loss.backward()
         optimizer.step()
 
@@ -503,14 +575,20 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         loss_vals[i]=loss.item()
 
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=True,toggle_IL=True)
+        if train_superpos:
+            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True)
+            with no_grad():
+                generated_weights = model.weight.detach().numpy()      
+            circ = circ.assign_parameters(generated_weights)
+        else:
+            circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True)
 
-        with no_grad():
-            generated_weights = model.weight.detach().numpy()
+            with no_grad():
+                generated_weights = model.weight.detach().numpy()
 
-        input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
-        params = np.concatenate((input_params, generated_weights))           
-        circ = circ.assign_parameters(params)    
+            input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
+            params = np.concatenate((input_params, generated_weights))           
+            circ = circ.assign_parameters(params)    
 
         # get statevector 
         backend = Aer.get_backend('statevector_simulator')
@@ -518,8 +596,11 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         result = job.result()
         state_vector = np.asarray(result.get_statevector()) 
 
+        # extract phases of conjugate state vector 
+        angle_arr = np.angle(np.conjugate(state_vector))
+
         # calculate fidelity and mismatch 
-        fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
+        fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
 
         # save mismatch for plotting 
@@ -552,10 +633,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
             # make note of last created temp files
             temp_ind = i   
-
+        
         # print status
         a = int(20*(i+1)/epochs)
-
+       
         if i==recovered_k:
             time_str="--:--:--.--"
         elif i==epochs-1:
@@ -609,7 +690,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos, verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -622,7 +703,9 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, 
         mis=""
     else:
         mis=f"({mint})"    
-
+    if train_superpos:
+        phase_reduce=True
+        meta+='(S)'
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
@@ -636,6 +719,10 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, 
 
     # iterate over input states 
     x_arr = np.arange(2**n)
+    fx_arr = [func(i) for i in x_arr]
+
+    if phase_reduce: 
+        fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
 
     for i in x_arr:
         
@@ -648,7 +735,8 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, 
 
         # get target array 
         target_arr = np.zeros(2**(n+m))
-        index = int(np.binary_repr(func(i),m)+np.binary_repr(i,n),2)
+
+        index = int(dec_to_bin(fx_arr[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint),2)
         target_arr[index]=1 
 
         # get statevector 
@@ -658,7 +746,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, 
         state_vector = np.asarray(result.get_statevector()) 
 
         # calculate fidelity and mismatch 
-        fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
+        fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch[i] = 1. - np.sqrt(fidelity) 
 
         # save as dictionary 
@@ -674,7 +762,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, 
 
     return 0 
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos):
     """
     For a given set of input parameters, check if training and testing results already exist. 
     """
@@ -687,7 +775,9 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
         mis=""
     else:
         mis=f"({mint})"
-
+    if train_superpos:
+        phase_reduce=True
+        meta+='(S)'
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
@@ -699,7 +789,7 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     
     return check_mismatch & check_weights & check_loss
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):   
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos):   
     """
     For a given set of input parameters, check if temp files already exist. 
     """
@@ -713,6 +803,9 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):
         mis=""
     else:
         mis=f"({mint})"
+    if train_superpos:
+        phase_reduce=True
+        meta+='(S)'    
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
@@ -732,7 +825,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):
     
     return check_mismatch & check_weights & check_loss
 
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce):    
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos):    
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
     """
@@ -745,6 +838,9 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
         mis=""
     else:
         mis=f"({mint})"
+    if train_superpos:
+        phase_reduce=True
+        meta+='(S)'    
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
