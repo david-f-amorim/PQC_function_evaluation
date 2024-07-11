@@ -18,7 +18,7 @@ figsize=(10,10)
 Show standard result (mismatch and loss as functions of epoch)
 """
 
-def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint):
+def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase_reduce):
 
     # set precision strings 
     if nint==None or nint==n:
@@ -29,6 +29,10 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'    
 
     log_str= ("" if log==False else "log_")
 
@@ -79,9 +83,9 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint):
 Show mismatch for various input states after training  
 """
 
-def standard_bar(n,m,L,epochs,func_str,loss,meta, show, log, nint, mint):
+def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -90,6 +94,10 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show, log, nint, mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -125,9 +133,9 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show, log, nint, mint):
 Compare mismatch for different loss functions
 """
 
-def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show, log, nint, mint):
+def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -136,6 +144,10 @@ def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show, log, nint, 
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -203,9 +215,9 @@ Compare results for QCNNs with different numbers of layers
 (expecting everything else to be identical)
 """
 
-def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show, log, nint, mint):
+def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -214,6 +226,10 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show, log, nint, mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -301,9 +317,9 @@ Compare results for QCNNs evaluating different functions
 (expecting everything else to be identical)
 """
 
-def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show, log, nint, mint):
+def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -312,6 +328,10 @@ def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show, log, nint, mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -400,9 +420,9 @@ Compare results for QCNNs with different meta strings.
 (expecting everything else to be identical)
 """
 
-def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show, log, nint, mint):
+def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -411,6 +431,10 @@ def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show, log, nint, mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -499,9 +523,9 @@ Compare results for QCNNs with different epochs.
 (expecting everything else to be identical)
 """
 
-def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show, log, nint, mint):
+def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -510,6 +534,10 @@ def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show, log, nint, mint
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_")
 
@@ -558,9 +586,9 @@ Compare average mismatch for QCNNs with different epochs and L values
 (expecting everything else to be identical)
 """
 
-def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show, log, nint, mint):
+def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, nint, mint, phase_reduce):
 
-    # set precision strings 
+     # set precision strings 
     if nint==None or nint==n:
         nis=""
     else:
@@ -569,6 +597,10 @@ def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show, log, nin
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)' 
 
     log_str= ("" if log==False else "log_") 
 
@@ -634,9 +666,11 @@ if __name__ == '__main__':
     parser.add_argument('-L','--L', help="Number of network layers.", default=[6],type=int, nargs="+")
     parser.add_argument('-l','--loss', help="Loss function.", default=["CE"], nargs="+")
     parser.add_argument('-fs','--f_str', help="String describing function.",nargs="+", default=["x"])
-    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[300],nargs="+", type=int)
+    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[800],nargs="+", type=int)
     parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
     parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
+
+    parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
 
     parser.add_argument('-cL','--compL', help="Compare different L values (pass multiple).", action='store_true')
     parser.add_argument('-cf','--compf', help="Compare different f_str values (pass multiple).", action='store_true')
@@ -656,25 +690,25 @@ if __name__ == '__main__':
         raise ValueError("Cannot do two comparisons at once.")
 
     if opt.compL:
-        comp_L(n=opt.n,m=opt.m,L_arr=opt.L,epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint)
+        comp_L(n=opt.n,m=opt.m,L_arr=opt.L,epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
     elif opt.compf:
-        comp_f(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str_arr=opt.f_str,loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint)
+        comp_f(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str_arr=opt.f_str,loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
     elif opt.compM:
-        comp_meta(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta_arr=opt.meta, show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint) 
+        comp_meta(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta_arr=opt.meta, show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce) 
     elif opt.compl:
-        comp_loss_funcs(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str_arr=opt.loss, meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint)
+        comp_loss_funcs(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str_arr=opt.loss, meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
     elif opt.compe:
-        comp_epochs(n=opt.n,m=opt.m,L=opt.L[0],epochs_arr=opt.epochs, func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint)
+        comp_epochs(n=opt.n,m=opt.m,L=opt.L[0],epochs_arr=opt.epochs, func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
     elif opt.compeL:
-        comp_mean_mismatch(n=opt.n,m=opt.m,L_arr=opt.L,epochs_arr=opt.epochs, func_str=opt.f_str[0],loss=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint)
+        comp_mean_mismatch(n=opt.n,m=opt.m,L_arr=opt.L,epochs_arr=opt.epochs, func_str=opt.f_str[0],loss=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
     else:
-        dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0],func_str=opt.f_str[0],loss_str=opt.loss[0],meta=opt.meta[0], log=opt.log, nint=opt.nint, mint=opt.mint)
+        dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0],func_str=opt.f_str[0],loss_str=opt.loss[0],meta=opt.meta[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
 
         if dupl_files and opt.ignore_duplicates==False:
             print("\nThe required plots already exist and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
         else: 
-            standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint)
-            standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint)
+            standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
+            standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce)
 
 
 

@@ -54,7 +54,7 @@ def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
             min_val = - (2.**nint)
             max_val = + (2.**nint - 2.**(-p)) 
 
-        if digits>max_val or digits<min_val:
+        if (digits>max_val and nint != 0) or digits<min_val:
             raise ValueError(f"Float {digits} out of available range [{min_val},{max_val}].")   
 
     
@@ -170,9 +170,9 @@ def input_layer(n, m, par_label, ctrl_state=0):
     # apply gates to qubits 
     for i in qubits[:n]:
 
-        j = i 
-        if j >=m:
-            j -= m
+        j = i  
+        if np.modf(j/m)[1] >= 1:
+            j -=int(np.modf(j/m)[1] * m)
 
         par = params[int(param_index) : int(param_index + num_par)]    
 
@@ -378,7 +378,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=False):
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce):
     """
     Initialise circuit as QNN for training purposes.
     """
@@ -410,6 +410,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'    
 
     # choose initial weights
     recovered_k =0
@@ -458,7 +462,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mismatch_vals = np.empty(epochs)
         loss_vals = np.empty(epochs)
 
-    # generate x and f(x) values (IMPROVE LATER!!)
+    # generate x and f(x) values
     pn =n - nint
     pm =m - mint
 
@@ -467,7 +471,11 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     x_arr = np.array(x_min + (x_max - x_min) *rng.random(size=epochs))
     fx_arr = [func(i) for i in x_arr]
 
-    if np.max(fx_arr)> 2.**mint - 2.**(-pm):
+    # reduce to phase value between 0 and 1:
+    if phase_reduce: 
+        fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
+
+    if np.max(fx_arr)> 2.**mint - 2.**(-pm) and mint != 0:
         raise ValueError(f"Insufficient number of target (integer) qubits.")
     
     # start training 
@@ -601,7 +609,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce, verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -613,7 +621,12 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,verbose=True):
     if mint==None or mint==m:
         mis=""
     else:
-        mis=f"({mint})"          
+        mis=f"({mint})"    
+
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'          
 
     # load weights 
     weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -661,7 +674,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,verbose=True):
 
     return 0 
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint):
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):
     """
     For a given set of input parameters, check if training and testing results already exist. 
     """
@@ -675,13 +688,18 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint):
     else:
         mis=f"({mint})"
 
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'    
+
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_loss = os.path.isfile(os.path.join("outputs", f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     
     return check_mismatch & check_weights & check_loss
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint):   
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce):   
     """
     For a given set of input parameters, check if temp files already exist. 
     """
@@ -695,6 +713,10 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'
 
     check_mismatch=False 
     check_weights=False 
@@ -710,7 +732,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint):
     
     return check_mismatch & check_weights & check_loss
 
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint):    
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce):    
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
     """
@@ -723,6 +745,10 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint):
         mis=""
     else:
         mis=f"({mint})"
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'    
 
     log_str= ("" if log==False else "log_")
 
@@ -738,3 +764,27 @@ def generate_seed():
     """
 
     return int(time.time())
+
+def extract_phase(n):
+    """
+    For an `n`-qubit register storing computational basis state |k> representing a float between 0 and 1, transform to
+        |k> -> e^(2 pi k) |k> 
+    via single-qubit Ry rotations (based on scheme presented in Hayes 2023).
+
+    This assumes an unsigned magnitude encoding with n precision bits. 
+    """
+
+    qc = QuantumCircuit(n, "Extract Phase")
+    qubits = list(range(n))
+
+    for k in np.arange(1,n+1):
+        lam = 2.*np.pi*(2.**(-k))
+        qubit = n-k
+        qc.p(lam,qubits([qubit]))
+
+    # package as instruction
+    qc_inst = qc.to_instruction()
+    circuit = QuantumCircuit(n)
+    circuit.append(qc_inst, qubits)    
+
+    return 0 
