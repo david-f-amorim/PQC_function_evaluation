@@ -12,6 +12,7 @@ from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
 from torch import Tensor, no_grad 
 import sys, time, os 
 import torch 
+import warnings
 
 def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
     """
@@ -146,7 +147,7 @@ def twos_complement(binary):
     
     return compl
 
-def input_layer(n, m, par_label, ctrl_state=0): 
+def input_layer(n, m, par_label, ctrl_state=0, real=False): 
     """
     Construct an input layer consisting of controlled single-qubit rotations
     with the n input qubits acting as controls and the m target qubits
@@ -158,7 +159,7 @@ def input_layer(n, m, par_label, ctrl_state=0):
     qubits = list(range(n+m))
 
     # number of parameters used by each gate 
-    num_par = 3 
+    num_par = 3 if real==False else 1
 
     # number of gates applied per layer 
     num_gates = n
@@ -174,12 +175,13 @@ def input_layer(n, m, par_label, ctrl_state=0):
         if np.modf(j/m)[1] >= 1:
             j -=int(np.modf(j/m)[1] * m)
 
-        par = params[int(param_index) : int(param_index + num_par)]    
-
-        cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
-        qc.append(cu3, [qubits[i], qubits[j+n]])
-
-        param_index += num_par
+        if real:
+            qc.cry(params[i], qubits[i], qubits[j+n])
+        else:
+            par = params[int(param_index) : int(param_index + num_par)] 
+            cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
+            qc.append(cu3, [qubits[i], qubits[j+n]])
+            param_index += num_par
         
 
     # package as instruction
@@ -189,25 +191,33 @@ def input_layer(n, m, par_label, ctrl_state=0):
     
     return circuit 
 
-def N_gate(params):
+def N_gate(params, real=False):
     """
     Construct the two-qubit N gate (as defined in Vatan 2004)
     in terms of three parameters, stored in list or tuple 'params'
     """
 
     circuit = QuantumCircuit(2, name="N Gate")
-    circuit.rz(-np.pi / 2, 1)
-    circuit.cx(1, 0)
-    circuit.rz(params[0], 0)
-    circuit.ry(params[1], 1)
-    circuit.cx(0, 1)
-    circuit.ry(params[2], 1)
-    circuit.cx(1, 0)
-    circuit.rz(np.pi / 2, 0)
+
+    if real:
+        circuit = QuantumCircuit(2, name="RN Gate")
+        circuit.cx(1, 0)
+        circuit.ry(params[0], 0)
+        circuit.ry(params[1], 1)
+        circuit.cx(0, 1)
+    else:    
+        circuit.rz(-np.pi / 2, 1)
+        circuit.cx(1, 0)
+        circuit.rz(params[0], 0)
+        circuit.ry(params[1], 1)
+        circuit.cx(0, 1)
+        circuit.ry(params[2], 1)
+        circuit.cx(1, 0)
+        circuit.rz(np.pi / 2, 0)
 
     return circuit 
 
-def conv_layer_NN(m, par_label):
+def conv_layer_NN(m, par_label, real=False):
     """
     Construct a linear (neighbour-to-neighbour) convolutional layer
     via the cascaded application of the N gate to the m-qubit target 
@@ -219,7 +229,7 @@ def conv_layer_NN(m, par_label):
     qubits = list(range(m))
 
     # number of parameters used by each N gate 
-    num_par = 3 
+    num_par = 3 if real==False else 2 
 
     # number of gates applied per layer 
     num_gates = m
@@ -234,7 +244,7 @@ def conv_layer_NN(m, par_label):
     pairs.append((qubits[-1], 0))
 
     for j in np.arange(num_gates):
-        qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)]),pairs[int(j)],inplace=True)
+        qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)], real=real),pairs[int(j)],inplace=True)
         if j != num_gates -1:
             qc.barrier()
         param_index += num_par 
@@ -246,7 +256,7 @@ def conv_layer_NN(m, par_label):
     
     return circuit 
 
-def conv_layer_AA(m, par_label): 
+def conv_layer_AA(m, par_label, real=False): 
     """
     Construct a quadratic (all-to-all) convolutional layer
     via the cascaded application of the N gate to the m-qubit target 
@@ -257,7 +267,7 @@ def conv_layer_AA(m, par_label):
     qubits = list(range(m))
 
     # number of parameters used by each N gate 
-    num_par = 3 
+    num_par = 3 if real==False else 2 
 
     # number of gates applied per layer 
     num_gates = 0.5 * m * (m-1)
@@ -271,7 +281,7 @@ def conv_layer_AA(m, par_label):
     pairs = list(combinations(qubits,2))
 
     for j in np.arange(num_gates):
-        qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)]),pairs[int(j)],inplace=True)
+        qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)], real=real),pairs[int(j)],inplace=True)
         if j != num_gates -1:
             qc.barrier()
         param_index += num_par 
@@ -326,7 +336,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False):
     """
     Set up a network consisting of input and convolutional layers acting on n input 
     qubits and m target qubits.  
@@ -346,7 +356,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     if initial_IL: 
         # apply input layer 
-        circuit.compose(input_layer(n,m, u"\u03B8_IN"), circuit.qubits, inplace=True)
+        circuit.compose(input_layer(n,m, u"\u03B8_IN", real=real), circuit.qubits, inplace=True)
         circuit.barrier()
 
     if input_H:
@@ -360,29 +370,29 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         if toggle_IL==False:
 
             if i % 2 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2)), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2), real=real), target_register, inplace=True)
             elif i % 2 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2)), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2),real=real), target_register, inplace=True)
         
         if toggle_IL==True:
 
             if i % 3 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3)), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3),real=real), target_register, inplace=True)
             elif i % 3 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3)), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3),real=real), target_register, inplace=True)
             elif i % 3 ==2:
                 # alternate between layers with control states 0 and 1 
                 if i % 2 == 1:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1), circuit.qubits, inplace=True) 
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1,real=real), circuit.qubits, inplace=True) 
                 elif i % 2 == 0:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0), circuit.qubits, inplace=True)     
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0,real=real), circuit.qubits, inplace=True)     
 
         if i != L-1:
             circuit.barrier()
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real):
     """
     Initialise circuit as QNN for training purposes.
     """
@@ -407,6 +417,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mint = 0
         mis=f"({mint})"
         meta+='(PR)'
+    if real:
+        meta+='(r)'    
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -414,7 +426,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     # generate circuit and set up as QNN 
     if train_superpos: 
-        qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True)
+        qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real)
         qnn = SamplerQNN(
                 circuit=qc.decompose(),            # decompose to avoid data copying (?)
                 sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -423,7 +435,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 input_gradients=False # ?? 
             ) 
     else:     
-        qc = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True)
+        qc = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real)
         qnn = SamplerQNN(
                 circuit=qc.decompose(),            # decompose to avoid data copying (?)
                 sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -477,12 +489,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     elif loss_str=="CE":
         criterion=CrossEntropyLoss()
     elif loss_str=="MM":
-
         def criterion(output, target):
-
-            val = 1. - torch.abs(torch.sum(torch.mul(output, target)))
-
-            return val 
+            return 1. - torch.abs(torch.sum(torch.mul(output, target)))
       
                     
     # set up arrays to store training outputs 
@@ -542,6 +550,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
 
+    warnings.filterwarnings("ignore", category=UserWarning)
+
     for i in np.arange(epochs)[recovered_k:]:
 
         if train_superpos == False:
@@ -557,14 +567,18 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # train model  
         optimizer.zero_grad()
 
-        if loss_str=="MM":
+        if loss_str=="MM" or real:
             if i==recovered_k:
                 angle_tensor = Tensor(np.zeros(2**(n+m)))
+                sign_tensor=Tensor(np.ones(2**(n+m)))
             else: 
                 angle_tensor = Tensor(angle_arr)   
+                sign_tensor=Tensor(sign_arr)
 
-            loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number 
-
+            if real:
+                loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
+            else:        
+                loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number in sqrt !
         else:
             loss = criterion(model(input), target)
 
@@ -576,12 +590,12 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         # set up circuit with calculated weights
         if train_superpos:
-            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True)
+            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real)
             with no_grad():
                 generated_weights = model.weight.detach().numpy()      
             circ = circ.assign_parameters(generated_weights)
         else:
-            circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True)
+            circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real)
 
             with no_grad():
                 generated_weights = model.weight.detach().numpy()
@@ -599,9 +613,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # extract phases of conjugate state vector 
         angle_arr = np.angle(np.conjugate(state_vector))
 
+        # extract signs of state vector 
+        sign_arr= np.sign(state_vector) 
+
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
+
+        print(np.abs(state_vector)**2, mismatch)
 
         # save mismatch for plotting 
         mismatch_vals[i]=mismatch
@@ -651,11 +670,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
 
         prefix="\t" 
-        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
+        #print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
         
     print(" ", flush=True, file=sys.stdout)
     
+    warnings.filterwarnings("default", category=UserWarning)
+
     elapsed = time.time()-start
     mins, sec = divmod(elapsed, 60)
     hours, mins = divmod(mins, 60)
@@ -690,7 +711,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos, verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real, verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -709,7 +730,9 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
-        meta+='(PR)'          
+        meta+='(PR)' 
+    if real:
+        meta+='(r)'               
 
     # load weights 
     weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -730,7 +753,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
         enc=binary_to_encode_param(np.binary_repr(i,n))
         params=np.concatenate((enc, weights))  
 
-        circ = generate_network(n,m,L, encode=True,toggle_IL=True)
+        circ = generate_network(n,m,L, encode=True,toggle_IL=True, real=real)
         circ = circ.assign_parameters(params) 
 
         # get target array 
@@ -762,7 +785,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
 
     return 0 
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos):
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real):
     """
     For a given set of input parameters, check if training and testing results already exist. 
     """
@@ -781,7 +804,9 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
-        meta+='(PR)'    
+        meta+='(PR)'
+    if real:
+        meta+='(r)'        
 
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -789,7 +814,7 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     
     return check_mismatch & check_weights & check_loss
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos):   
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real):   
     """
     For a given set of input parameters, check if temp files already exist. 
     """
@@ -810,6 +835,8 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
         mint = 0
         mis=f"({mint})"
         meta+='(PR)'
+    if real:
+        meta+='(r)'    
 
     check_mismatch=False 
     check_weights=False 
@@ -825,7 +852,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     
     return check_mismatch & check_weights & check_loss
 
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos):    
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real):    
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
     """
@@ -844,7 +871,9 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
-        meta+='(PR)'    
+        meta+='(PR)'   
+    if real:
+        meta+='(r)'     
 
     log_str= ("" if log==False else "log_")
 
