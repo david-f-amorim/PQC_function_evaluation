@@ -345,7 +345,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
             generated_weights = model.weight.detach().numpy()
 
     np.save(os.path.join("ampl_outputs", f"weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),generated_weights)
-    np.save(os.path.join("ampl_outputs", f"mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}__{x_min}_{x_max}{meta}"),mismatch_vals)
+    np.save(os.path.join("ampl_outputs", f"mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),mismatch_vals)
     np.save(os.path.join("ampl_outputs", f"loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),loss_vals)
     np.save(os.path.join("ampl_outputs", f"statevec_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),np.abs(state_vector))
 
