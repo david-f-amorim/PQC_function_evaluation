@@ -17,6 +17,8 @@ parser.add_argument('-r','--real', help="Output states with real amplitudes only
 parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
 parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
 
+parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023: -n 6 -m 8 -PR -f psi.", action='store_true')
+
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
 parser.add_argument('--lr', help="Learning rate.", default=0.01,type=float)
@@ -34,10 +36,18 @@ if opt.f_str==None:
     opt.f_str=opt.f 
 
 if opt.f=="psi":
-    opt.f=psi    
+    opt.f=psi   
+else:
+    opt.f=lambda x: eval(opt.f)      
 
 if opt.gen_seed:
-    opt.seed = generate_seed()    
+    opt.seed = generate_seed()   
+
+if opt.hayes:
+    opt.n=6 
+    opt.m=8 
+    opt.phase_reduce=True 
+    opt.f=psi      
 
 # check for duplicates
 from tools import train_QNN, test_QNN
@@ -49,8 +59,8 @@ for i in range(len(opt.L)):
     if dupl_files and opt.ignore_duplicates==False:
         print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
     else: 
-        train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=lambda x: eval(opt.f), func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real)
-        test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=lambda x: eval(opt.f), func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real)    
+        train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real)
+        test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real)    
 
 
 
