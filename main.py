@@ -1,5 +1,5 @@
 import argparse 
-from tools import check_duplicates, generate_seed 
+from tools import check_duplicates, generate_seed, psi 
 
 parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
 parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=int)
@@ -32,6 +32,9 @@ opt = parser.parse_args()
 # configure arguments
 if opt.f_str==None:
     opt.f_str=opt.f 
+
+if opt.f=="psi":
+    opt.f=psi    
 
 if opt.gen_seed:
     opt.seed = generate_seed()    

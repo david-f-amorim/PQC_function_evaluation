@@ -917,8 +917,9 @@ def extract_phase(n):
     return circuit 
 
 def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file):
-
-    raise DeprecationWarning("FIX CIRCULAR IMPORT PROBLEM")
+    """
+    Amplitude encode (phase and amplitude) a quantum register using pre-trained weights.
+    """
 
     # set up registers 
     input_register = QuantumRegister(n, "input")
@@ -930,7 +931,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     weights_p = np.load(weights_p_str)
 
     # encode amplitudes 
-    circuit.compose(R_generate_network(n, L_A), input_register, inplace=True)
+    circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
     circuit = circuit.assign_parameters(weights_A)
 
     # evaluate function
@@ -955,3 +956,68 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     np.save(state_vec_file, state_v)
 
     return 0
+
+def psi(x,):
+    """
+    Phase function to encode for Hayes 2023. 
+
+    Note: parameters hard-coded for now. 
+    """
+
+    n = 6 
+    nint = n 
+    fmin=40.
+    fmax=168. 
+    m1=(4.926e-6)*35
+    m2=(4.926e-6)*30. 
+    beta=0.
+    sig=0.
+    Tfrac = 100.
+     
+    df = (fmax-fmin)/(2**n)
+    T = 1./df
+    tc = T + (T/Tfrac)
+    DT = tc%T
+    Mt = m1 + m2
+    nu = (m1*m2)/Mt
+    eta = nu/Mt
+    Mc = Mt*eta**(3./5)
+
+    def x_trans(x):
+        xmax = np.power(2,nint) - np.power(2,nint-n)
+        x = x/xmax
+        x = x*(fmax-fmin-df)
+        x = x + fmin
+        return x
+        
+
+    x = x_trans(x)
+    out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
+    return out
+
+def A_generate_network(n,L):
+    """
+    Set up a network consisting of real convolutional layers acting on n 
+    qubits used for amplitude encoding of a single register. 
+    """
+
+    # initialise empty input register 
+    register = QuantumRegister(n, "reg")
+    circuit = QuantumCircuit(register) 
+
+    # prepare register
+    circuit.h(register)
+    circuit.barrier()
+
+    # apply R convolutional layers (alternating between AA and NN)
+    for i in np.arange(L):
+
+        if i % 2 ==0:
+            circuit.compose(conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2), real=True), register, inplace=True)
+        elif i % 2 ==1:
+            circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True), register, inplace=True)
+          
+        if i != L-1:
+            circuit.barrier()
+
+    return circuit 

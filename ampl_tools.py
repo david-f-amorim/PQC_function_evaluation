@@ -15,122 +15,7 @@ from tools import check_duplicates, generate_seed
 import torch
 import warnings
 
-def RN_gate(params):
-    """
-    Construct the two-qubit RN gate (EXPERIMENTAL!)
-    in terms of three parameters, stored in list or tuple 'params'
-    """
-
-    circuit = QuantumCircuit(2, name="RN Gate")
-    circuit.cx(1, 0)
-    circuit.ry(params[0], 0)
-    circuit.ry(params[1], 1)
-    circuit.cx(0, 1)
-    
-    return circuit 
-
-def R_conv_layer_NN(m, par_label):
-    """
-    Construct a linear (neighbour-to-neighbour) convolutional layer
-    via the cascaded application of the RN gate to a n-qubit 
-    register.   
-    """
-
-    # set up circuit 
-    qc = QuantumCircuit(m, name="R Convolutional Layer (NN)")
-    qubits = list(range(m))
-
-    # number of parameters used by each N gate 
-    num_par = 3 
-
-    # number of gates applied per layer 
-    num_gates = m
-
-    # set up parameter vector 
-    param_index = 0
-    params = ParameterVector(par_label, length= int(num_par * num_gates))
-
-    # apply N gate linearly between neighbouring qubits
-    # (including circular connection between last and first) 
-    pairs = [tuple([i, i+1]) for i in qubits[:-1]]
-    pairs.append((qubits[-1], 0))
-
-    for j in np.arange(num_gates):
-        qc.compose(RN_gate(params[int(param_index) : int(param_index + num_par)]),pairs[int(j)],inplace=True)
-        if j != num_gates -1:
-            qc.barrier()
-        param_index += num_par 
-    
-    # package as instruction
-    qc_inst = qc.to_instruction()
-    circuit = QuantumCircuit(m)
-    circuit.append(qc_inst, qubits)
-    
-    return circuit 
-
-def R_conv_layer_AA(m, par_label): 
-    """
-    Construct a quadratic (all-to-all)  convolutional layer
-    via the cascaded application of the RN gate to a n-qubit 
-    register.   
-    """
-    # set up circuit 
-    qc = QuantumCircuit(m, name="Convolutional Layer (AA)")
-    qubits = list(range(m))
-
-    # number of parameters used by each N gate 
-    num_par = 3 
-
-    # number of gates applied per layer 
-    num_gates = 0.5 * m * (m-1)
-
-    # set up parameter vector 
-    param_index = 0
-    params = ParameterVector(par_label, length= int(num_par * num_gates))
-
-    # apply N gate linearly between neighbouring qubits
-    # (including circular connection between last and first) 
-    pairs = list(combinations(qubits,2))
-
-    for j in np.arange(num_gates):
-        qc.compose(RN_gate(params[int(param_index) : int(param_index + num_par)]),pairs[int(j)],inplace=True)
-        if j != num_gates -1:
-            qc.barrier()
-        param_index += num_par 
-    
-    # package as instruction
-    qc_inst = qc.to_instruction()
-    circuit = QuantumCircuit(m)
-    circuit.append(qc_inst, qubits)
-    
-    return circuit 
-
-def R_generate_network(n,L):
-    """
-    Set up a network consisting of real convolutional layers acting on n 
-    qubits. 
-    """
-
-    # initialise empty input register 
-    register = QuantumRegister(n, "reg")
-    circuit = QuantumCircuit(register) 
-
-    # prepare register
-    circuit.h(register)
-    circuit.barrier()
-
-    # apply R convolutional layers (alternating between AA and NN)
-    for i in np.arange(L):
-
-        if i % 2 ==0:
-            circuit.compose(R_conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2)), register, inplace=True)
-        elif i % 2 ==1:
-            circuit.compose(R_conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2)), register, inplace=True)
-          
-        if i != L-1:
-            circuit.barrier()
-
-    return circuit 
+from tools import A_generate_network
 
 def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint):
     """
@@ -141,7 +26,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
     algorithm_globals.random_seed= seed
     
     # generate circuit and set up as QNN 
-    qc = R_generate_network(n,L)
+    qc = A_generate_network(n,L)
     qnn = SamplerQNN(
             circuit=qc.decompose(),            # decompose to avoid data copying (?)
             sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -240,7 +125,7 @@ def R_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,l
         loss_vals[i]=loss.item()
 
         # set up circuit with calculated weights
-        circ = R_generate_network(n,L)
+        circ = A_generate_network(n,L)
 
         with no_grad():
             generated_weights = model.weight.detach().numpy()
