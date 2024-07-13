@@ -1,0 +1,147 @@
+\documentclass{beamer}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[UKenglish]{babel}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{braket}
+\usepackage{esint}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false, bookmarks=true}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title[PQC Function Evaluation]{PQC Function Evaluation}
+\subtitle{Weeks 1-3}
+\author[David Amorim]{David Amorim}
+\institute[]{}
+\date[2024]{01/07/2024 - 19/07/2024}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+\begin{frame}
+\section{Background}
+\frametitle{Background}
+
+\begin{itemize}
+\item Hayes 2023\footnote{\url{https://arxiv.org/pdf/2306.11073}} presents a scheme to encode a complex vector $\boldsymbol{h} =\{ \tilde{A}_j e^{i \Psi (j)} | 0 \leq j < N \}$ as the state 
+\begin{equation}
+\ket{h} = \frac{1}{|\tilde{A}|} \sum^{2^n-1}_{j=0} \tilde{A}(j) e^{i \Psi (j)} \ket{j}, 
+\end{equation}
+using $n = \lceil \log_2 N \rceil$ qubits
+\item This requires operators $\hat{U}_A$ and $\hat{U}_\Psi$ such that 
+\begin{align}
+\hat{U}_A \ket{0}^{\otimes n} &=  \frac{1}{|\tilde{A}|} \sum^{2^n-1}_{j=0} \tilde{A}(j) \ket{j}, \\
+\hat{U}_\Psi \ket{j} &= e^{i \Psi (j)} \ket{j}
+\end{align}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Background}
+\begin{itemize}
+\item $\hat{U}_\Psi$ is constructed via an operator $\hat{Q}_\Psi$ that performs \alert{function evaluation} in an ancilla register:
+\begin{equation}
+\hat{Q}_\Psi  \ket{j} \ket{0}^{\otimes m}_a = \ket{j} \ket{\Psi'(j)}_a,
+\end{equation}
+with $\Psi'(j) \equiv \Psi(j) / 2 \pi$
+\item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPF)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Background}
+\begin{alertblock}{Aim}
+Implement $\hat{Q}_\Psi$ in a gate-efficient way using a parametrised quantum circuit (PQC)
+\end{alertblock}
+\vspace{1cm}
+\textbf{Remark} \\
+The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register containing the $\ket{\Psi'(j)}$ will be referred to as the \alert{input register} and \alert{target register}, respectively. 
+\end{frame}
+
+\begin{frame}
+\section{Approach: a QCNN}
+\frametitle{Approach: a QCNN}
+\begin{itemize}
+\item A \emph{quantum convolutional neural network} (\alert{QCNN}) is used to tackle the problem
+\item A QCNN is a parametrised quantum circuit involving multiple \alert{layers}
+\item Two types of network layers are implemented:
+\begin{itemize}
+\item \alert{Convolutional layers (CL)} involve multi-qubit entanglement gates 
+\item \alert{Input layers (IL)}\footnote{Replacing the conventional QCNN \emph{pooling layers}} involve controlled single-qubit operations on target qubits 
+\end{itemize}
+\item Input qubits only appear as controls throughout the QCNN
+\end{itemize}
+\end{frame}
+ 
+\begin{frame}
+\subsection{Convolutional Layers}
+\frametitle{Convolutional Layers (CLs)}
+\begin{itemize}
+\item Each CL involves the cascaded application of a \alert{two-qubit operator} on the target register 
+\item A general two-qubit operator involves 15 parameters
+\item To reduce the parameter space, the \alert{three-parameter gate} 
+\begin{equation}
+\mathcal{N}(\alpha, \beta, \gamma) = \exp \left( i \left[ \alpha X \otimes X + \beta Y \otimes Y + \gamma Z \otimes Z \right] \right)
+\end{equation}
+is applied, at the cost of restricting the search space 
+\item This can be decomposed\footnote{\url{https://arxiv.org/pdf/quant-ph/0308006}} into 3 $CX$, 3 $R_z$, and 2 $R_y$ gates
+\item A two-parameter real version, $\mathcal{N}_\mathbb{R}(\lambda, \mu)$, can be obtained by removing the $R_z$
+\end{itemize}
+\end{frame} 
+
+\begin{frame}
+\frametitle{Convolutional Layers (CLs)}
+\begin{itemize}
+\item Two types of convolutional layers are implemented:
+\begin{itemize}
+\item \alert{Neighbour-to-neighbour / linear CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to neighbouring target qubits 
+\item \alert{All-to-all /quadratic CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to all combinations of target qubits
+\end{itemize}
+\item The $\mathcal{N}$-gate cost of neighbour-to-neighbour (NN) layers is \alert{$\mathcal{O}(m)$} while that of all-to-all (AA) layers is \alert{$\mathcal{O}(m^2)$}
+\item Currently, the QCNN uses alternating linear and quadratic CLs
+\end{itemize}
+\end{frame} 
+
+\begin{frame}
+\subsection{Input Layers}
+\frametitle{Input Layers (ILs)}
+\begin{itemize}
+\item ILs, replacing pooling layers, feed information about the input register into the target register 
+\item An IL involves a sequence of controlled generic single-qubit rotations (\alert{$CU3$ gates}) on the target qubits, with input qubits as controls
+\item For an IL producing states with \alert{real} amplitudes, the $CU3$ gates are replaced with \alert{$CR_y$ gates}
+\item Each input qubit controls precisely one $CU3$/$CR_y$ operation, resulting in an \alert{$\mathcal{O}(n)$} gate cost (no CX gates!)
+\item ILs are inserted after every second convolutional layer, alternating between control states 0 and 1  
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\subsection{Summary: QCNN Structure}
+\frametitle{Summary: QCNN Structure}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=5cm]{im/QCNN_structure}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\section{Training the QCNN}
+\frametitle{Training the QCNN}
+ADD SUBSECTIONS: SEQUENTIAL, SUPERPOSITION, ASIDE: AMPLITUDES  (maybe put the aside as a footnote for superposition)..
+
+.. add smth about challenges ?? 
+\end{frame}
+
+
+\end{document}
