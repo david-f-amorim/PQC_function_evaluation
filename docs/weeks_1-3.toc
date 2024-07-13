@@ -5,3 +5,4 @@
 \beamer@subsectionintoc {2}{2}{Input Layers}{9}{0}{2}
 \beamer@subsectionintoc {2}{3}{Summary: QCNN Structure}{10}{0}{2}
 \beamer@sectionintoc {3}{Training the QCNN}{11}{0}{3}
+\beamer@sectionintoc {4}{Initial Tests}{13}{0}{4}
