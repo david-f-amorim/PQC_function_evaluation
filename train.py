@@ -17,7 +17,7 @@ parser.add_argument('-r','--real', help="Output states with real amplitudes only
 parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
 parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
 
-parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. -n 6 -PR -f psi. Still set own m", action='store_true')
+parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -n 6 -PR -f psi. Still set own m.", action='store_true')
 
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
