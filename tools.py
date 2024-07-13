@@ -247,7 +247,8 @@ def conv_layer_NN(m, par_label, real=False):
     for j in np.arange(num_gates):
         qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)], real=real),pairs[int(j)],inplace=True)
         if j != num_gates -1:
-            qc.barrier()
+            #qc.barrier()
+            s=" "
         param_index += num_par 
     
     # package as instruction
@@ -284,7 +285,8 @@ def conv_layer_AA(m, par_label, real=False):
     for j in np.arange(num_gates):
         qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)], real=real),pairs[int(j)],inplace=True)
         if j != num_gates -1:
-            qc.barrier()
+            #qc.barrier()
+            s=" "
         param_index += num_par 
     
     # package as instruction
@@ -358,7 +360,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
     if initial_IL: 
         # apply input layer 
         circuit.compose(input_layer(n,m, u"\u03B8_IN", real=real), circuit.qubits, inplace=True)
-        circuit.barrier()
+        #circuit.barrier()
 
     if input_H:
         circuit.h(input_register)    
@@ -389,7 +391,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
                     circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0,real=real), circuit.qubits, inplace=True)     
 
         if i != L-1:
-            circuit.barrier()
+            #circuit.barrier()
+            str=""
 
         if inverse:
             circuit=circuit.inverse()    
@@ -900,15 +903,23 @@ def extract_phase(n):
 
     This assumes an unsigned magnitude encoding with n precision bits. 
     """
+    nint = 0
 
-    qc = QuantumCircuit(n, "Extract Phase")
+    qc = QuantumCircuit(n, name="Extract Phase")
     qubits = list(range(n))
-
-    for k in np.arange(1,n+1):
+    
+    """
+    for k in np.arange(1,n+1-nint):
         lam = 2.*np.pi*(2.**(-k))
-        qubit = n-k
-        qc.p(lam,qubits([qubit]))
+        qubit = n-k - nint
+        qc.p(lam,qubits[qubit])
+    """    
 
+    for k in np.arange(0,n):
+        lam = 2.*np.pi*(2.**(k-n))
+        qubit = k
+        qc.p(lam,qubits[qubit]) 
+       
     # package as instruction
     qc_inst = qc.to_instruction()
     circuit = QuantumCircuit(n)
@@ -916,7 +927,7 @@ def extract_phase(n):
 
     return circuit 
 
-def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file):
+def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file=None, save=False):
     """
     Amplitude encode (phase and amplitude) a quantum register using pre-trained weights.
     """
@@ -929,20 +940,23 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     # load weights 
     weights_A = np.load(weights_A_str)
     weights_p = np.load(weights_p_str)
-
+    
     # encode amplitudes 
     circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
     circuit = circuit.assign_parameters(weights_A)
-
+    
     # evaluate function
-    circuit.compose(generate_network(n,m, L_p, real=real_p), [input_register,target_register], inplace=True) 
-
+    qc = generate_network(n,m, L_p, real=real_p)
+    qc = qc.assign_parameters(weights_p)
+    inv_qc = qc.inverse()
+    circuit.compose(qc, [*input_register,*target_register], inplace=True) 
+    
     # extract phases 
     circuit.compose(extract_phase(m),target_register, inplace=True) 
 
     # clear ancilla register 
-    circuit.compose(generate_network(n,m, L_p, real=real_p, inverse=True), [input_register,target_register], inplace=True) 
-
+    circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
+    
     # get resulting statevector 
     backend = Aer.get_backend('statevector_simulator')
     job = execute(circuit, backend)
@@ -952,10 +966,12 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     state_vector = np.asarray(state_vector).reshape((2**m,2**n))
     state_v = state_vector[0,:].flatten()
 
-    # save to file 
-    np.save(state_vec_file, state_v)
-
-    return 0
+    if save:
+        # save to file 
+        np.save(state_vec_file, state_v)
+        return 0
+    else:
+        return state_v
 
 def psi(x,):
     """
@@ -1007,7 +1023,7 @@ def A_generate_network(n,L):
 
     # prepare register
     circuit.h(register)
-    circuit.barrier()
+    #circuit.barrier()
 
     # apply R convolutional layers (alternating between AA and NN)
     for i in np.arange(L):
@@ -1018,6 +1034,7 @@ def A_generate_network(n,L):
             circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True), register, inplace=True)
           
         if i != L-1:
-            circuit.barrier()
+            #circuit.barrier()
+            str=""
 
     return circuit 

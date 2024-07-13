@@ -100,6 +100,10 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_
         mis=f"({mint})"
     if train_superpos:
         meta+='(S)'
+    if phase_reduce:
+        mint = 0
+        mis=f"({mint})"
+        meta+='(PR)'    
     if real:
         meta+='(r)' 
 
@@ -714,7 +718,14 @@ if __name__ == '__main__':
     parser.add_argument('-M','--meta', help="String with meta data.",nargs="+", default=[""])
     parser.add_argument('-I','--ignore_duplicates', help="Ignore and overwrite duplicate files.", action='store_true')
 
+    parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. -n 6 -PR -f psi. Still set own m", action='store_true')
+
     opt = parser.parse_args()
+
+    if opt.hayes:
+        opt.n=6 
+        opt.phase_reduce=True 
+        opt.f_str="x"    
 
     if int(opt.compL)+int(opt.compf)+int(opt.compM)+int(opt.compl)+int(opt.compe)+int(opt.compeL) > 1:
         raise ValueError("Cannot do two comparisons at once.")

@@ -1,5 +1,8 @@
 # PQC for function evaluation 
 
+# THIS IS OUTDATED ! UPDATE EVENTUALLY ...
+
+
 ***Preliminaries: Aim and Definitions***  
 
 Consider an $n$-qubit *input* register, denoted with subscript $i$, as well as an $m$-qubit *target* register, denoted with subscript $t$, and let $f: \mathbb{R} \to \mathbb{R}$ be a function that can be efficiently computed. In the following, we aim to construct and operator that (approximately) performs 

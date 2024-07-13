@@ -46,7 +46,8 @@ if opt.gen_seed:
 if opt.hayes:
     opt.n=6 
     opt.phase_reduce=True 
-    opt.f=psi      
+    opt.f=psi 
+    opt.f_str="psi"     
 
 # check for duplicates
 from tools import train_QNN, test_QNN
