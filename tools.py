@@ -1178,7 +1178,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
         if (i % 100 ==0) and (i != 0) and (i != epochs-1): 
             np.save(os.path.join("ampl_outputs", f"__TEMP{i}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),generated_weights)
             np.save(os.path.join("ampl_outputs", f"__TEMP{i}_mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),mismatch_vals)
-            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}__{x_min}_{x_max}{meta}"),loss_vals)
+            np.save(os.path.join("ampl_outputs", f"__TEMP{i}_loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),loss_vals)
             
             # delete previous temp files
             prev_weights=f"__TEMP{i-100}_weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}.npy"

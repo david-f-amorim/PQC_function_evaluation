@@ -8,7 +8,7 @@ if __name__ == '__main__':
     parser.add_argument('-l','--loss', help="Loss function.", default="MSE", choices=["CE", "MSE", "L1", "KLD"])
     parser.add_argument('-f','--f', help="Function to evaluate (variable: x).", default=None)
     parser.add_argument('-fs','--f_str', help="String describing function.")
-    parser.add_argument('-e','--epochs', help="Number of epochs.", default=800,type=int)
+    parser.add_argument('-e','--epochs', help="Number of epochs.", default=300,type=int)
     parser.add_argument('--xmin', help="Minimum value of function range.", default=40, type=int)
     parser.add_argument('--xmax', help="Maximum value of function range.", default=168, type=int)
     parser.add_argument('-M','--meta', help="String with meta data.", default="")
