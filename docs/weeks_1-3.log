@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  13 JUL 2024 22:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  15 JUL 2024 17:20
 entering extended mode
 **./weeks_1-3.tex
 (weeks_1-3.tex
@@ -798,11 +798,51 @@ Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
 Package: esint 
 \symlargesymbolsA=\mathgroup6
 )
-Package hyperref Info: Option `colorlinks' set `false' on input line 12.
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count332
+\float@exts=\toks45
+\float@box=\box75
+\@float@everytoks=\toks46
+\@floatcapt=\box76
+)
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen293
+\captionmargin@=\dimen294
+\captionwidth=\dimen295
+\caption@tempdima=\dimen296
+\caption@indent=\dimen297
+\caption@parindent=\dimen298
+\caption@hangindent=\dimen299
+Package caption Info: beamer document class detected.
+
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption-beamer.
+sto
+File: caption-beamer.sto 2020/08/22 v2.0 Adaption of the caption package to the
+ beamer document classes (AR)
+))
+\c@caption@flags=\count333
+\c@continuedfloat=\count334
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: Hyperref support is turned off
+(caption)             because hyperref has stopped early.
+)
+\c@subfigure=\count335
+\c@subtable=\count336
+)
+Package hyperref Info: Option `colorlinks' set `false' on input line 14.
 
 
 Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 12.
+(hyperref)                setting the option has no effect on input line 14.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerthemeMadri
@@ -824,29 +864,29 @@ circles.sty)
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count332
-\l__pdf_internal_box=\box75
+\l__color_backend_stack_int=\count337
+\l__pdf_internal_box=\box77
 ) (weeks_1-3.aux)
 \openout1 = `weeks_1-3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -886,17 +926,17 @@ LaTeX Font Info:    ... okay on input line 25.
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count333
-\scratchdimen=\dimen293
-\scratchbox=\box76
-\nofMPsegments=\count334
-\nofMParguments=\count335
-\everyMPshowfont=\toks45
-\MPscratchCnt=\count336
-\MPscratchDim=\dimen294
-\MPnumerator=\count337
-\makeMPintoPDFobject=\count338
-\everyMPtoPDFconversion=\toks46
+\scratchcounter=\count338
+\scratchdimen=\dimen300
+\scratchbox=\box78
+\nofMPsegments=\count339
+\nofMParguments=\count340
+\everyMPshowfont=\toks47
+\MPscratchCnt=\count341
+\MPscratchDim=\dimen301
+\MPnumerator=\count342
+\makeMPintoPDFobject=\count343
+\everyMPtoPDFconversion=\toks48
 )
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -908,7 +948,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 25.
+Package hyperref Info: Link coloring OFF on input line 29.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -920,11 +960,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 lestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count339
+\c@section@level=\count344
 )
-LaTeX Info: Redefining \ref on input line 25.
-LaTeX Info: Redefining \pageref on input line 25.
-LaTeX Info: Redefining \nameref on input line 25.
+LaTeX Info: Redefining \ref on input line 29.
+LaTeX Info: Redefining \pageref on input line 29.
+LaTeX Info: Redefining \nameref on input line 29.
  (weeks_1-3.out) (weeks_1-3.out)
 \@outlinefile=\write5
 \openout5 = `weeks_1-3.out'.
@@ -953,26 +993,29 @@ Dictionary: translator-numbers-dictionary, Language: English
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-t
 heorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
-) (weeks_1-3.nav) [1
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+ (weeks_1-3.nav) [1
 
 {C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (weeks_1-3.toc)
  [2
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 50.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 50.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+esint on input line 5
-0.
+4.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/esint\uesint.fd
 File: uesint.fd 
@@ -995,8 +1038,8 @@ File: uesint.fd
 <im/QCNN_structure.png, id=334, 676.32675pt x 287.27325pt>
 File: im/QCNN_structure.png Graphic file (type png)
 <use im/QCNN_structure.png>
-Package pdftex.def Info: im/QCNN_structure.png  used on input line 138.
-(pdftex.def)             Requested size: 334.9324pt x 142.26378pt.
+Package pdftex.def Info: im/QCNN_structure.png  used on input line 142.
+(pdftex.def)             Requested size: 342.2953pt x 145.39403pt.
  [10
 
  <./im/QCNN_structure.png>] [11
@@ -1021,13 +1064,13 @@ Package rerunfilecheck Info: File `weeks_1-3.out' has not changed.
 (rerunfilecheck)             Checksum: 5F7E7F90A9CF07EE8F23776931DA6B56;926.
  ) 
 Here is how much of TeX's memory you used:
- 22056 strings out of 478864
- 417886 string characters out of 2848660
- 722533 words of memory out of 3000000
- 39421 multiletter control sequences out of 15000+600000
+ 23433 strings out of 478864
+ 444833 string characters out of 2848660
+ 747876 words of memory out of 3000000
+ 40781 multiletter control sequences out of 15000+600000
  418765 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,124p,416b,715s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 128i,15n,124p,416b,717s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -1053,7 +1096,7 @@ y8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
 s/cm/cmtt9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
 s/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on weeks_1-3.pdf (13 pages, 344863 bytes).
+Output written on weeks_1-3.pdf (13 pages, 344830 bytes).
 PDF statistics:
  567 PDF objects out of 1000 (max. 8388607)
  34 named destinations out of 1000 (max. 500000)

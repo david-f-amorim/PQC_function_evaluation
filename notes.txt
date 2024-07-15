@@ -2,34 +2,9 @@
 NOTES
 =======
 
------ CODE ISSUES ------
-    
-long-term: work towards integration with Fergus' code!
+PLAY AROUND WITH LOSS FUNCTIOSN ETC FOR AMPL ENCODE 
 
-Original work uses 6 qubits for x and 10 for y 
-
-
-+++++++++++
-
-TRY AND WRITE COMPLETE AMPLITUDE ENCODING ALGORITHM !! DO SOME TESTS WITH AMPL QCNN !!!
-	-> plot ampl versus function 
-
-========== 
-continue running the quinn computations -> results will allow for direct performance comparison with Fergus' qgan !
-=======
-
-INSIGHT: nint=None always ?! ; since value encoded in amplitude not basis state ??!
-
-
-define custom loss function with loss == mismatch?  loss (x,y) = 1 - |Sum_n (x_n * y_n) | as opposed to MSE loss(x,y) = mean [Sum_n (x_n -y_n)**2]
-
-
-write function to translate qubit to phase (paper) 
-
-next step: COMPARE BENCHMARK TO LPF !!!
-	->> work at a much higher level !! import functions from Fergus !!
-
-possible advantage: much fewer qubits! 
+GOAL: BEAT GR !!
 
 
 +++++++++++++++++ 

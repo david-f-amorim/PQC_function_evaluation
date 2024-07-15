@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage{braket}
 \usepackage{esint}
+\usepackage{float}
+\usepackage{subcaption}
 \usepackage{hyperref}
 \hypersetup{colorlinks=false, bookmarks=true}
 
@@ -16,11 +18,13 @@
 \usefonttheme{professionalfonts}
 \useinnertheme{circles}
 
+\setbeamertemplate{caption}[numbered]
+
 \title[PQC Function Evaluation]{PQC Function Evaluation}
 \subtitle{Weeks 1-3}
 \author[David Amorim]{David Amorim}
 \institute[]{}
-\date[2024]{01/07/2024 - 19/07/2024}
+\date[22/07/2024]{01/07/2024 - 19/07/2024}
 
 \begin{document}
 
@@ -57,7 +61,7 @@ using $n = \lceil \log_2 N \rceil$ qubits
 \hat{Q}_\Psi  \ket{j} \ket{0}^{\otimes m}_a = \ket{j} \ket{\Psi'(j)}_a,
 \end{equation}
 with $\Psi'(j) \equiv \Psi(j) / 2 \pi$
-\item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPF)}
+\item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPFs)}
 \end{itemize}
 \end{frame}
 
@@ -92,7 +96,7 @@ The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register conta
 \begin{itemize}
 \item Each CL involves the cascaded application of a \alert{two-qubit operator} on the target register 
 \item A general two-qubit operator involves 15 parameters
-\item To reduce the parameter space, the \alert{three-parameter operator} 
+\item To reduce the parameter space, the canonical \alert{three-parameter operator} 
 \begin{equation}
 \mathcal{N}(\alpha, \beta, \gamma) = \exp \left( i \left[ \alpha X \otimes X + \beta Y \otimes Y + \gamma Z \otimes Z \right] \right)
 \end{equation}
@@ -130,10 +134,10 @@ is applied, at the cost of restricting the search space
 \begin{frame}
 \subsection{Summary: QCNN Structure}
 \frametitle{Summary: QCNN Structure}
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[height=5cm]{im/QCNN_structure}
-\end{center}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{im/QCNN_structure}
+\caption{Schematic of QCNN structure}
 \end{figure}
 \end{frame}
 
@@ -145,9 +149,9 @@ is applied, at the cost of restricting the search space
 \item The optimiser determines improved parameter values for each training run (\alert{epoch}) based on the \alert{loss} between output and target state
 \item Beyond loss, \alert{mismatch} is an important metric:
 \begin{equation}
-\mathsf{M}= 1 - \sqrt{|\braket{\psi_\text{target}| \psi_\text{out}}|}
+\mathsf{M}= 1 - |\braket{\psi_\text{target}| \psi_\text{out}}|
 \end{equation}
-\item There are two ways to train the QCNN on input data:\footnote{Once can also train the QCNN to produce a target distribution independent of the input register, which is equivalent to constructing $\hat{U}_A$}
+\item There are two ways to train the QCNN on input data:\footnote{One can also train the QCNN to produce a target distribution independent of the input register, which is equivalent to constructing $\hat{U}_A$}
 \begin{enumerate}
 \item Training on \alert{individual states}
 \item Training in \alert{superposition}
@@ -187,6 +191,7 @@ is applied, at the cost of restricting the search space
 \item Training mode (individually versus in superposition)
 \item Use of $\mathcal{N}$ and $CU3$ versus $\mathcal{N}_\mathbb{R}$ and $R_y$ 
 \item Choice of loss function
+\item Network structure
 \end{enumerate}
 \item The case $n=m=2$, $\Psi(x)=x$ (the simplest non-trivial configuration) is an ideal \alert{benchmark problem}
 \item Unclear, however, how well these findings extrapolate to more general cases

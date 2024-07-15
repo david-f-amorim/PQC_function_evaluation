@@ -1102,6 +1102,9 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
         criterion=KLDivLoss()
     elif loss_str=="CE":
         criterion=CrossEntropyLoss()
+    elif loss_str=="MM":
+        def criterion(output, target):
+            return 1. - torch.abs(torch.sum(torch.mul(output, target)))    
                     
     # set up arrays to store training outputs 
     if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
