@@ -5,9 +5,9 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 
 # config 
 n = 6
-m = 5
+m = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy"
-weights_phase = "outputs/weights_6_5(0)_3_600_psi_MM_(S)(PR)(r).npy"
+weights_phase = "outputs/weights_6_6(0)_3_600_psi_MM_(S)(PR)(r).npy"
 L_ampl = 3 
 L_phase = 3
 real_p = True 
