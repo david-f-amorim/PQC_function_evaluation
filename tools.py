@@ -583,7 +583,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 sign_tensor=Tensor(np.ones(2**(n+m)))
             else: 
                 angle_tensor = Tensor(angle_arr)   
-                sign_tensor=Tensor(np.ones(2**(n+m))) #Tensor(sign_arr)
+                sign_tensor=Tensor(sign_arr) # Tensor(np.ones(2**(n+m))) 
 
             if real:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
@@ -624,7 +624,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         angle_arr = np.angle(np.conjugate(state_vector))
 
         # extract signs of state vector 
-        sign_arr= np.sign(state_vector) 
+        sign_arr= np.ones(2**(n+m), dtype=float) * np.sign(state_vector) 
 
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2

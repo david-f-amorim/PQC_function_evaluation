@@ -2,6 +2,14 @@
 NOTES
 =======
 
+SOMETHING IS WRONG WITH PHASE EXTRACTION !!!
+
+WHY ALWAYS PHASE OF PI ???-> NOTE: TOOK OUT MINUS SIGN MULT (l.586)!
+
+ALWAYS MINUS SIGN ??!!! !!!??? 
+
+
+
 
 +++++++++++++++++ 
 
