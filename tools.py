@@ -583,7 +583,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 sign_tensor=Tensor(np.ones(2**(n+m)))
             else: 
                 angle_tensor = Tensor(angle_arr)   
-                sign_tensor=Tensor(sign_arr)
+                sign_tensor=Tensor(np.ones(2**(n+m))) #Tensor(sign_arr)
 
             if real:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
@@ -912,13 +912,13 @@ def extract_phase(n):
         lam = 2.*np.pi*(2.**(-k))
         qubit = n-k - nint
         qc.p(lam,qubits[qubit])
-    """    
-
+       
+    """
     for k in np.arange(0,n):
         lam = 2.*np.pi*(2.**(k-n))
         qubit = k
         qc.p(lam,qubits[qubit]) 
-       
+      
     # package as instruction
     qc_inst = qc.to_instruction()
     circuit = QuantumCircuit(n)
@@ -963,6 +963,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     state_vector = result.get_statevector()
 
     state_vector = np.asarray(state_vector).reshape((2**m,2**n))
+
     state_v = state_vector[0,:].flatten()
 
     if save:
@@ -972,7 +973,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     else:
         return state_v
 
-def psi(x,):
+def psi(x):
     """
     Phase function to encode for Hayes 2023. 
 

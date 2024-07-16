@@ -5,11 +5,11 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 
 # config 
 n = 6
-m = 6
-weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy"
-weights_phase = "outputs/weights_6_6(0)_3_600_psi_MM_(S)(PR)(r).npy"
-L_ampl = 3 
-L_phase = 3
+m = 2
+weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
+weights_phase = "outputs/weights_6_2(0)_6_600_psi_MM_(S)(PR)(r).npy"
+L_ampl =3
+L_phase = 6
 real_p = True 
 
 # plot settings
@@ -24,7 +24,7 @@ no_h = True # don't produce h plot
 # additional plots 
 A_L_comp = False 
 QGAN_comp = False
-phase_round_comp = False  
+phase_round_comp = False 
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -93,6 +93,8 @@ state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p
 amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < 0).astype(int)
 phase *= (amplitude > 1e-15).astype(float) 
+
+print(np.sum(amplitude**2))
 
 # get full wavefunction 
 real_wave =np.real(state_vec)
@@ -283,9 +285,9 @@ if phase_round_comp:
         phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
         return 2 * np.pi * phase_reduced_dec
     
-    P =np.array([phi_round(4),phi_round(5),phi_round(6),phi_round(7),phi_round(8) ], dtype="object")
+    P =np.array([phi_round(3),phi_round(4),phi_round(5),phi_round(6),phi_round(7),phi_round(8) ], dtype="object")
 
-    labels= [r"$m=4$",r"$m=5$", r"$m=6$", r"$m=7$" ,r"$m=8$"]
+    labels= [r"$m=3$",r"$m=4$",r"$m=5$", r"$m=6$", r"$m=7$" ,r"$m=8$"]
 
     N = len(P)
 
