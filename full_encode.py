@@ -5,24 +5,35 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 
 # config 
 n = 6
-m = 4
-weights_ampl = "ampl_outputs/weights_6_8_800_x76_MSE_40_168_.npy"
-weights_phase = "outputs/weights_6_4(0)_3_1000_x_L1_(S)(PR)(r).npy"
-L_ampl = 8 
+m = 5
+weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy"
+weights_phase = "outputs/weights_6_5(0)_3_600_psi_MM_(S)(PR)(r).npy"
+L_ampl = 3 
 L_phase = 3
 real_p = True 
 
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
+pdf = False # save outputs as pdf 
 
-no_A = False # don't produce amplitude plot 
+no_A = True # don't produce amplitude plot 
 no_p = False # don't produce phase plot 
-no_h = False # don't produce h plot
+no_h = True # don't produce h plot
+
+# additional plots 
+A_L_comp = False 
+QGAN_comp = False
+phase_round_comp = False  
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
 rcParams['font.family'] = 'STIXGeneral'
+if pdf:
+    rcParams["text.usetex"] = True 
+    pdf_str=".pdf"
+else:
+    pdf_str=""    
 width=0.75
 color='black'
 fontsize=28
@@ -60,12 +71,21 @@ wave_real_target_rounded = np.real(h_target_rounded)
 wave_im_target_rounded = np.imag(h_target_rounded)
 
 # load amplitude-only statevector (for QCNN, QGAN, GR)
-ampl_vec = np.load("ampl_outputs/statevec_6_8_800_x76_MSE_40_168_.npy")
+ampl_vec = np.load("ampl_outputs/statevec_6_9_300_x76_MM_40_168_.npy")
 ampl_vec_QGAN = np.abs(np.load("ampl_outputs/amp_state_QGAN.npy"))
-ampl_vec_GR = np.abs(np.load("ampl_outputs/amp_state_QGAN.npy")) # GET GR !!
+ampl_vec_GR = np.abs(np.load("ampl_outputs/amp_state_GR.npy")) 
 
-# load LPF phase 
-#LPF_phase = np.load("...") GET DATA !!
+# load LPF phase [POST-PROCESSING TAKEN FROM HAYES 2023!]
+psi_LPF = np.load("full_encode/psi_LPF.npy")
+nint =1
+nn = 10
+probs = np.argwhere(np.round(np.abs(psi_LPF)**2,15)>0.)[:,1]
+probs = ((probs/(2**nn)) * (2**(nint) + 2**(nint) - 2**(-(nn-nint-1)))) - 2**nint
+psi_LPF = probs
+
+# load LPF waveforms 
+h_QGAN = np.load("full_encode/full_state_QGAN.npy")
+h_GR = np.load("full_encode/full_state_GR.npy")
 
 # calculate state vector from QCNNs 
 state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p)
@@ -88,7 +108,7 @@ if no_A==False:
     ax[0].plot(x_arr,ampl_target, color="black")
     if comp:
         ax[0].scatter(x_arr,ampl_vec_QGAN,label="QGAN", color="green")
-        ax[0].scatter(x_arr,ampl_vec_QGAN,label="GR", color="blue")
+        ax[0].scatter(x_arr,ampl_vec_GR,label="GR", color="blue")
     ax[0].scatter(x_arr,ampl_vec,label="QCNN", color="red")
 
     ax[0].set_ylabel(r"$\tilde A(f)$", fontsize=fontsize)
@@ -98,7 +118,7 @@ if no_A==False:
 
     if comp:
         ax[1].scatter(x_arr,ampl_target-ampl_vec_QGAN,label="QGAN", color="green")
-        ax[1].scatter(x_arr,ampl_target-ampl_vec_QGAN,label="GR", color="blue")
+        ax[1].scatter(x_arr,ampl_target-ampl_vec_GR,label="GR", color="blue")
     ax[1].scatter(x_arr,ampl_target-ampl_vec,label="QCNN", color="red")
 
     ax[1].set_ylabel(r"$\Delta \tilde A(f)$", fontsize=fontsize)
@@ -106,7 +126,7 @@ if no_A==False:
     ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
     fig.tight_layout()
-    fig.savefig("full_encode/amplitude_comp", bbox_inches='tight', dpi=500)
+    fig.savefig(f"full_encode/amplitude_comp{pdf_str}", bbox_inches='tight', dpi=500)
 
     if show:
         plt.show()
@@ -120,7 +140,7 @@ if no_p==False:
     ax[0].plot(x_arr,phase_target, color="black")
     ax[0].plot(x_arr,phase_rounded, color="gray", ls="--")
     if comp:
-        ax[0].scatter(x_arr,phase,label="LPF", color="blue")
+        ax[0].scatter(x_arr,psi_LPF,label="LPF", color="blue")
     ax[0].scatter(x_arr,phase,label="QCNN", color="red")
 
     ax[0].set_ylabel(r"$\Psi (f)$", fontsize=fontsize)
@@ -129,7 +149,7 @@ if no_p==False:
     ax[0].set_xticks([])
 
     if comp:
-        ax[1].scatter(x_arr,phase_target-phase,label="GR", color="blue")
+        ax[1].scatter(x_arr,phase_target-psi_LPF,label="GR", color="blue")
     ax[1].scatter(x_arr,phase_target-phase,label="QCNN", color="red")
 
     ax[1].set_ylabel(r"$\Delta \Psi(f)$", fontsize=fontsize)
@@ -137,7 +157,7 @@ if no_p==False:
     ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
     fig.tight_layout()
-    fig.savefig("full_encode/phase_comp", bbox_inches='tight', dpi=500)
+    fig.savefig(f"full_encode/phase_comp{pdf_str}", bbox_inches='tight', dpi=500)
 
     if show:
         plt.show()
@@ -153,8 +173,8 @@ if no_h==False:
     ax[0,0].plot(x_arr,wave_real_target, color="black")
     ax[0,0].plot(x_arr,wave_real_target_rounded, color="gray", ls="--")
     if comp:
-        ax[0,0].scatter(x_arr,real_wave,label="LPF & QGAN", color="green")
-        ax[0,0].scatter(x_arr,real_wave,label="LPF & GR", color="blue")
+        ax[0,0].scatter(x_arr,np.real(h_QGAN),label="LPF & QGAN", color="green")
+        ax[0,0].scatter(x_arr,np.real(h_GR),label="LPF & GR", color="blue")
     ax[0,0].scatter(x_arr,real_wave,label="QCNN", color="red")
 
     ax[0,0].set_ylabel(r"$\Re[\tilde h(f)]$", fontsize=fontsize)
@@ -163,8 +183,8 @@ if no_h==False:
     ax[0,0].set_xticks([])
 
     if comp:
-        ax[1,0].scatter(x_arr,wave_real_target -real_wave,label="LPF & QGAN", color="green")
-        ax[1,0].scatter(x_arr,wave_real_target -real_wave,label="LPF & GR", color="blue")
+        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_QGAN),label="LPF & QGAN", color="green")
+        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_GR),label="LPF & GR", color="blue")
     ax[1,0].scatter(x_arr,wave_real_target -real_wave,label="QCNN", color="red")
 
     ax[1,0].set_ylabel(r"$\Delta \Re[\tilde h(f)]$", fontsize=fontsize)
@@ -174,8 +194,8 @@ if no_h==False:
     ax[0,1].plot(x_arr,wave_im_target, color="black")
     ax[0,1].plot(x_arr,wave_im_target_rounded, color="gray", ls="--")
     if comp:
-        ax[0,1].scatter(x_arr,im_wave,label="LPF & QGAN", color="green")
-        ax[0,1].scatter(x_arr,im_wave,label="LPF & GR", color="blue")
+        ax[0,1].scatter(x_arr,np.imag(h_QGAN),label="LPF & QGAN", color="green")
+        ax[0,1].scatter(x_arr,np.imag(h_GR),label="LPF & GR", color="blue")
     ax[0,1].scatter(x_arr,im_wave,label="QCNN", color="red")
 
     ax[0,1].set_ylabel(r"$\Im[\tilde h(f)]$", fontsize=fontsize)
@@ -184,8 +204,8 @@ if no_h==False:
     ax[0,1].set_xticks([])
 
     if comp:
-        ax[1,1].scatter(x_arr,wave_im_target -im_wave,label="LPF & QGAN", color="green")
-        ax[1,1].scatter(x_arr,wave_im_target -im_wave,label="LPF & GR", color="blue")
+        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_QGAN),label="LPF & QGAN", color="green")
+        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_GR),label="LPF & GR", color="blue")
     ax[1,1].scatter(x_arr,wave_im_target -im_wave,label="QCNN", color="red")
 
     ax[1,1].set_ylabel(r"$\Delta \Im[\tilde h(f)]$", fontsize=fontsize)
@@ -193,7 +213,94 @@ if no_h==False:
     ax[1,1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
     fig.tight_layout()
-    fig.savefig("full_encode/h_comp", bbox_inches='tight', dpi=500)
+    fig.savefig(f"full_encode/h_comp{pdf_str}", bbox_inches='tight', dpi=500)
 
     if show:
         plt.show()
+
+#------------------------------------------------------------------------------------------------------
+
+if A_L_comp:
+
+    arr_1 = np.load("ampl_outputs/mismatch_6_1_600_x76_MM_40_168_.npy")
+    arr_2 = np.load("ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
+    arr_3 = np.load("ampl_outputs/mismatch_6_6_600_x76_MM_40_168_.npy")
+    arr_4 = np.load("ampl_outputs/mismatch_6_9_600_x76_MM_40_168_.npy")
+    arr_5 = np.load("ampl_outputs/mismatch_6_11_300_x76_MM_40_168_.npy")
+
+    M = np.array([arr_1,arr_2,arr_3,arr_4,arr_5], dtype="object")
+    L = np.array([1,3,6,9,11])
+
+    N = len(M)
+
+    plt.figure(figsize=figsize)
+    cmap = plt.get_cmap('jet', N)
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel("Epoch", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+    plt.yscale('log')         
+
+    for i in range(N): 
+        plt.scatter(np.arange(len(M[i]))+1, M[i], color=cmap(i), label=r"$L=$"+f"{L[i]}")
+
+    plt.legend(fontsize=fontsize, loc='upper right')
+    plt.savefig(f"full_encode/A_L_comp{pdf_str}", bbox_inches='tight', dpi=500)
+    if show:
+        plt.show()
+
+if QGAN_comp:
+
+    arr_1 = np.load("ampl_outputs/mismatch_QGAN_12.npy")
+    arr_2 = np.load("ampl_outputs/mismatch_QGAN_20.npy")
+    arr_3 = np.load("ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
+    
+    M = np.array([arr_1,arr_2,arr_3], dtype="object")
+    labels = [r"QGAN ($L=12$)",r"QGAN ($L=20$)",r"QCNN ($L=3$)"]
+    colours=["green", "blue", "red"]
+
+    N = len(M)
+
+    plt.figure(figsize=figsize)
+    cmap = plt.get_cmap('jet', N)
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel("Epoch", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+    plt.yscale('log')         
+
+    for i in range(N): 
+        plt.scatter(np.arange(len(M[i]))+1, M[i], color=colours[i], label=labels[i])
+
+    plt.legend(fontsize=fontsize, loc='lower right')
+    plt.savefig(f"full_encode/QGAN_comp{pdf_str}", bbox_inches='tight', dpi=500)
+    if show:
+        plt.show()        
+
+if phase_round_comp:
+
+    def phi_round(p):
+        phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
+        phase_reduced_bin = [dec_to_bin(i,p, "unsigned mag", 0) for i in phase_reduced]
+        phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
+        return 2 * np.pi * phase_reduced_dec
+    
+    P =np.array([phi_round(4),phi_round(5),phi_round(6),phi_round(7),phi_round(8) ], dtype="object")
+
+    labels= [r"$m=4$",r"$m=5$", r"$m=6$", r"$m=7$" ,r"$m=8$"]
+
+    N = len(P)
+
+    plt.figure(figsize=figsize)
+    cmap = plt.get_cmap('jet', N)
+    plt.ylabel(r"$\Psi (f)$", fontsize=fontsize)
+    plt.xlabel(r"$f$ (Hz)", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+  
+    for i in range(N): 
+        plt.plot(x_arr, P[i], color=cmap(i), label=labels[i], linewidth=2.5)
+
+    plt.plot(x_arr,phase_target,color="black",ls="--", linewidth=2, label=r"$m \to \infty$")     
+
+    plt.legend(fontsize=fontsize, loc='upper right')
+    plt.savefig(f"full_encode/phase_round_comp{pdf_str}", bbox_inches='tight', dpi=500)
+    if show:
+        plt.show()    

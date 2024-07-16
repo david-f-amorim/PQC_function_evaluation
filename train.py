@@ -38,7 +38,8 @@ if opt.f_str==None:
 if opt.f=="psi":
     opt.f=psi   
 else:
-    opt.f=lambda x: eval(opt.f)      
+    f = str(opt.f)
+    opt.f=lambda x: eval(f)      
 
 if opt.gen_seed:
     opt.seed = generate_seed()   

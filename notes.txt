@@ -2,11 +2,15 @@
 NOTES
 =======
 
-PLAY AROUND WITH LOSS FUNCTIOSN ETC FOR AMPL ENCODE 
-
-GOAL: BEAT GR !!
-
 
 +++++++++++++++++ 
+
+scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/PQC_function_evaluation/outputs Downloads/outputs
+
+scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/PQC_function_evaluation/ampl_outputs Downloads/ampl_outputs
+
+scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/Quantum_state_preparation_of_gravitational_waves/state_vectors Downloads/state_vecs
+
+scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/Quantum_state_preparation_of_gravitational_waves/weights Downloads/weights
 
 

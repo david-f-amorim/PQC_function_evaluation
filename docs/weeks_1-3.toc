@@ -6,3 +6,6 @@
 \beamer@subsectionintoc {2}{3}{Summary: QCNN Structure}{10}{0}{2}
 \beamer@sectionintoc {3}{Training the QCNN}{11}{0}{3}
 \beamer@sectionintoc {4}{Initial Tests}{13}{0}{4}
+\beamer@sectionintoc {5}{Results}{14}{0}{5}
+\beamer@subsectionintoc {5}{1}{Encoding the Amplitude}{15}{0}{5}
+\beamer@subsectionintoc {5}{2}{Encoding the Phase}{17}{0}{5}

@@ -198,4 +198,110 @@ is applied, at the cost of restricting the search space
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\section{Results}
+\frametitle{Results}
+\begin{itemize}
+\item In the following, a QCNN is applied to implement both $\hat{U}_A$ and $\hat{U}_\Psi$ for the problem studied in Hayes 2023:
+\begin{align}
+\tilde{A}(f) &= f^{-7/6}, \\
+\Psi(f) &= c_0 + c_1 f + c_2 f^{-1/3} + c_3 f^{-2/3} + c_4 f^{-1} + c_5 f^{-5/3},
+\end{align}
+with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
+\item In the paper, $\hat{U}_A$ is implemented via a quantum generative adversarial network (\alert{QGAN}) as well as the Grover-Rudolph (\alert{GR}) algorithm while \alert{LPFs} are used for $\hat{U}_\Psi$
+\item Hayes 2023 uses $n=6$ as well as 22 ancilla qubits 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\subsection{Encoding the Amplitude}
+\frametitle{Encoding the Amplitude}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item The \alert{QCNN outperforms the QGAN} and \alert{nearly reaches GR} w.r.t. mismatch 
+\item $L=3$ with mismatch as loss function was used 
+\end{itemize}
+\vspace{0.8cm}
+\begin{table}
+\centering 
+\begin{tabular}{c| c| c}
+\textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
+QGAN & 100 & $8.6\times10^{-3}$   \\
+GR\footnote[frame]{Hayes 2023 reports a mismatch of $4.1\times 10^{-4}$} & 23,796 & $5.7\times10^{-4}$ $\,$  \\
+QCNN  & 72 & $6.5\times10^{-4}$
+\end{tabular}
+\caption{Comparison of $\hat{U}_A$ implementations}
+\end{table}
+\end{column}
+\begin{column}{0.5\textwidth} 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/amplitude_comp}
+\caption{Reconstruction of $\tilde{A}(f)$ from different methods. Target in black.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Encoding the Amplitude}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/A_L_comp}
+\caption{QCNN training for different circuit depths.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}  
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/QGAN_comp}
+\caption{Comparison of QGAN and QCNN training. Note: QGAN results do not match Hayes 2023!}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\subsection{Encoding the Phase}
+\frametitle{Encoding the Phase}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item The implementation of $\hat{U}_\Psi$ is not the only factor affecting the encoding of $\Psi(f)$
+\item The size, $m$, of the target register limits the available precision due to rounding to $\sim 2^{-m}$ 
+\item A meaningful representation of $\Psi(f)$  requires $m \gtrsim 6$
+\item In combination with $n=6$ this gives a state-space of size $\gtrsim2^{12} =4,096$ resulting in long training times
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}  
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/phase_round_comp}
+\caption{Attainable precision due to rounding for different target register sizes}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Encoding the Phase}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item ...
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}  
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/phase_round_comp}
+\caption{...}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
 \end{document}
