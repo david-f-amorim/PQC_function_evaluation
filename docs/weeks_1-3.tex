@@ -236,8 +236,8 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \begin{column}{0.5\textwidth}
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{im/phase_loss_comp_linear_m4}
-\caption{Comparison of loss functions for $\Psi \sim \sin x$ and $m=4$. Target in black; rounded target dashed in grey.}
+\includegraphics[width=\textwidth]{im/phase_loss_comp_sin_m3}
+\caption{Comparison of loss functions for $\Psi \sim \sin x$ and $m=3$. Target in black; rounded target dashed in grey.}
 \end{figure}
 \end{column}
 \end{columns}
@@ -245,9 +245,12 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 
 \begin{frame}
 \frametitle{Initial Tests}
-look into effects of increasing L and or epochs...
+\begin{itemize}
+\item \alert{SAM} significantly \alert{outperforms CE} when taking into account state amplitudes 
+\item QCNN performance not much improved by increasing $L$ or number of epochs\footnote{Based on just a few tests} (\alert{no brute force solution})
+\item Instead, try to implement a \alert{weighted loss function}, taking into account the features of $\Psi$
 
-SAM significantly outperforms CE when taking into account state amplitudes 
+\end{itemize}
 
 USE GRADIENT-BASED WEIGHTING, tailored to function shape (\alert{MEG}: mismatch entailing gradients)
 \end{frame}
@@ -345,13 +348,7 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item right now: using -l MM -TS -r -L 3 -e 600 for different m values ... not learning even for m=3 ...
-\item  at least MM quickly stagnates ...
-\item take-aways so far:
-\begin{enumerate}[(a)]
-\item -TS is far superior to individual training 
-\item CE worse than MM ; L1 worse than MM but better than CE 
-\end{enumerate}
+\item ...
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}  
@@ -378,8 +375,8 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \section{Next Steps}
 \frametitle{Next Steps}
 \begin{itemize}
-\item more fully explore PQC parameter space ... 
-\item look into barren plateau mitigation (layer-by-layer training....) 
+\item more fully explore PQC parameter space ... (depth, epoch...)
+\item look into barren plateau mitigation (layer-by-layer training....) => might help increase L/e
 \end{itemize}
 \end{frame}
 

@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 4
-weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 3
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
@@ -387,8 +387,8 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr = np.array(["SAM","CE"])
-    arr_1 = "outputs/weights_6_4(0)_6_600_psi_MM_q(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_4(0)_6_600_psi_CE_q(S)(PR)(r).npy"
+    arr_1 = "outputs/weights_6_3(0)_6_600_psi_MM_s(S)(PR)(r).npy"
+    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_s(S)(PR)(r).npy"
   
     weights_arr =np.array([arr_1, arr_2])
     colours = ["red", "blue"]
