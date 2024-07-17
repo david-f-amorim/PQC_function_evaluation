@@ -248,11 +248,14 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \begin{itemize}
 \item \alert{SAM} significantly \alert{outperforms CE} when taking into account state amplitudes 
 \item QCNN performance not much improved by increasing $L$ or number of epochs\footnote{Based on just a few tests} (\alert{no brute force solution})
-\item Instead, try to implement a \alert{weighted loss function}, taking into account the features of $\Psi$
+\item Instead implement a \alert{weighted loss function}, taking into account the features of $\Psi$: define \emph{weighted mismatch} (\alert{WIM}) as 
+\begin{equation}
+\mathsf{WIM}(x,y) =  \left\vert 1 - \sum_n w_n x_n y_n \right \vert, 
+\end{equation}
+where the weights $w_n \in \mathbb{R}_{+}$ may be recomputed between epochs
 
 \end{itemize}
-
-USE GRADIENT-BASED WEIGHTING, tailored to function shape (\alert{MEG}: mismatch entailing gradients)
+IDEA: recompute $w_n$ based on mismatch?? -> let $w_n$ be (normalised) mismatch of $n$th input state? ; OR maybe base weighting on size of "plateau" ? (need to normalise $w x$!) ; or maybe on gradient ??
 \end{frame}
 
 \begin{frame}

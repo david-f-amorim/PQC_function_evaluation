@@ -252,7 +252,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 
 \end{itemize}
 
-USE GRADIENT-BASED WEIGHTING, tailored to function shape (\alert{MEG}: mismatch entailing gradients)
+USE GRADIENT-BASED WEIGHTING, tailored to function shape (\alert{MEG}: mismatch entailing gradients; \alert{WIM}: WeIghted Mismatch)
 \end{frame}
 
 \begin{frame}
