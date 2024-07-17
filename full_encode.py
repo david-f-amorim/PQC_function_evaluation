@@ -27,9 +27,9 @@ no_h = True # don't produce h plot
 # additional plots 
 A_L_comp = False 
 QGAN_comp = False
-phase_round_comp = True
+phase_round_comp = False
 phase_L_comp = False 
-phase_loss_comp = False
+phase_loss_comp = True
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -58,7 +58,7 @@ ampl_target = ampl_target / np.sqrt(np.sum(ampl_target**2))
 
 # calculate target output for phase 
 phase_target = psi(np.linspace(0, 2**n, len(x_arr)))
-"""
+
 # calculate target output for wavefunc 
 h_target = ampl_target * np.exp(2*1.j*np.pi* phase_target)
 wave_real_target = np.real(h_target)
@@ -103,7 +103,7 @@ print("Norm: ",np.sum(amplitude**2))
 # get full wavefunction 
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
-"""
+
  
 #------------------------------------------------------------------------------
 if no_A==False:
@@ -346,6 +346,7 @@ if phase_L_comp==True:
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 
         phase_arr[i]=phase 
+        print("Norm: ",np.sum(amplitude**2))
 
     if delta_round:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
@@ -386,8 +387,8 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr = np.array(["SAM","CE"])
-    arr_1 = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_4(0)_6_600_psi_CE_(S)(PR)(r).npy"
+    arr_1 = "outputs/weights_6_4(0)_6_600_psi_MM_q(S)(PR)(r).npy"
+    arr_2 = "outputs/weights_6_4(0)_6_600_psi_CE_q(S)(PR)(r).npy"
   
     weights_arr =np.array([arr_1, arr_2])
     colours = ["red", "blue"]
@@ -402,6 +403,8 @@ if phase_loss_comp==True:
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 
         phase_arr[i]=phase 
+
+        print(f"Norm {loss_arr[i]}: ",np.sum(amplitude**2))
 
     if delta_round:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following

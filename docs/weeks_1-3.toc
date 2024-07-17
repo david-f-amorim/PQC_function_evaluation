@@ -6,8 +6,8 @@
 \beamer@subsectionintoc {2}{3}{Summary: QCNN Structure}{10}{0}{2}
 \beamer@sectionintoc {3}{Training the QCNN}{11}{0}{3}
 \beamer@sectionintoc {4}{Initial Tests}{13}{0}{4}
-\beamer@sectionintoc {5}{Results}{15}{0}{5}
-\beamer@subsectionintoc {5}{1}{Encoding the Amplitude}{16}{0}{5}
-\beamer@subsectionintoc {5}{2}{Encoding the Phase}{18}{0}{5}
-\beamer@subsectionintoc {5}{3}{Full Waveform}{20}{0}{5}
-\beamer@sectionintoc {6}{Next Steps}{21}{0}{6}
+\beamer@sectionintoc {5}{Results}{17}{0}{5}
+\beamer@subsectionintoc {5}{1}{Encoding the Amplitude}{18}{0}{5}
+\beamer@subsectionintoc {5}{2}{Encoding the Phase}{20}{0}{5}
+\beamer@subsectionintoc {5}{3}{Full Waveform}{22}{0}{5}
+\beamer@sectionintoc {6}{Next Steps}{23}{0}{6}

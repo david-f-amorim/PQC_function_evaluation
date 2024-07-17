@@ -210,7 +210,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \begin{equation}
 \mathsf{SAM}(x,y) = \left\vert 1 - \sum_n x_n y_n \right \vert 
 \end{equation}
-\item Biggest issue are the rounding discontinuities
+\item SAM is tailored to reduce mismatch and enforce positive amplitudes
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -221,6 +221,35 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \end{figure}
 \end{column}
 \end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Initial Tests}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/phase_loss_comp_quadratic_m4}
+\caption{Comparison of loss functions for $\Psi \sim x^2$ and $m=4$. Target in black; rounded target dashed in grey.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{im/phase_loss_comp_linear_m4}
+\caption{Comparison of loss functions for $\Psi \sim \sin x$ and $m=4$. Target in black; rounded target dashed in grey.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Initial Tests}
+look into effects of increasing L and or epochs...
+
+SAM significantly outperforms CE when taking into account state amplitudes 
+
+USE GRADIENT-BASED WEIGHTING, tailored to function shape (\alert{MEG}: mismatch entailing gradients)
 \end{frame}
 
 \begin{frame}
@@ -349,7 +378,8 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \section{Next Steps}
 \frametitle{Next Steps}
 \begin{itemize}
-\item ???
+\item more fully explore PQC parameter space ... 
+\item look into barren plateau mitigation (layer-by-layer training....) 
 \end{itemize}
 \end{frame}
 

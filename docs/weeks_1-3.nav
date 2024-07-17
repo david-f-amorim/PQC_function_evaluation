@@ -44,34 +44,38 @@
 \headcommand {\beamer@framepages {13}{13}}
 \headcommand {\slideentry {4}{0}{1}{14/14}{}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\beamer@sectionpages {1}{14}}
-\headcommand {\beamer@subsectionpages {1}{14}}
-\headcommand {\sectionentry {5}{Results}{15}{Results}{0}}
-\headcommand {\slideentry {5}{0}{0}{15/15}{}{0}}
+\headcommand {\slideentry {4}{0}{2}{15/15}{}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\beamer@subsectionpages {1}{15}}
-\headcommand {\beamer@subsectionentry {0}{5}{1}{16}{Encoding the Amplitude}}
-\headcommand {\slideentry {5}{1}{0}{16/16}{}{0}}
+\headcommand {\slideentry {4}{0}{3}{16/16}{}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\slideentry {5}{1}{1}{17/17}{}{0}}
+\headcommand {\beamer@sectionpages {1}{16}}
+\headcommand {\beamer@subsectionpages {1}{16}}
+\headcommand {\sectionentry {5}{Results}{17}{Results}{0}}
+\headcommand {\slideentry {5}{0}{0}{17/17}{}{0}}
 \headcommand {\beamer@framepages {17}{17}}
 \headcommand {\beamer@subsectionpages {1}{17}}
-\headcommand {\beamer@subsectionentry {0}{5}{2}{18}{Encoding the Phase}}
-\headcommand {\slideentry {5}{2}{0}{18/18}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{18}{Encoding the Amplitude}}
+\headcommand {\slideentry {5}{1}{0}{18/18}{}{0}}
 \headcommand {\beamer@framepages {18}{18}}
-\headcommand {\slideentry {5}{2}{1}{19/19}{}{0}}
+\headcommand {\slideentry {5}{1}{1}{19/19}{}{0}}
 \headcommand {\beamer@framepages {19}{19}}
 \headcommand {\beamer@subsectionpages {1}{19}}
-\headcommand {\beamer@subsectionentry {0}{5}{3}{20}{Full Waveform}}
-\headcommand {\slideentry {5}{3}{0}{20/20}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{20}{Encoding the Phase}}
+\headcommand {\slideentry {5}{2}{0}{20/20}{}{0}}
 \headcommand {\beamer@framepages {20}{20}}
-\headcommand {\beamer@sectionpages {1}{20}}
-\headcommand {\beamer@subsectionpages {1}{20}}
-\headcommand {\sectionentry {6}{Next Steps}{21}{Next Steps}{0}}
-\headcommand {\slideentry {6}{0}{0}{21/21}{}{0}}
+\headcommand {\slideentry {5}{2}{1}{21/21}{}{0}}
 \headcommand {\beamer@framepages {21}{21}}
-\headcommand {\beamer@partpages {1}{21}}
 \headcommand {\beamer@subsectionpages {1}{21}}
-\headcommand {\beamer@sectionpages {1}{21}}
-\headcommand {\beamer@documentpages {21}}
-\headcommand {\gdef \inserttotalframenumber {21}}
+\headcommand {\beamer@subsectionentry {0}{5}{3}{22}{Full Waveform}}
+\headcommand {\slideentry {5}{3}{0}{22/22}{}{0}}
+\headcommand {\beamer@framepages {22}{22}}
+\headcommand {\beamer@sectionpages {1}{22}}
+\headcommand {\beamer@subsectionpages {1}{22}}
+\headcommand {\sectionentry {6}{Next Steps}{23}{Next Steps}{0}}
+\headcommand {\slideentry {6}{0}{0}{23/23}{}{0}}
+\headcommand {\beamer@framepages {23}{23}}
+\headcommand {\beamer@partpages {1}{23}}
+\headcommand {\beamer@subsectionpages {1}{23}}
+\headcommand {\beamer@sectionpages {1}{23}}
+\headcommand {\beamer@documentpages {23}}
+\headcommand {\gdef \inserttotalframenumber {23}}

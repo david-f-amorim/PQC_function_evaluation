@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  17 JUL 2024 12:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  17 JUL 2024 12:41
 entering extended mode
 **./weeks_1-3.tex
 (weeks_1-3.tex
@@ -1061,59 +1061,78 @@ Overfull \vbox (4.5242pt too high) detected at line 224
 
 [14
 
- <./im/phase_loss_comp_linear_m4.pdf>] [15
-
-]
-<im/amplitude_comp.pdf, id=571, 715.47299pt x 715.47299pt>
-File: im/amplitude_comp.pdf Graphic file (type pdf)
-<use im/amplitude_comp.pdf>
-Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 270.
+ <./im/phase_loss_comp_linear_m4.pdf>]
+<im/phase_loss_comp_quadratic_m4.pdf, id=547, 715.47299pt x 715.47299pt>
+File: im/phase_loss_comp_quadratic_m4.pdf Graphic file (type pdf)
+<use im/phase_loss_comp_quadratic_m4.pdf>
+Package pdftex.def Info: im/phase_loss_comp_quadratic_m4.pdf  used on input lin
+e 244.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
- [16
+File: im/phase_loss_comp_linear_m4.pdf Graphic file (type pdf)
+<use im/phase_loss_comp_linear_m4.pdf>
+Package pdftex.def Info: im/phase_loss_comp_linear_m4.pdf  used on input line 2
+44.
+(pdftex.def)             Requested size: 171.14764pt x 173.59479pt.
 
- <./im/amplitude_comp.pdf>]
-<im/A_L_comp.pdf, id=617, 650.17484pt x 626.42184pt>
-File: im/A_L_comp.pdf Graphic file (type pdf)
-<use im/A_L_comp.pdf>
-Package pdftex.def Info: im/A_L_comp.pdf  used on input line 290.
-(pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
-<im/QGAN_comp.pdf, id=618, 650.17484pt x 626.42184pt>
-File: im/QGAN_comp.pdf Graphic file (type pdf)
-<use im/QGAN_comp.pdf>
-Package pdftex.def Info: im/QGAN_comp.pdf  used on input line 290.
-(pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
-
-[17
-
- <./im/A_L_comp.pdf> <./im/QGAN_comp.pdf>]
-<im/phase_round_comp.pdf, id=680, 639.70206pt x 629.48254pt>
-File: im/phase_round_comp.pdf Graphic file (type pdf)
-<use im/phase_round_comp.pdf>
-Package pdftex.def Info: im/phase_round_comp.pdf  used on input line 312.
-(pdftex.def)             Requested size: 171.14764pt x 168.41612pt.
- [18
-
- <./im/phase_round_comp.pdf>]
-<im/phase_comp.pdf, id=718, 715.47299pt x 715.47299pt>
-File: im/phase_comp.pdf Graphic file (type pdf)
-<use im/phase_comp.pdf>
-Package pdftex.def Info: im/phase_comp.pdf  used on input line 336.
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
-
-Overfull \vbox (2.06783pt too high) detected at line 336
+Overfull \vbox (4.5242pt too high) detected at line 244
  []
 
-[19
+[15
 
- <./im/phase_comp.pdf>]
-<im/h_comp.png, id=759, 1435.86037pt x 712.72675pt>
-File: im/h_comp.png Graphic file (type png)
-<use im/h_comp.png>
-Package pdftex.def Info: im/h_comp.png  used on input line 346.
-(pdftex.def)             Requested size: 342.2953pt x 169.90512pt.
+ <./im/phase_loss_comp_quadratic_m4.pdf>] [16
+
+] [17
+
+]
+<im/amplitude_comp.pdf, id=639, 715.47299pt x 715.47299pt>
+File: im/amplitude_comp.pdf Graphic file (type pdf)
+<use im/amplitude_comp.pdf>
+Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 299.
+(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
+ [18
+
+ <./im/amplitude_comp.pdf>]
+<im/A_L_comp.pdf, id=685, 650.17484pt x 626.42184pt>
+File: im/A_L_comp.pdf Graphic file (type pdf)
+<use im/A_L_comp.pdf>
+Package pdftex.def Info: im/A_L_comp.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
+<im/QGAN_comp.pdf, id=686, 650.17484pt x 626.42184pt>
+File: im/QGAN_comp.pdf Graphic file (type pdf)
+<use im/QGAN_comp.pdf>
+Package pdftex.def Info: im/QGAN_comp.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
+ [19
+
+ <./im/A_L_comp.pdf> <./im/QGAN_comp.pdf>]
+<im/phase_round_comp.pdf, id=749, 639.70206pt x 629.48254pt>
+File: im/phase_round_comp.pdf Graphic file (type pdf)
+<use im/phase_round_comp.pdf>
+Package pdftex.def Info: im/phase_round_comp.pdf  used on input line 341.
+(pdftex.def)             Requested size: 171.14764pt x 168.41612pt.
  [20
 
- <./im/h_comp.png>] [21
+ <./im/phase_round_comp.pdf>]
+<im/phase_comp.pdf, id=787, 715.47299pt x 715.47299pt>
+File: im/phase_comp.pdf Graphic file (type pdf)
+<use im/phase_comp.pdf>
+Package pdftex.def Info: im/phase_comp.pdf  used on input line 365.
+(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
+
+Overfull \vbox (2.06783pt too high) detected at line 365
+ []
+
+[21
+
+ <./im/phase_comp.pdf>]
+<im/h_comp.png, id=827, 1435.86037pt x 712.72675pt>
+File: im/h_comp.png Graphic file (type png)
+<use im/h_comp.png>
+Package pdftex.def Info: im/h_comp.png  used on input line 375.
+(pdftex.def)             Requested size: 342.2953pt x 169.90512pt.
+ [22
+
+ <./im/h_comp.png>] [23
 
 ]
 \tf@nav=\write6
@@ -1127,13 +1146,13 @@ Package pdftex.def Info: im/h_comp.png  used on input line 346.
 
  (weeks_1-3.aux)
 Package rerunfilecheck Info: File `weeks_1-3.out' has not changed.
-(rerunfilecheck)             Checksum: 63DBAA027EA9EA72B26918901C3659B4;1557.
+(rerunfilecheck)             Checksum: 686204F3474D2CE38B1C961A2E5F3C63;1557.
  ) 
 Here is how much of TeX's memory you used:
- 23569 strings out of 478864
- 447186 string characters out of 2848660
+ 23586 strings out of 478864
+ 447627 string characters out of 2848660
  747880 words of memory out of 3000000
- 40883 multiletter control sequences out of 15000+600000
+ 40895 multiletter control sequences out of 15000+600000
  421522 words of font info for 98 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,18n,124p,416b,949s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1151,28 +1170,29 @@ s/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb>
 r12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmr17.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/publi
 c/amsfonts/cm/cmr6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/david/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/User
-s/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.p
-fb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
-/cmssi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmssi9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/david/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/david/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/david/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><C
-:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols
-/msbm10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
-sfonts/symbols/msbm7.pfb>
-Output written on weeks_1-3.pdf (21 pages, 1830717 bytes).
+1/public/amsfonts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/david/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users
+/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><
+C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cms
+sbx10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmssi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmssi9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/david/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/david/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users
+/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10
+.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+symbols/msbm10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/amsfonts/symbols/msbm7.pfb>
+Output written on weeks_1-3.pdf (23 pages, 1864149 bytes).
 PDF statistics:
- 934 PDF objects out of 1000 (max. 8388607)
- 55 named destinations out of 1000 (max. 500000)
- 335 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1006 PDF objects out of 1200 (max. 8388607)
+ 59 named destinations out of 1000 (max. 500000)
+ 340 words of extra memory for PDF output out of 10000 (max. 10000000)
 
