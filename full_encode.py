@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 4
+weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
@@ -15,12 +15,12 @@ ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_.npy")
 L_ampl =3
 
 # plot settings
-comp = False # compare to Hayes 2023  
+comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
-no_A = True # don't produce amplitude plot 
+no_A = False # don't produce amplitude plot 
 no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
@@ -29,7 +29,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False 
-phase_loss_comp = True
+phase_loss_comp = False
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -155,11 +155,11 @@ if no_p==False:
     ax[0].tick_params(axis="both", labelsize=ticksize)
     ax[0].set_xticks([])
 
-    if delta_round:
-        phase_target = phase_rounded
 
     if comp:
         ax[1].scatter(x_arr,phase_target-psi_LPF,label="GR", color="blue")
+    if delta_round:
+        phase_target = phase_rounded
     ax[1].scatter(x_arr,phase_target-phase,label="QCNN", color="red")
 
     ax[1].set_ylabel(r"$\Delta \Psi(f)$", fontsize=fontsize)
@@ -183,8 +183,8 @@ if no_h==False:
     ax[0,0].plot(x_arr,wave_real_target, color="black")
     ax[0,0].plot(x_arr,wave_real_target_rounded, color="gray", ls="--")
     if comp:
-        ax[0,0].scatter(x_arr,np.real(h_QGAN),label="LPF & QGAN", color="green")
-        ax[0,0].scatter(x_arr,np.real(h_GR),label="LPF & GR", color="blue")
+        ax[0,0].scatter(x_arr,np.real(h_QGAN),label="LPF + QGAN", color="green")
+        ax[0,0].scatter(x_arr,np.real(h_GR),label="LPF + GR", color="blue")
     ax[0,0].scatter(x_arr,real_wave,label="QCNN", color="red")
 
     ax[0,0].set_ylabel(r"$\Re[\tilde h(f)]$", fontsize=fontsize)
@@ -192,12 +192,11 @@ if no_h==False:
     ax[0,0].tick_params(axis="both", labelsize=ticksize)
     ax[0,0].set_xticks([])
 
+    if comp:
+        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_QGAN),label="LPF + QGAN", color="green")
+        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_GR),label="LPF + GR", color="blue")
     if delta_round:
         wave_real_target = wave_real_target_rounded
-
-    if comp:
-        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_QGAN),label="LPF & QGAN", color="green")
-        ax[1,0].scatter(x_arr,wave_real_target -np.real(h_GR),label="LPF & GR", color="blue")
     ax[1,0].scatter(x_arr,wave_real_target -real_wave,label="QCNN", color="red")
 
     ax[1,0].set_ylabel(r"$\Delta \Re[\tilde h(f)]$", fontsize=fontsize)
@@ -207,8 +206,8 @@ if no_h==False:
     ax[0,1].plot(x_arr,wave_im_target, color="black")
     ax[0,1].plot(x_arr,wave_im_target_rounded, color="gray", ls="--")
     if comp:
-        ax[0,1].scatter(x_arr,np.imag(h_QGAN),label="LPF & QGAN", color="green")
-        ax[0,1].scatter(x_arr,np.imag(h_GR),label="LPF & GR", color="blue")
+        ax[0,1].scatter(x_arr,np.imag(h_QGAN),label="LPF + QGAN", color="green")
+        ax[0,1].scatter(x_arr,np.imag(h_GR),label="LPF + GR", color="blue")
     ax[0,1].scatter(x_arr,im_wave,label="QCNN", color="red")
 
     ax[0,1].set_ylabel(r"$\Im[\tilde h(f)]$", fontsize=fontsize)
@@ -216,12 +215,11 @@ if no_h==False:
     ax[0,1].tick_params(axis="both", labelsize=ticksize)
     ax[0,1].set_xticks([])
 
+    if comp:
+        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_QGAN),label="LPF + QGAN", color="green")
+        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_GR),label="LPF + GR", color="blue")
     if delta_round:
         wave_im_target = wave_im_target_rounded
-
-    if comp:
-        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_QGAN),label="LPF & QGAN", color="green")
-        ax[1,1].scatter(x_arr,wave_im_target -np.imag(h_GR),label="LPF & GR", color="blue")
     ax[1,1].scatter(x_arr,wave_im_target -im_wave,label="QCNN", color="red")
 
     ax[1,1].set_ylabel(r"$\Delta \Im[\tilde h(f)]$", fontsize=fontsize)

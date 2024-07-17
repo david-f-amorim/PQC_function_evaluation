@@ -247,7 +247,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \frametitle{Initial Tests}
 \begin{itemize}
 \item \alert{SAM} significantly \alert{outperforms CE} when taking into account state amplitudes 
-\item QCNN performance not improved by increasing $L$ or number of epochs\footnote{Based on just a few tests} (\alert{no brute force solution})
+\item QCNN performance not much improved by increasing $L$ or number of epochs\footnote{Based on just a few tests} (\alert{no brute force solution})
 \item Instead, try to implement a \alert{weighted loss function}, taking into account the features of $\Psi$
 
 \end{itemize}
