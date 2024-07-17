@@ -4,6 +4,11 @@ NOTES
 
 PLAY AROUND WITH WEIGHTED LOSS FUNCTION ???
 
+\item for linear Psi: -L 6/9 -e 600 -l MM -m 3 works well !!! MATTER OF LAYERS ?? (-H -TS -r) !! ->> also works fairly well with m -4 !!
+[right now: trying 6/9/12 for m 5]
+\item note: make plots before switching psi back (files will be overwritten)
+\item USE A gradient-WEIGHTED LOSS FUNCTION TO SMOOTH OUTLIERS ??!!
+
 
 
 
