@@ -236,7 +236,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
 \textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
 QGAN & 100 & $8.6\times10^{-3}$   \\
 GR\footnote[frame]{Hayes 2023 reports a mismatch of $4.1\times 10^{-4}$} & 23,796 & $5.7\times10^{-4}$ $\,$  \\
-QCNN  & 72 & $6.7\times10^{-4}$
+QCNN  & 72 & $7.1\times10^{-4}$
 \end{tabular}
 \caption{Comparison of $\hat{U}_A$ implementations}
 \end{table}
@@ -298,9 +298,13 @@ QCNN  & 72 & $6.7\times10^{-4}$
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item ... USE L1 TS r L3 ???
+\item right now: using -l MM -TS -r -L 3 -e 600 for different m values ... not learning even for m=3 ...
 \item  at least MM quickly stagnates ...
-\item GOAL: get $m=3$...
+\item take-aways so far:
+\begin{enumerate}[(a)]
+\item -TS is far superior to individual training 
+\item CE worse than MM ; L1 worse than MM but better than CE 
+\end{enumerate}
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}  

@@ -4,28 +4,29 @@ from matplotlib import rcParams
 from tools import psi, bin_to_dec, dec_to_bin, full_encode  
 
 # config 
-n = 6
-m = 2
-weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
-weights_phase = "outputs/weights_6_2(0)_3_300_psi_MM_(S)(PR)(r).npy"
-ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_.npy")
-L_ampl =3
 L_phase = 3
 real_p = True 
+m = 3
+weights_phase = "outputs/weights_6_3(0)_3_600_psi_MM_(S)(PR)(r).npy"
+
+n = 6
+weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
+ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_.npy")
+L_ampl =3
 
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
 pdf = False # save outputs as pdf 
 
-no_A = False # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_A = True # don't produce amplitude plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
 A_L_comp = False 
 QGAN_comp = False
-phase_round_comp = False 
+phase_round_comp = True
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -54,7 +55,7 @@ ampl_target = ampl_target / np.sqrt(np.sum(ampl_target**2))
 
 # calculate target output for phase 
 phase_target = psi(np.linspace(0, 2**n, len(x_arr)))
-
+"""
 # calculate target output for wavefunc 
 h_target = ampl_target * np.exp(2*1.j*np.pi* phase_target)
 wave_real_target = np.real(h_target)
@@ -94,11 +95,12 @@ amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
 phase *= (amplitude > 1e-15).astype(float) 
 
-print(np.sum(amplitude**2))
+print("Norm: ",np.sum(amplitude**2))
 
 # get full wavefunction 
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
+"""
  
 #------------------------------------------------------------------------------
 if no_A==False:
