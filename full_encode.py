@@ -7,9 +7,10 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 n = 6
 m = 2
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
-weights_phase = "outputs/weights_6_2(0)_6_600_psi_MM_(S)(PR)(r).npy"
+weights_phase = "outputs/weights_6_2(0)_3_300_psi_MM_(S)(PR)(r).npy"
+ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_.npy")
 L_ampl =3
-L_phase = 6
+L_phase = 3
 real_p = True 
 
 # plot settings
@@ -17,7 +18,7 @@ comp = True # compare to Hayes 2023
 show = True # show plots
 pdf = False # save outputs as pdf 
 
-no_A = True # don't produce amplitude plot 
+no_A = False # don't produce amplitude plot 
 no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
@@ -71,7 +72,6 @@ wave_real_target_rounded = np.real(h_target_rounded)
 wave_im_target_rounded = np.imag(h_target_rounded)
 
 # load amplitude-only statevector (for QCNN, QGAN, GR)
-ampl_vec = np.load("ampl_outputs/statevec_6_9_300_x76_MM_40_168_.npy")
 ampl_vec_QGAN = np.abs(np.load("ampl_outputs/amp_state_QGAN.npy"))
 ampl_vec_GR = np.abs(np.load("ampl_outputs/amp_state_GR.npy")) 
 
@@ -91,7 +91,7 @@ h_GR = np.load("full_encode/full_state_GR.npy")
 state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p)
 
 amplitude = np.abs(state_vec)
-phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < 0).astype(int)
+phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
 phase *= (amplitude > 1e-15).astype(float) 
 
 print(np.sum(amplitude**2))

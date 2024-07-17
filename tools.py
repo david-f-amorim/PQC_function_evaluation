@@ -495,7 +495,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         criterion=CrossEntropyLoss()
     elif loss_str=="MM":
         def criterion(output, target):
-            return 1. - torch.abs(torch.sum(torch.mul(output, target)))
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)  
       
                     
     # set up arrays to store training outputs 
@@ -746,7 +746,8 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
-
+    signs = np.empty(2**n)
+    
     # iterate over input states 
     x_arr = np.arange(2**n)
     fx_arr = [func(i) for i in x_arr]
@@ -775,10 +776,12 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
         result = job.result()
         state_vector = np.asarray(result.get_statevector()) 
 
+        signs[i]=np.sign(np.sum(np.real(state_vector)*np.sqrt(target_arr)))
+
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch[i] = 1. - np.sqrt(fidelity) 
-
+        
         # save as dictionary 
         dic = dict(zip(x_arr, mismatch)) 
         np.save(os.path.join("outputs",f"bar_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"), dic)
@@ -786,7 +789,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
     if verbose:
         print("Mismatch by input state:")
         for i in x_arr:
-            print(f"\t{np.binary_repr(i,n)}:  {mismatch[i]:.2e}")
+            print(f"\t{np.binary_repr(i,n)}:  {mismatch[i]:.2e} ({signs[i]})")
         print("")
         print("")    
 
@@ -955,7 +958,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
 
     # clear ancilla register 
     circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
-    
+ 
     # get resulting statevector 
     backend = Aer.get_backend('statevector_simulator')
     job = execute(circuit, backend)
@@ -1105,7 +1108,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
         criterion=CrossEntropyLoss()
     elif loss_str=="MM":
         def criterion(output, target):
-            return 1. - torch.abs(torch.sum(torch.mul(output, target)))    
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)  
                     
     # set up arrays to store training outputs 
     if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
@@ -1254,6 +1257,6 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
     np.save(os.path.join("ampl_outputs", f"weights_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),generated_weights)
     np.save(os.path.join("ampl_outputs", f"mismatch_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),mismatch_vals)
     np.save(os.path.join("ampl_outputs", f"loss_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),loss_vals)
-    np.save(os.path.join("ampl_outputs", f"statevec_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),np.abs(state_vector))
+    np.save(os.path.join("ampl_outputs", f"statevec_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),np.real(state_vector))
 
     return 0

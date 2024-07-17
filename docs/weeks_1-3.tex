@@ -236,7 +236,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
 \textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
 QGAN & 100 & $8.6\times10^{-3}$   \\
 GR\footnote[frame]{Hayes 2023 reports a mismatch of $4.1\times 10^{-4}$} & 23,796 & $5.7\times10^{-4}$ $\,$  \\
-QCNN  & 72 & $6.5\times10^{-4}$
+QCNN  & 72 & $6.7\times10^{-4}$
 \end{tabular}
 \caption{Comparison of $\hat{U}_A$ implementations}
 \end{table}
@@ -280,7 +280,7 @@ QCNN  & 72 & $6.5\times10^{-4}$
 \item The implementation of $\hat{U}_\Psi$ is not the only factor affecting the encoding of $\Psi(f)$
 \item The size, $m$, of the target register limits the available precision due to rounding to $\sim 2^{-m}$ 
 \item A meaningful representation of $\Psi(f)$  requires $m \gtrsim 6$
-\item In combination with $n=6$ this gives a state-space of size $\gtrsim2^{12} =4,096$ resulting in long training times
+\item The LPF approach in Hayes 2023 uses $m=8$
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}  
