@@ -398,7 +398,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3):
     """
     Initialise circuit as QNN for training purposes.
     """
@@ -647,7 +647,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mismatch_vals[i]=mismatch
 
         # set loss func weights
-        if loss_str=="WIM" and (i % 10 ==0) and (i >=100):
+        if loss_str=="WIM" and (i % tau_2 ==0) and (i >=tau_3):
             
             # initialise arrays to store results 
             temp_mismatch = np.empty(2**n)
@@ -690,13 +690,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                     ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[q],n,'unsigned mag',nint=nint),2) 
                     WIM_weights_arr[ind]= temp_mismatch[q]
 
-            WIM_weights_arr=np.exp(WIM_weights_arr)    
+            WIM_weights_arr=np.exp(tau_1 * WIM_weights_arr)    
             WIM_weights_arr= WIM_weights_arr / np.sum(WIM_weights_arr)
-
-        elif loss_str=="WIM" and (i % 10 ==5) and (i >=100): 
-            WIM_weights_arr=np.exp(WIM_weights_arr)    
-            WIM_weights_arr= WIM_weights_arr / np.sum(WIM_weights_arr)
-              
+      
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
         

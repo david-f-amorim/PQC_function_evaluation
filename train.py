@@ -19,6 +19,10 @@ parser.add_argument('-TS','--train_superpos', help="Train circuit in superpositi
 
 parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR -f psi. Still set own m.", action='store_true')
 
+parser.add_argument('--tau1', help="WIM tau1 parameter.", default=1,type=float)
+parser.add_argument('--tau2', help="WIM tau2 parameter.", default=10,type=float)
+parser.add_argument('--tau3', help="WIM tau3 parameter.", default=100,type=float)
+
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
 parser.add_argument('--lr', help="Learning rate.", default=0.01,type=float)
