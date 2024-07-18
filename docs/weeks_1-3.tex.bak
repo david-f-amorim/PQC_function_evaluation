@@ -61,6 +61,7 @@ using $n = \lceil \log_2 N \rceil$ qubits
 \hat{Q}_\Psi  \ket{j} \ket{0}^{\otimes m}_a = \ket{j} \ket{\Psi'(j)}_a,
 \end{equation}
 with $\Psi'(j) \equiv \Psi(j) / 2 \pi$
+\item Due to rounding, the size, $m$, of the ancilla register limits the precision with which $\Psi'$ can be encoded to $\sim 2^{-m}$ 
 \item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPFs)}
 \end{itemize}
 \end{frame}
@@ -263,7 +264,7 @@ where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \begin{column}{0.5\textwidth}
 \begin{itemize}
 \item WIM REDUCES STDEV BUT NOT OVERALL PERFORMANCE...MAKES OUTLIERS A BIT BETTER AND THE REST A BIT WORSE 
-\item SAM STILL BETTER THAN WIM OVERALL!
+\item SAM STILL BETTER THAN WIM OVERALL! (faster; slighlty more accurate)
 \item repeating Psi linear/quadratic/sine tests on WIM: WIM worse for linear; 
 \end{itemize}
 \end{column}
@@ -303,7 +304,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
 \begin{tabular}{c| c| c}
 \textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
 QGAN & 100 & $8.6\times10^{-3}$   \\
-GR\footnote[frame]{Hayes 2023 reports a mismatch of $4.1\times 10^{-4}$} & 23,796 & $5.7\times10^{-4}$ $\,$  \\
+GR& 23,796 & $4.1\times 10^{-4}$   \\
 QCNN  & 72 & $7.1\times10^{-4}$
 \end{tabular}
 \caption{Comparison of $\hat{U}_A$ implementations}
@@ -321,27 +322,6 @@ QCNN  & 72 & $7.1\times10^{-4}$
 
 \begin{frame}
 \subsection{Encoding the Phase}
-\frametitle{Encoding the Phase}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{itemize}
-\item The implementation of $\hat{U}_\Psi$ is not the only factor affecting the encoding of $\Psi(f)$
-\item The size, $m$, of the target register limits the available precision due to rounding to $\sim 2^{-m}$ 
-\item A meaningful representation of $\Psi(f)$  requires $m \gtrsim 6$
-\item The LPF approach in Hayes 2023 uses $m=8$
-\end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}  
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{im/phase_round_comp}
-\caption{Attainable precision due to rounding for different target register sizes}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
 \frametitle{Encoding the Phase}
 \begin{columns}
 \begin{column}{0.5\textwidth}

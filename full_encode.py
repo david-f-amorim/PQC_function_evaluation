@@ -385,9 +385,9 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr = np.array(["SAM","CE", "WIM"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_quadratic(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_quadratic(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WIM_quadratic(S)(PR)(r).npy"
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_sine(S)(PR)(r).npy"
+    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_sine(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WIM_sine(S)(PR)(r).npy"
   
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]

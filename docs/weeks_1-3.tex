@@ -18,6 +18,14 @@
 \usefonttheme{professionalfonts}
 \useinnertheme{circles}
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \setbeamertemplate{caption}[numbered]
 
 \title[PQC Function Evaluation]{PQC Function Evaluation}
@@ -28,6 +36,7 @@
 
 \begin{document}
 
+
 \frame{\titlepage}
 
 \begin{frame}
@@ -35,8 +44,8 @@
 \tableofcontents
 \end{frame}
 
-\begin{frame}
 \section{Background}
+\begin{frame}
 \frametitle{Background}
 
 \begin{itemize}
@@ -61,6 +70,7 @@ using $n = \lceil \log_2 N \rceil$ qubits
 \hat{Q}_\Psi  \ket{j} \ket{0}^{\otimes m}_a = \ket{j} \ket{\Psi'(j)}_a,
 \end{equation}
 with $\Psi'(j) \equiv \Psi(j) / 2 \pi$
+\item Due to rounding, the size, $m$, of the ancilla register limits the precision with which $\Psi'$ can be encoded to $\sim 2^{-m}$ 
 \item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPFs)}
 \end{itemize}
 \end{frame}
@@ -75,8 +85,8 @@ Implement $\hat{Q}_\Psi$ in a gate-efficient way using a parametrised quantum ci
 The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register containing the $\ket{\Psi'(j)}$ will be referred to as the \alert{input register} and \alert{target register}, respectively. 
 \end{frame}
 
-\begin{frame}
 \section{Approach: a QCNN}
+\begin{frame}
 \frametitle{Approach: a QCNN}
 \begin{itemize}
 \item A \emph{quantum convolutional neural network} (\alert{QCNN}) is used to tackle the problem
@@ -90,8 +100,8 @@ The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register conta
 \end{itemize}
 \end{frame}
  
+\subsection{Convolutional Layers} 
 \begin{frame}
-\subsection{Convolutional Layers}
 \frametitle{Convolutional Layers (CLs)}
 \begin{itemize}
 \item Each CL involves the cascaded application of a \alert{two-qubit operator} on the target register 
@@ -119,8 +129,8 @@ is applied, at the cost of restricting the search space
 \end{itemize}
 \end{frame} 
 
-\begin{frame}
 \subsection{Input Layers}
+\begin{frame}
 \frametitle{Input Layers (ILs)}
 \begin{itemize}
 \item ILs, replacing pooling layers, feed information about the input register into the target register 
@@ -131,8 +141,8 @@ is applied, at the cost of restricting the search space
 \end{itemize}
 \end{frame}
 
-\begin{frame}
 \subsection{Summary: QCNN Structure}
+\begin{frame}
 \frametitle{Summary: QCNN Structure}
 \begin{figure}[h]
 \centering
@@ -141,8 +151,8 @@ is applied, at the cost of restricting the search space
 \end{figure}
 \end{frame}
 
-\begin{frame}
 \section{Training the QCNN}
+\begin{frame}
 \frametitle{Training the QCNN}
 \begin{itemize}
 \item For training, the QCNN is wrapped as a \emph{SamplerQNN} object and connected to PyTorch's \alert{Adam optimiser} via \emph{TorchConnector}
@@ -180,8 +190,8 @@ is applied, at the cost of restricting the search space
 \end{block}
 \end{frame}
 
-\begin{frame}
 \section{Initial Tests}
+\begin{frame}
 \frametitle{Initial Tests}
 \begin{itemize}
 \item Initial tests need to be carried out to \alert{inform QCNN design choices} regarding:
@@ -259,22 +269,15 @@ where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 
 \begin{frame}
 \frametitle{Initial Tests}
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{itemize}
 \item WIM REDUCES STDEV BUT NOT OVERALL PERFORMANCE...MAKES OUTLIERS A BIT BETTER AND THE REST A BIT WORSE 
 \item SAM STILL BETTER THAN WIM OVERALL! (faster; slighlty more accurate)
 \item repeating Psi linear/quadratic/sine tests on WIM: WIM worse for linear; 
 \end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}
-
-\end{column}
-\end{columns}
 \end{frame}
 
-\begin{frame}
 \section{Results}
+\begin{frame}
 \frametitle{Results}
 \begin{itemize}
 \item In the following, a QCNN is applied to implement both $\hat{U}_A$ and $\hat{U}_\Psi$ for the problem studied in Hayes 2023:
@@ -288,8 +291,8 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
 \end{itemize}
 \end{frame}
 
-\begin{frame}
 \subsection{Encoding the Amplitude}
+\begin{frame}
 \frametitle{Encoding the Amplitude}
 \begin{columns}
 \begin{column}{0.5\textwidth}
@@ -303,7 +306,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
 \begin{tabular}{c| c| c}
 \textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
 QGAN & 100 & $8.6\times10^{-3}$   \\
-GR\footnote[frame]{Hayes 2023 reports a mismatch of $4.1\times 10^{-4}$} & 23,796 & $5.7\times10^{-4}$ $\,$  \\
+GR& 23,796 & $4.1\times 10^{-4}$   \\
 QCNN  & 72 & $7.1\times10^{-4}$
 \end{tabular}
 \caption{Comparison of $\hat{U}_A$ implementations}
@@ -319,28 +322,7 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{columns}
 \end{frame}
 
-\begin{frame}
 \subsection{Encoding the Phase}
-\frametitle{Encoding the Phase}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{itemize}
-\item The implementation of $\hat{U}_\Psi$ is not the only factor affecting the encoding of $\Psi(f)$
-\item The size, $m$, of the target register limits the available precision due to rounding to $\sim 2^{-m}$ 
-\item A meaningful representation of $\Psi(f)$  requires $m \gtrsim 6$
-\item The LPF approach in Hayes 2023 uses $m=8$
-\end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}  
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{im/phase_round_comp}
-\caption{Attainable precision due to rounding for different target register sizes}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
 \begin{frame}
 \frametitle{Encoding the Phase}
 \begin{columns}
@@ -361,8 +343,8 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{columns}
 \end{frame}
 
-\begin{frame}
 \subsection{Full Waveform}
+\begin{frame}
 \frametitle{Full Waveform}
 \begin{figure}[h]
 \centering
@@ -371,8 +353,8 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{figure}
 \end{frame}
 
-\begin{frame}
 \section{Next Steps}
+\begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
 \item improve wim 
