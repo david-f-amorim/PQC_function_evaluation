@@ -725,7 +725,9 @@ if __name__ == '__main__':
     if opt.hayes:
         opt.n=6 
         opt.phase_reduce=True 
-        opt.f_str=["psi"]    
+        opt.train_superpos=True 
+        opt.real=True 
+        opt.f_str="psi"  
 
     if int(opt.compL)+int(opt.compf)+int(opt.compM)+int(opt.compl)+int(opt.compe)+int(opt.compeL) > 1:
         raise ValueError("Cannot do two comparisons at once.")

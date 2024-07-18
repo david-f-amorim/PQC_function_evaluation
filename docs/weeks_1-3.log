@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  17 JUL 2024 18:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  18 JUL 2024 06:59
 entering extended mode
 **./weeks_1-3.tex
 (weeks_1-3.tex
@@ -1089,7 +1089,7 @@ Overfull \vbox (2.06783pt too high) detected at line 244
 <im/amplitude_comp.pdf, id=654, 715.47299pt x 715.47299pt>
 File: im/amplitude_comp.pdf Graphic file (type pdf)
 <use im/amplitude_comp.pdf>
-Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 305.
+Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 306.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
  [18
 
@@ -1097,12 +1097,12 @@ Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 305.
 <im/A_L_comp.pdf, id=700, 650.17484pt x 626.42184pt>
 File: im/A_L_comp.pdf Graphic file (type pdf)
 <use im/A_L_comp.pdf>
-Package pdftex.def Info: im/A_L_comp.pdf  used on input line 325.
+Package pdftex.def Info: im/A_L_comp.pdf  used on input line 326.
 (pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
 <im/QGAN_comp.pdf, id=701, 650.17484pt x 626.42184pt>
 File: im/QGAN_comp.pdf Graphic file (type pdf)
 <use im/QGAN_comp.pdf>
-Package pdftex.def Info: im/QGAN_comp.pdf  used on input line 325.
+Package pdftex.def Info: im/QGAN_comp.pdf  used on input line 326.
 (pdftex.def)             Requested size: 171.14764pt x 164.89221pt.
  [19
 
@@ -1110,7 +1110,7 @@ Package pdftex.def Info: im/QGAN_comp.pdf  used on input line 325.
 <im/phase_round_comp.pdf, id=764, 639.70206pt x 629.48254pt>
 File: im/phase_round_comp.pdf Graphic file (type pdf)
 <use im/phase_round_comp.pdf>
-Package pdftex.def Info: im/phase_round_comp.pdf  used on input line 347.
+Package pdftex.def Info: im/phase_round_comp.pdf  used on input line 348.
 (pdftex.def)             Requested size: 171.14764pt x 168.41612pt.
  [20
 
@@ -1118,10 +1118,10 @@ Package pdftex.def Info: im/phase_round_comp.pdf  used on input line 347.
 <im/phase_comp.pdf, id=802, 715.47299pt x 715.47299pt>
 File: im/phase_comp.pdf Graphic file (type pdf)
 <use im/phase_comp.pdf>
-Package pdftex.def Info: im/phase_comp.pdf  used on input line 365.
+Package pdftex.def Info: im/phase_comp.pdf  used on input line 366.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-Overfull \vbox (2.06783pt too high) detected at line 365
+Overfull \vbox (2.06783pt too high) detected at line 366
  []
 
 [21
@@ -1130,7 +1130,7 @@ Overfull \vbox (2.06783pt too high) detected at line 365
 <im/h_comp.pdf, id=839, 1438.17305pt x 715.47299pt>
 File: im/h_comp.pdf Graphic file (type pdf)
 <use im/h_comp.pdf>
-Package pdftex.def Info: im/h_comp.pdf  used on input line 375.
+Package pdftex.def Info: im/h_comp.pdf  used on input line 376.
 (pdftex.def)             Requested size: 342.2953pt x 170.28687pt.
  [22
 
@@ -1153,7 +1153,7 @@ Package rerunfilecheck Info: File `weeks_1-3.out' has not changed.
 Here is how much of TeX's memory you used:
  23593 strings out of 478864
  447930 string characters out of 2848660
- 747880 words of memory out of 3000000
+ 747879 words of memory out of 3000000
  40901 multiletter control sequences out of 15000+600000
  421522 words of font info for 98 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1192,7 +1192,7 @@ ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users
 .pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
 symbols/msbm10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/symbols/msbm7.pfb>
-Output written on weeks_1-3.pdf (23 pages, 746411 bytes).
+Output written on weeks_1-3.pdf (23 pages, 746550 bytes).
 PDF statistics:
  1039 PDF objects out of 1200 (max. 8388607)
  59 named destinations out of 1000 (max. 500000)

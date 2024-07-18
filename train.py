@@ -5,10 +5,10 @@ parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.
 parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=int)
 parser.add_argument('-m','--m', help="Number of target qubits.", default=2, type=int)
 parser.add_argument('-L','--L', help="Number of network layers. If multiple values given will execute sequentially.", default=[6],type=int, nargs="+")
-parser.add_argument('-l','--loss', help="Loss function.", default="CE", choices=["CE", "MSE", "L1", "KLD", "MM"])
+parser.add_argument('-l','--loss', help="Loss function.", default="MM", choices=["CE", "MSE", "L1", "KLD", "MM", "WIM"])
 parser.add_argument('-f','--f', help="Function to evaluate (variable: x).", default="x")
 parser.add_argument('-fs','--f_str', help="String describing function.")
-parser.add_argument('-e','--epochs', help="Number of epochs.", default=800,type=int)
+parser.add_argument('-e','--epochs', help="Number of epochs.", default=600,type=int)
 parser.add_argument('-M','--meta', help="String with meta data.", default="")
 parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
 parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
@@ -17,7 +17,7 @@ parser.add_argument('-r','--real', help="Output states with real amplitudes only
 parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
 parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
 
-parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -n 6 -PR -f psi. Still set own m.", action='store_true')
+parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR -f psi. Still set own m.", action='store_true')
 
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
@@ -47,6 +47,8 @@ if opt.gen_seed:
 if opt.hayes:
     opt.n=6 
     opt.phase_reduce=True 
+    opt.train_superpos=True 
+    opt.real=True 
     opt.f=psi 
     opt.f_str="psi"     
 

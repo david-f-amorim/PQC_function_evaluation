@@ -495,8 +495,16 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         criterion=CrossEntropyLoss()
     elif loss_str=="MM":
         def criterion(output, target):
-            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)  
-      
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards) 
+    elif loss_str=="WIM":     
+        def criterion(output, target, weights):
+
+            output = torch.mul(output, weights) # apply weights 
+            output = output / torch.sum(torch.mul(output, output)) # normalise
+
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)
+        
+        WIM_weights_arr=np.ones(2**(n+m)) # initially set all weights to one
                     
     # set up arrays to store training outputs 
     if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
@@ -577,20 +585,25 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # train model  
         optimizer.zero_grad()
 
-        if loss_str=="MM" or real:
-            if i==recovered_k:
-                angle_tensor = Tensor(np.zeros(2**(n+m)))
-                sign_tensor=Tensor(np.ones(2**(n+m)))
-            else: 
-                angle_tensor = Tensor(angle_arr)   
-                sign_tensor=Tensor(sign_arr) # Tensor(np.ones(2**(n+m))) 
-
-            if real:
+        #if loss_str=="MM" or loss_str=="WIM" or real:
+        if i==recovered_k:
+            angle_tensor = Tensor(np.zeros(2**(n+m)))
+            sign_tensor=Tensor(np.ones(2**(n+m)))
+        else: 
+            angle_tensor = Tensor(angle_arr)   
+            sign_tensor=Tensor(sign_arr) 
+            
+        if real:
+            if loss_str=="WIM":
+                WIM_weights_tensor=Tensor(WIM_weights_arr)
+                loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
+            else:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
-            else:        
+        else: 
+            if loss_str=="MM":    
                 loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number in sqrt !
-        else:
-            loss = criterion(model(input), target)
+            else:
+                loss = criterion(model(input), target)
 
         loss.backward()
         optimizer.step()
@@ -633,6 +646,50 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         # save mismatch for plotting 
         mismatch_vals[i]=mismatch
 
+        # set loss func weights
+        if loss_str=="WIM" and (i % 10 ==0) and (i >100):
+            
+            # initialise arrays to store results 
+            temp_mismatch = np.empty(2**n)
+            WIM_weights_arr= np.empty(2**(n+m))
+            
+            # iterate over input states 
+            x_arr_temp = np.arange(2**n)
+            fx_arr_temp = [func(i) for i in x_arr]
+
+            if phase_reduce: 
+                fx_arr_temp = [np.modf(i/ (2* np.pi))[0] for i in fx_arr_temp]
+
+            for i in x_arr:
+                
+                # prepare circuit 
+                enc=binary_to_encode_param(np.binary_repr(i,n))
+                params=np.concatenate((enc, generated_weights))  
+
+                qc = generate_network(n,m,L, encode=True,toggle_IL=True, real=real)
+                qc = qc.assign_parameters(params) 
+
+                # get target array 
+                target_arr_temp = np.zeros(2**(n+m))
+
+                index = int(dec_to_bin(fx_arr_temp[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr_temp[i],n,'unsigned mag',nint=nint),2)
+                target_arr_temp[index]=1 
+
+                # get statevector 
+                backend = Aer.get_backend('statevector_simulator')
+                job = execute(qc, backend)
+                result = job.result()
+                state_vector_temp = np.asarray(result.get_statevector()) 
+
+                # calculate fidelity and mismatch 
+                fidelity_temp = np.abs(np.dot(np.sqrt(target_arr_temp),np.conjugate(state_vector_temp)))**2
+                temp_mismatch[i] = 1. - np.sqrt(fidelity_temp)
+
+                # add to weights_arr 
+                for j in np.arange(2**m):
+                    ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[i],n,'unsigned mag',nint=nint),2) 
+                    WIM_weights_arr[ind]= temp_mismatch[i]
+              
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
         
