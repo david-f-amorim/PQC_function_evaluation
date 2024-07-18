@@ -21,15 +21,15 @@ pdf = False # save outputs as pdf
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
 A_L_comp = False 
 QGAN_comp = False
 phase_round_comp = False
-phase_L_comp = False 
-phase_loss_comp = False
+phase_L_comp = False
+phase_loss_comp = True
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -384,12 +384,13 @@ if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr = np.array(["SAM","CE"])
-    arr_1 = "outputs/weights_6_3(0)_6_600_psi_MM_s(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_s(S)(PR)(r).npy"
+    loss_arr = np.array(["SAM","CE", "WIM"])
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
+    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_linear(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WIM_linear(S)(PR)(r).npy"
   
-    weights_arr =np.array([arr_1, arr_2])
-    colours = ["red", "blue"]
+    weights_arr =np.array([arr_1, arr_2, arr_3])
+    colours = ["red", "blue", "green"]
     N = len(weights_arr)
 
     phase_arr = np.empty(N, dtype="object")
