@@ -690,7 +690,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                     ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[q],n,'unsigned mag',nint=nint),2) 
                     WIM_weights_arr[ind]= temp_mismatch[q]
 
-            WIM_weights_arr=np.exp(WIM_weights_arr**2)    
+            WIM_weights_arr=np.exp(WIM_weights_arr)    
             WIM_weights_arr= WIM_weights_arr / np.sum(WIM_weights_arr)
 
         elif loss_str=="WIM" and (i % 10 ==5) and (i >=100): 
