@@ -253,7 +253,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \mathsf{WIM}(x,y) =  \left\vert 1 - \sum_j w_j x_j y_j \right \vert, 
 \end{equation}
 where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
-\item When training in superposition take $w_j$ to be the (normalised, smoothed) mismatch between $\hat{Q}_\Psi \ket{j} \ket{0}$ and $\ket{j}\ket{\Psi'(j)}$
+\item Take $w_j$ to be the (normalised, smoothed) mismatch between $\hat{Q}_\Psi \ket{j} \ket{0}$ and $\ket{j}\ket{\Psi'(j)}$
 \end{itemize}
 \end{frame}
 
@@ -262,10 +262,9 @@ where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item TAU1=0.8 SEEMS GOOD!
-\item play around with tau2 and tau3 : seem to make no difference 
-\item investigate if higher epoch makes difference [seems to!]: -e 1000 and -L 9??!!
-\item think about turning on and off (i.e. setting and re-setting weights?)
+\item With some tinkering, WIM slightly ...
+\item 
+\item investigate if higher epoch makes difference: -e 1000 and -L 9 makes it worse; -e 1500 makes it slightly better?
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}

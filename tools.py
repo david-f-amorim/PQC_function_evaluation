@@ -647,7 +647,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mismatch_vals[i]=mismatch
 
         # set loss func weights
-        if loss_str=="WIM" and (i % tau_2 ==0) and (i >=tau_3) and ((i // tau_3) % 2==1):
+        if loss_str=="WIM" and (i % tau_2 ==0) and (i >=tau_3):
             
             # initialise arrays to store results 
             temp_mismatch = np.empty(2**n)
@@ -691,10 +691,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                     WIM_weights_arr[ind]= temp_mismatch[q]
 
             WIM_weights_arr=np.exp(tau_1 * WIM_weights_arr)    
-
-        elif loss_str=="WIM" and (i % tau_2 ==0) and (i >=tau_3) and ((i // tau_3) % 2 == 0):
-             WIM_weights_arr=np.ones(2**(n+m))
-
 
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
