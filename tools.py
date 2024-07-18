@@ -655,15 +655,15 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             
             # iterate over input states 
             x_arr_temp = np.arange(2**n)
-            fx_arr_temp = [func(i) for i in x_arr]
+            fx_arr_temp = [func(k) for k in x_arr]
 
             if phase_reduce: 
-                fx_arr_temp = [np.modf(i/ (2* np.pi))[0] for i in fx_arr_temp]
+                fx_arr_temp = [np.modf(k/ (2* np.pi))[0] for k in fx_arr_temp]
 
-            for i in x_arr:
+            for q in x_arr:
                 
                 # prepare circuit 
-                enc=binary_to_encode_param(np.binary_repr(i,n))
+                enc=binary_to_encode_param(np.binary_repr(q,n))
                 params=np.concatenate((enc, generated_weights))  
 
                 qc = generate_network(n,m,L, encode=True,toggle_IL=True, real=real)
@@ -672,7 +672,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 # get target array 
                 target_arr_temp = np.zeros(2**(n+m))
 
-                index = int(dec_to_bin(fx_arr_temp[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr_temp[i],n,'unsigned mag',nint=nint),2)
+                index = int(dec_to_bin(fx_arr_temp[q],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr_temp[q],n,'unsigned mag',nint=nint),2)
                 target_arr_temp[index]=1 
 
                 # get statevector 
@@ -683,12 +683,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
                 # calculate fidelity and mismatch 
                 fidelity_temp = np.abs(np.dot(np.sqrt(target_arr_temp),np.conjugate(state_vector_temp)))**2
-                temp_mismatch[i] = 1. - np.sqrt(fidelity_temp)
+                temp_mismatch[q] = 1. - np.sqrt(fidelity_temp)
 
                 # add to weights_arr 
                 for j in np.arange(2**m):
-                    ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[i],n,'unsigned mag',nint=nint),2) 
-                    WIM_weights_arr[ind]= temp_mismatch[i]
+                    ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[q],n,'unsigned mag',nint=nint),2) 
+                    WIM_weights_arr[ind]= temp_mismatch[q]
+
+            WIM_weights_arr=np.exp(WIM_weights_arr)    
               
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
@@ -847,6 +849,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
         print("Mismatch by input state:")
         for i in x_arr:
             print(f"\t{np.binary_repr(i,n)}:  {mismatch[i]:.2e} ({signs[i]})")
+        print(f"Mean: {np.mean(mismatch):.2e}; STDEV: {np.std(mismatch):.2e}")    
         print("")
         print("")    
 

@@ -698,7 +698,7 @@ if __name__ == '__main__':
     parser.add_argument('-L','--L', help="Number of network layers.", default=[6],type=int, nargs="+")
     parser.add_argument('-l','--loss', help="Loss function.", default=["CE"], nargs="+")
     parser.add_argument('-fs','--f_str', help="String describing function.",nargs="+", default=["x"])
-    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[800],nargs="+", type=int)
+    parser.add_argument('-e','--epochs', help="Number of epochs.", default=[600],nargs="+", type=int)
     parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
     parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
 
@@ -727,7 +727,7 @@ if __name__ == '__main__':
         opt.phase_reduce=True 
         opt.train_superpos=True 
         opt.real=True 
-        opt.f_str="psi"  
+        opt.f_str=["psi"]  
 
     if int(opt.compL)+int(opt.compf)+int(opt.compM)+int(opt.compl)+int(opt.compe)+int(opt.compeL) > 1:
         raise ValueError("Cannot do two comparisons at once.")
