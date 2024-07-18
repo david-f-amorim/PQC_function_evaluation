@@ -263,8 +263,8 @@ where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \begin{column}{0.5\textwidth}
 \begin{itemize}
 \item TAU1=0.8 SEEMS GOOD!
-\item play around with tau2 and tau3 
-\item investigate if higher epoch makes difference [seems to!]: -e 1000 and -
+\item play around with tau2 and tau3 : seem to make no difference 
+\item investigate if higher epoch makes difference [seems to!]: -e 1000 and -L 9??!!
 \item think about turning on and off (i.e. setting and re-setting weights?)
 \end{itemize}
 \end{column}
@@ -315,26 +315,6 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \centering
 \includegraphics[width=\textwidth]{im/amplitude_comp}
 \caption{Reconstruction of $\tilde{A}(f)$ from different methods. Target in black.}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Encoding the Amplitude}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{im/A_L_comp}
-\caption{QCNN training for different circuit depths.}
-\end{figure}
-\end{column}
-\begin{column}{0.5\textwidth}  
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{im/QGAN_comp}
-\caption{Comparison of QGAN and QCNN training. Note: QGAN results do not match Hayes 2023!}
 \end{figure}
 \end{column}
 \end{columns}
