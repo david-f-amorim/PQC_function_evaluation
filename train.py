@@ -19,7 +19,7 @@ parser.add_argument('-TS','--train_superpos', help="Train circuit in superpositi
 
 parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR -f psi. Still set own m.", action='store_true')
 
-parser.add_argument('--tau1', help="WIM tau1 parameter.", default=1,type=float)
+parser.add_argument('--tau1', help="WIM tau1 parameter.", default=0.8,type=float)
 parser.add_argument('--tau2', help="WIM tau2 parameter.", default=10,type=float)
 parser.add_argument('--tau3', help="WIM tau3 parameter.", default=100,type=float)
 
