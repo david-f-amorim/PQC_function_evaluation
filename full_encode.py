@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 4
-weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 3
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
@@ -17,11 +17,11 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = True # save outputs as pdf 
+pdf = False # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
-no_A = False # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_A = True # don't produce amplitude plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
