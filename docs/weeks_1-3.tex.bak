@@ -262,9 +262,9 @@ where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item With some tinkering, WIM slightly ...
-\item 
-\item investigate if higher epoch makes difference: -e 1000 and -L 9 makes it worse; -e 1500 makes it slightly better?
+\item WIM REDUCES STDEV BUT NOT OVERALL PERFORMANCE...MAKES OUTLIERS A BIT BETTER AND THE REST A BIT WORSE 
+\item SAM STILL BETTER THAN WIM OVERALL!
+\item maybe: weighted mse / mae better ??
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -346,7 +346,7 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item ...
+\item ... [improve fig caption]
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}  
@@ -373,6 +373,7 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \section{Next Steps}
 \frametitle{Next Steps}
 \begin{itemize}
+\item improve wim 
 \item more fully explore PQC parameter space ... (depth, epoch...)
 \item look into barren plateau mitigation (layer-by-layer training....) => might help increase L/e
 \end{itemize}

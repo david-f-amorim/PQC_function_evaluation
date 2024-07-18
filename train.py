@@ -21,7 +21,7 @@ parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023.
 
 parser.add_argument('--tau1', help="WIM tau1 parameter.", default=0.8,type=float)
 parser.add_argument('--tau2', help="WIM tau2 parameter.", default=10,type=float)
-parser.add_argument('--tau3', help="WIM tau3 parameter.", default=100,type=float)
+parser.add_argument('--tau3', help="WIM tau3 parameter.", default=1,type=float)
 
 parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
