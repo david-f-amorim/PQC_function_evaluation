@@ -502,7 +502,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             output = torch.mul(output, weights) # apply weights 
             output = output / torch.sum(torch.mul(output, output)) # normalise
 
-            return  torch.mean(torch.abs(output-target))  # redefine to punish sign errors (moved abs outwards)
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)
         
         WIM_weights_arr=np.ones(2**(n+m)) # initially set all weights to one
                     
