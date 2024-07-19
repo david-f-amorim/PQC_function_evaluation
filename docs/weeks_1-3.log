@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  18 JUL 2024 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  19 JUL 2024 11:03
 entering extended mode
 **./weeks_1-3.tex
 (weeks_1-3.tex
@@ -1001,8 +1001,6 @@ Package caption Info: End \AtBeginDocument code.
 {C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (weeks_1-3.toc)
  [2
 
-] (weeks_1-3.toc) [3
-
 ]
 LaTeX Font Info:    Trying to load font information for U+msa on input line 63.
 
@@ -1022,13 +1020,15 @@ LaTeX Font Info:    Trying to load font information for U+esint on input line 6
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/esint\uesint.fd
 File: uesint.fd 
 )
-[4
+[3
+
+] [4
 
 ] [5
 
-] [6
+] (weeks_1-3.toc) [6
 
-] (weeks_1-3.toc) [7
+] [7
 
 ] [8
 
@@ -1036,28 +1036,26 @@ File: uesint.fd
 
 ] [10
 
-] [11
-
 ]
-<im/QCNN_structure.png, id=442, 676.32675pt x 287.27325pt>
+<im/QCNN_structure.png, id=404, 676.32675pt x 287.27325pt>
 File: im/QCNN_structure.png Graphic file (type png)
 <use im/QCNN_structure.png>
 Package pdftex.def Info: im/QCNN_structure.png  used on input line 152.
 (pdftex.def)             Requested size: 342.2953pt x 145.39403pt.
- [12
+ [11
 
- <./im/QCNN_structure.png>] (weeks_1-3.toc) [13
+ <./im/QCNN_structure.png>] (weeks_1-3.toc) [12
+
+] [13
 
 ] [14
 
-] [15
+] (weeks_1-3.toc) [15
 
-] (weeks_1-3.toc) [16
-
-] [17
+] [16
 
 ]
-<im/phase_loss_comp_linear_m4.pdf, id=654, 705.3834pt x 715.47299pt>
+<im/phase_loss_comp_linear_m4.pdf, id=615, 705.3834pt x 715.47299pt>
 File: im/phase_loss_comp_linear_m4.pdf Graphic file (type pdf)
 <use im/phase_loss_comp_linear_m4.pdf>
 Package pdftex.def Info: im/phase_loss_comp_linear_m4.pdf  used on input line 2
@@ -1067,16 +1065,16 @@ Package pdftex.def Info: im/phase_loss_comp_linear_m4.pdf  used on input line 2
 Overfull \vbox (4.5242pt too high) detected at line 234
  []
 
-[18
+[17
 
  <./im/phase_loss_comp_linear_m4.pdf>]
-<im/phase_loss_comp_quadratic_m4.pdf, id=701, 715.47299pt x 715.47299pt>
+<im/phase_loss_comp_quadratic_m4.pdf, id=662, 715.47299pt x 715.47299pt>
 File: im/phase_loss_comp_quadratic_m4.pdf Graphic file (type pdf)
 <use im/phase_loss_comp_quadratic_m4.pdf>
 Package pdftex.def Info: im/phase_loss_comp_quadratic_m4.pdf  used on input lin
 e 254.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
-<im/phase_loss_comp_sin_m3.pdf, id=702, 715.47299pt x 715.47299pt>
+<im/phase_loss_comp_sin_m3.pdf, id=663, 715.47299pt x 715.47299pt>
 File: im/phase_loss_comp_sin_m3.pdf Graphic file (type pdf)
 <use im/phase_loss_comp_sin_m3.pdf>
 Package pdftex.def Info: im/phase_loss_comp_sin_m3.pdf  used on input line 254.
@@ -1086,48 +1084,46 @@ Package pdftex.def Info: im/phase_loss_comp_sin_m3.pdf  used on input line 254.
 Overfull \vbox (2.06783pt too high) detected at line 254
  []
 
-[19
+[18
 
  <./im/phase_loss_comp_quadratic_m4.pdf> <./im/phase_loss_comp_sin_m3.pdf>]
-[20
+[19
+
+] (weeks_1-3.toc) [20
 
 ] [21
 
-] (weeks_1-3.toc) [22
-
-] [23
-
 ]
-<im/amplitude_comp.pdf, id=872, 715.47299pt x 715.47299pt>
+<im/amplitude_comp.pdf, id=807, 715.47299pt x 715.47299pt>
 File: im/amplitude_comp.pdf Graphic file (type pdf)
 <use im/amplitude_comp.pdf>
-Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 323.
+Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 316.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
- [24
+ [22
 
  <./im/amplitude_comp.pdf>]
-<im/phase_comp.pdf, id=914, 715.47299pt x 715.47299pt>
+<im/phase_comp.pdf, id=850, 715.47299pt x 715.47299pt>
 File: im/phase_comp.pdf Graphic file (type pdf)
 <use im/phase_comp.pdf>
-Package pdftex.def Info: im/phase_comp.pdf  used on input line 344.
+Package pdftex.def Info: im/phase_comp.pdf  used on input line 337.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-Overfull \vbox (2.06783pt too high) detected at line 344
+Overfull \vbox (2.06783pt too high) detected at line 337
  []
 
-[25
+[23
 
  <./im/phase_comp.pdf>]
-<im/h_comp.pdf, id=952, 1438.17305pt x 715.47299pt>
+<im/h_comp.pdf, id=887, 1438.17305pt x 715.47299pt>
 File: im/h_comp.pdf Graphic file (type pdf)
 <use im/h_comp.pdf>
-Package pdftex.def Info: im/h_comp.pdf  used on input line 354.
+Package pdftex.def Info: im/h_comp.pdf  used on input line 347.
 (pdftex.def)             Requested size: 342.2953pt x 170.28687pt.
- [26
+ [24
 
- <./im/h_comp.pdf>] (weeks_1-3.toc) [27
+ <./im/h_comp.pdf>] (weeks_1-3.toc) [25
 
-] [28
+] [26
 
 ]
 \tf@nav=\write6
@@ -1142,13 +1138,13 @@ Package pdftex.def Info: im/h_comp.pdf  used on input line 354.
 
 (weeks_1-3.aux)
 Package rerunfilecheck Info: File `weeks_1-3.out' has not changed.
-(rerunfilecheck)             Checksum: 79EB1FD7FB659E4B9D0A020E599CCEDC;1558.
+(rerunfilecheck)             Checksum: BD39CCD4D4ECB9D5AE5724787A76E44C;1558.
  ) 
 Here is how much of TeX's memory you used:
- 23618 strings out of 478864
- 448667 string characters out of 2848660
- 747938 words of memory out of 3000000
- 40907 multiletter control sequences out of 15000+600000
+ 23608 strings out of 478864
+ 448506 string characters out of 2848660
+ 748197 words of memory out of 3000000
+ 40903 multiletter control sequences out of 15000+600000
  421522 words of font info for 98 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,416b,776s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1180,9 +1176,9 @@ amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
 nts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/david/AppData/Local/Programs/M
 iKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/david/AppData/Lo
 cal/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on weeks_1-3.pdf (28 pages, 639166 bytes).
+Output written on weeks_1-3.pdf (26 pages, 624513 bytes).
 PDF statistics:
- 1174 PDF objects out of 1200 (max. 8388607)
- 69 named destinations out of 1000 (max. 500000)
+ 1109 PDF objects out of 1200 (max. 8388607)
+ 65 named destinations out of 1000 (max. 500000)
  330 words of extra memory for PDF output out of 10000 (max. 10000000)
 

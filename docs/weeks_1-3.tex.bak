@@ -18,25 +18,34 @@
 \usefonttheme{professionalfonts}
 \useinnertheme{circles}
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \setbeamertemplate{caption}[numbered]
 
 \title[PQC Function Evaluation]{PQC Function Evaluation}
-\subtitle{Weeks 1-3}
+\subtitle{Carnegie Vacation Scholarship}
 \author[David Amorim]{David Amorim}
 \institute[]{}
-\date[22/07/2024]{01/07/2024 - 19/07/2024}
+\date[22/07/2024]{Weeks 1-3 \\(01/07/2024 - 19/07/2024)}
 
 \begin{document}
 
+
 \frame{\titlepage}
 
-\begin{frame}
-\frametitle{Table of Contents}
-\tableofcontents
-\end{frame}
+%\begin{frame}
+%\frametitle{Table of Contents}
+%\tableofcontents
+%\end{frame}
 
-\begin{frame}
 \section{Background}
+\begin{frame}
 \frametitle{Background}
 
 \begin{itemize}
@@ -61,7 +70,7 @@ using $n = \lceil \log_2 N \rceil$ qubits
 \hat{Q}_\Psi  \ket{j} \ket{0}^{\otimes m}_a = \ket{j} \ket{\Psi'(j)}_a,
 \end{equation}
 with $\Psi'(j) \equiv \Psi(j) / 2 \pi$
-\item Due to rounding, the size, $m$, of the ancilla register limits the precision with which $\Psi'$ can be encoded to $\sim 2^{-m}$ 
+\item Due to rounding the size, $m$, of the ancilla register limits the precision with which $\Psi'$ can be encoded to $\sim 2^{-m}$ 
 \item Currently, $\hat{Q}_\Psi$ is implemented using gate-intensive \emph{linear piecewise functions (LPFs)}
 \end{itemize}
 \end{frame}
@@ -76,8 +85,8 @@ Implement $\hat{Q}_\Psi$ in a gate-efficient way using a parametrised quantum ci
 The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register containing the $\ket{\Psi'(j)}$ will be referred to as the \alert{input register} and \alert{target register}, respectively. 
 \end{frame}
 
-\begin{frame}
 \section{Approach: a QCNN}
+\begin{frame}
 \frametitle{Approach: a QCNN}
 \begin{itemize}
 \item A \emph{quantum convolutional neural network} (\alert{QCNN}) is used to tackle the problem
@@ -91,8 +100,8 @@ The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register conta
 \end{itemize}
 \end{frame}
  
+\subsection{Convolutional Layers} 
 \begin{frame}
-\subsection{Convolutional Layers}
 \frametitle{Convolutional Layers (CLs)}
 \begin{itemize}
 \item Each CL involves the cascaded application of a \alert{two-qubit operator} on the target register 
@@ -102,8 +111,8 @@ The $n$-qubit register containing the $\ket{j}$ and the $m$-qubit register conta
 \mathcal{N}(\alpha, \beta, \gamma) = \exp \left( i \left[ \alpha X \otimes X + \beta Y \otimes Y + \gamma Z \otimes Z \right] \right)
 \end{equation}
 is applied, at the cost of restricting the search space 
-\item This can be decomposed\footnote{\url{https://arxiv.org/pdf/quant-ph/0308006}} into 3$CX$, 3$R_z$, and 2$R_y$ gates
-\item A two-parameter real version, $\mathcal{N}_\mathbb{R}(\lambda, \mu)$, can be obtained by removing the $R_z$
+\item This can be decomposed\footnote{\url{https://arxiv.org/pdf/quant-ph/0308006}} into 3 CX, 3 $\text{R}_\text{z}$, and 2 $\text{R}_\text{y}$ gates
+\item A two-parameter real version, $\mathcal{N}_\mathbb{R}(\lambda, \mu)$, can be obtained by removing the $\text{R}_\text{z}$
 \end{itemize}
 \end{frame} 
 
@@ -112,28 +121,28 @@ is applied, at the cost of restricting the search space
 \begin{itemize}
 \item Two types of convolutional layers are implemented:\footnote{Loosely based on Sim 2019 (\url{https://arxiv.org/pdf/1905.10876})}
 \begin{itemize}
-\item \alert{Neighbour-to-neighbour / linear CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to neighbouring target qubits 
-\item \alert{All-to-all /quadratic CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to all combinations of target qubits
+\item \alert{Neighbour-to-neighbour/linear CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to neighbouring target qubits 
+\item \alert{All-to-all/quadratic CLs}: the $\mathcal{N}$ (or $\mathcal{N}_\mathbb{R}$) gate is applied to all combinations of target qubits
 \end{itemize}
 \item The $\mathcal{N}$-gate cost of neighbour-to-neighbour (NN) layers is \alert{$\mathcal{O}(m)$} while that of all-to-all (AA) layers is \alert{$\mathcal{O}(m^2)$}
 \item The QCNN uses alternating linear and quadratic CLs
 \end{itemize}
 \end{frame} 
 
-\begin{frame}
 \subsection{Input Layers}
+\begin{frame}
 \frametitle{Input Layers (ILs)}
 \begin{itemize}
 \item ILs, replacing pooling layers, feed information about the input register into the target register 
-\item An IL involves a sequence of controlled generic single-qubit rotations (\alert{$CU3$ gates}) on the target qubits, with input qubits as controls
-\item For an IL producing states with \alert{real} amplitudes, the $CU3$ gates are replaced with \alert{$CR_y$ gates}
-\item Each input qubit controls precisely one $CU3$ (or $CR_y$ operation), resulting in an \alert{$\mathcal{O}(n)$} gate cost (no CX gates!)
+\item An IL involves a sequence of controlled generic single-qubit rotations (\alert{CU3 gates}) on the target qubits, with input qubits as controls
+\item For an IL producing states with \alert{real} amplitudes, the CU3 gates are replaced with \alert{$\text{CR}_\text{y}$ gates}
+\item Each input qubit controls precisely one CU3 (or $\text{CR}_\text{y}$ operation), resulting in an \alert{$\mathcal{O}(n)$} gate cost (no CX gates!)
 \item ILs are inserted after every second convolutional layer, alternating between control states 0 and 1  
 \end{itemize}
 \end{frame}
 
-\begin{frame}
 \subsection{Summary: QCNN Structure}
+\begin{frame}
 \frametitle{Summary: QCNN Structure}
 \begin{figure}[h]
 \centering
@@ -142,8 +151,8 @@ is applied, at the cost of restricting the search space
 \end{figure}
 \end{frame}
 
-\begin{frame}
 \section{Training the QCNN}
+\begin{frame}
 \frametitle{Training the QCNN}
 \begin{itemize}
 \item For training, the QCNN is wrapped as a \emph{SamplerQNN} object and connected to PyTorch's \alert{Adam optimiser} via \emph{TorchConnector}
@@ -181,8 +190,8 @@ is applied, at the cost of restricting the search space
 \end{block}
 \end{frame}
 
-\begin{frame}
 \section{Initial Tests}
+\begin{frame}
 \frametitle{Initial Tests}
 \begin{itemize}
 \item Initial tests need to be carried out to \alert{inform QCNN design choices} regarding:
@@ -190,7 +199,7 @@ is applied, at the cost of restricting the search space
 \item Number of layers
 \item Number of epochs 
 \item Training mode (individually versus in superposition)
-\item Use of $\mathcal{N}$ and $CU3$ versus $\mathcal{N}_\mathbb{R}$ and $CR_y$ 
+\item Use of $\mathcal{N}$ and $\text{CU}3$ versus $\mathcal{N}_\mathbb{R}$ and $\text{CR}_\text{y}$ 
 \item Choice of loss function
 \item Network structure
 \end{enumerate}
@@ -206,7 +215,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item \alert{Heuristically}: train in superposition with real circuits ($\mathcal{N}_\mathbb{R}$ and $CR_y$) of depth $L =6$ using 600 epochs and \alert{focus} on optimising the \alert{loss function}
+\item \alert{Heuristically}: train in superposition with real circuits ($\mathcal{N}_\mathbb{R}$ and $\text{CR}_\text{y}$) of depth $L =6$ using 600 epochs and \alert{focus} on optimising the \alert{loss function}
 \item Best results achieved with \emph{cross entropy} (\alert{CE}) and \emph{sign-adjusted mismatch} (\alert{SAM}):
 \begin{equation}
 \mathsf{SAM}(x,y) = \left\vert 1 - \sum_j x_j y_j \right \vert 
@@ -255,50 +264,36 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \end{equation}
 where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \item The $w_j$ are based on the mismatch between $\hat{Q}_\Psi \ket{j} \ket{0}$ and $\ket{j}\ket{\Psi'(j)}$
+\item\emph{ Despite considerable efforts, WIM could not (yet) improve upon SAM} 
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Initial Tests}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{itemize}
-\item WIM REDUCES STDEV BUT NOT OVERALL PERFORMANCE...MAKES OUTLIERS A BIT BETTER AND THE REST A BIT WORSE 
-\item SAM STILL BETTER THAN WIM OVERALL! (faster; slighlty more accurate)
-\item repeating Psi linear/quadratic/sine tests on WIM: WIM worse for linear; 
-\end{itemize}
-\end{column}
-\begin{column}{0.5\textwidth}
-
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
 \section{Results}
+\begin{frame}
 \frametitle{Results}
 \begin{itemize}
-\item In the following, a QCNN is applied to implement both $\hat{U}_A$ and $\hat{U}_\Psi$ for the problem studied in Hayes 2023:
+\item The following shows how the methods developed so far compare to the ones used in Hayes 2023
+\item QCNNs are applied to \alert{implement both $\hat{U}_A$ and $\hat{U}_\Psi$} for the problem studied in Hayes 2023:
 \begin{align}
 \tilde{A}(f) &= f^{-7/6}, \\
 \Psi(f) &= c_0 + c_1 f + c_2 f^{-1/3} + c_3 f^{-2/3} + c_4 f^{-1} + c_5 f^{-5/3},
 \end{align}
-with 40$\,$Hz $\leq f \leq $ 168$\,$Hz
+with 40$\,$Hz $\leq f \leq $ 168$\,$Hz and $n=6$
 \item In the paper, $\hat{U}_A$ is implemented via a quantum generative adversarial network (\alert{QGAN}) as well as the Grover-Rudolph (\alert{GR}) algorithm while \alert{LPFs} are used for $\hat{U}_\Psi$
-\item Hayes 2023 uses $n=6$ as well as 22 ancilla qubits 
 \end{itemize}
 \end{frame}
 
-\begin{frame}
 \subsection{Encoding the Amplitude}
+\begin{frame}
 \frametitle{Encoding the Amplitude}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
 \item The \alert{QCNN outperforms the QGAN} and \alert{nearly reaches GR} w.r.t. mismatch 
 \item The QCNN ($L=3$, $n=6$) was trained in 600 epochs with SAM
+\item GR also requires 22 ancilla qubits
 \end{itemize}
-\vspace{0.4cm}
+\vspace{0.2cm}
 \begin{table}
 \centering 
 \begin{tabular}{c| c| c}
@@ -320,15 +315,15 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{columns}
 \end{frame}
 
-\begin{frame}
 \subsection{Encoding the Phase}
+\begin{frame}
 \frametitle{Encoding the Phase}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item ... [improve fig caption]
-\item give some info on fidelity/mismatch... (overall....)
-\item number of gates ... training params...
+\item The \alert{LPFs vastly outperform} the QCNN
+\item The QCNN ($L=3$, $n=6$, $m=4$) was trained in 600 epochs using SAM and involves 76 CX gates 
+\item The LPF approach ($m=6$) requires 22 ancilla qubits and 9,464 CX gates 
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}  
@@ -341,8 +336,8 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{columns}
 \end{frame}
 
-\begin{frame}
 \subsection{Full Waveform}
+\begin{frame}
 \frametitle{Full Waveform}
 \begin{figure}[h]
 \centering
@@ -351,13 +346,14 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \end{figure}
 \end{frame}
 
-\begin{frame}
 \section{Next Steps}
+\begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
-\item improve wim 
-\item more fully explore PQC parameter space ... (depth, epoch...)
-\item look into barren plateau mitigation (layer-by-layer training....) => might help increase L/e
+\item Continue work on WIM  
+\item Explore the QCNN parameter space further (e.g. circuit depth, network structure...) 
+\item Look into barren plateau mitigation (e.g. layer-by-layer training...)
+\item ...
 \end{itemize}
 \end{frame}
 

@@ -1,13 +1,13 @@
 \babel@toc {UKenglish}{}
-\beamer@sectionintoc {1}{Background}{3}{0}{1}
-\beamer@sectionintoc {2}{Approach: a QCNN}{7}{0}{2}
-\beamer@subsectionintoc {2}{1}{Convolutional Layers}{9}{0}{2}
-\beamer@subsectionintoc {2}{2}{Input Layers}{11}{0}{2}
-\beamer@subsectionintoc {2}{3}{Summary: QCNN Structure}{12}{0}{2}
-\beamer@sectionintoc {3}{Training the QCNN}{13}{0}{3}
-\beamer@sectionintoc {4}{Initial Tests}{16}{0}{4}
-\beamer@sectionintoc {5}{Results}{22}{0}{5}
-\beamer@subsectionintoc {5}{1}{Encoding the Amplitude}{24}{0}{5}
-\beamer@subsectionintoc {5}{2}{Encoding the Phase}{25}{0}{5}
-\beamer@subsectionintoc {5}{3}{Full Waveform}{26}{0}{5}
-\beamer@sectionintoc {6}{Next Steps}{27}{0}{6}
+\beamer@sectionintoc {1}{Background}{2}{0}{1}
+\beamer@sectionintoc {2}{Approach: a QCNN}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Convolutional Layers}{8}{0}{2}
+\beamer@subsectionintoc {2}{2}{Input Layers}{10}{0}{2}
+\beamer@subsectionintoc {2}{3}{Summary: QCNN Structure}{11}{0}{2}
+\beamer@sectionintoc {3}{Training the QCNN}{12}{0}{3}
+\beamer@sectionintoc {4}{Initial Tests}{15}{0}{4}
+\beamer@sectionintoc {5}{Results}{20}{0}{5}
+\beamer@subsectionintoc {5}{1}{Encoding the Amplitude}{22}{0}{5}
+\beamer@subsectionintoc {5}{2}{Encoding the Phase}{23}{0}{5}
+\beamer@subsectionintoc {5}{3}{Full Waveform}{24}{0}{5}
+\beamer@sectionintoc {6}{Next Steps}{25}{0}{6}

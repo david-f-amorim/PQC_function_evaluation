@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
+m = 4
+weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_.npy" 
@@ -21,7 +21,7 @@ pdf = False # save outputs as pdf
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
@@ -29,7 +29,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = True
+phase_loss_comp = False
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
