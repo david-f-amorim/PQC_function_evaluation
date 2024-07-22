@@ -13,6 +13,8 @@ if __name__ == '__main__':
     parser.add_argument('--xmax', help="Maximum value of function range.", default=168, type=int)
     parser.add_argument('-M','--meta', help="String with meta data.", default="")
     parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
+
+    parser.add_argument('-RP','--repeat_params', help="Use the same parameter values for different layers", action='store_true')
     
     parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
     parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
@@ -41,6 +43,6 @@ if __name__ == '__main__':
 
     for i in range(len(opt.L)):
         
-        ampl_train_QNN(n=int(opt.n),x_min=int(opt.xmin),x_max=int(opt.xmax),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint)
+        ampl_train_QNN(n=int(opt.n),x_min=int(opt.xmin),x_max=int(opt.xmax),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, repeat_params=opt.repeat_params)
  
 

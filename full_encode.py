@@ -9,6 +9,8 @@ real_p = True
 m = 3
 weights_phase = "outputs/weights_6_3(0)_6_600_psi_WIM_smooth(S)(PR)(r).npy"
 
+repeat_params=None
+
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
 ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.npy")
@@ -92,7 +94,7 @@ h_QGAN = np.load("full_encode/full_state_QGAN.npy")
 h_GR = np.load("full_encode/full_state_GR.npy")
 
 # calculate state vector from QCNNs 
-state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p)
+state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
 
 amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)

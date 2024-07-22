@@ -147,7 +147,7 @@ def twos_complement(binary):
     
     return compl
 
-def input_layer(n, m, par_label, ctrl_state=0, real=False): 
+def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None): 
     """
     Construct an input layer consisting of controlled single-qubit rotations
     with the n input qubits acting as controls and the m target qubits
@@ -165,7 +165,8 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False):
     num_gates = n
 
     # set up parameter vector 
-    params = ParameterVector(par_label, length= num_par * num_gates)
+    if params == None:
+        params = ParameterVector(par_label, length= num_par * num_gates)
     param_index = 0
 
     # apply gates to qubits 
@@ -217,7 +218,7 @@ def N_gate(params, real=False):
 
     return circuit 
 
-def conv_layer_NN(m, par_label, real=False):
+def conv_layer_NN(m, par_label, real=False, params=None):
     """
     Construct a linear (neighbour-to-neighbour) convolutional layer
     via the cascaded application of the N gate to the m-qubit target 
@@ -236,7 +237,8 @@ def conv_layer_NN(m, par_label, real=False):
 
     # set up parameter vector 
     param_index = 0
-    params = ParameterVector(par_label, length= int(num_par * num_gates))
+    if params == None:
+        params = ParameterVector(par_label, length= int(num_par * num_gates))
 
     # apply N gate linearly between neighbouring qubits
     # (including circular connection between last and first) 
@@ -257,7 +259,7 @@ def conv_layer_NN(m, par_label, real=False):
     
     return circuit 
 
-def conv_layer_AA(m, par_label, real=False): 
+def conv_layer_AA(m, par_label, real=False, params=None): 
     """
     Construct a quadratic (all-to-all) convolutional layer
     via the cascaded application of the N gate to the m-qubit target 
@@ -275,7 +277,8 @@ def conv_layer_AA(m, par_label, real=False):
 
     # set up parameter vector 
     param_index = 0
-    params = ParameterVector(par_label, length= int(num_par * num_gates))
+    if params == None:
+        params = ParameterVector(par_label, length= int(num_par * num_gates))
 
     # apply N gate linearly between neighbouring qubits
     # (including circular connection between last and first) 
@@ -338,14 +341,31 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False, inverse=False):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False, inverse=False, repeat_params=None):
     """
     Set up a network consisting of input and convolutional layers acting on n input 
     qubits and m target qubits.  
     Both the input state and the circuit weights can be set by accessing circuit parameters
     after initialisation.  
     """
-
+    # initialise parameter vector 
+    if repeat_params==None:
+        AA_CL_params=None 
+        NN_CL_params=None 
+        IL_params=None 
+    elif repeat_params=="CL":
+        IL_params=None 
+        AA_CL_params=ParameterVector(u"\u03B8_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
+        NN_CL_params=ParameterVector(u"\u03B8_NN", length= int((3 if real==False else 2) * m))     
+    elif repeat_params=="IL":
+        IL_params=ParameterVector(u"\u03B8_IN", length= int((3 if real==False else 1) * n))
+        AA_CL_params=None 
+        NN_CL_params=None 
+    elif repeat_params=="both":
+        AA_CL_params=ParameterVector(u"\u03B8_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
+        NN_CL_params=ParameterVector(u"\u03B8_NN", length= int((3 if real==False else 2) * m))
+        IL_params=ParameterVector(u"\u03B8_IN", length= int((3 if real==False else 1) * n))    
+        
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")
     target_register = QuantumRegister(m, "target")
@@ -358,7 +378,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     if initial_IL: 
         # apply input layer 
-        circuit.compose(input_layer(n,m, u"\u03B8_IN", real=real), circuit.qubits, inplace=True)
+        circuit.compose(input_layer(n,m, u"\u03B8_IN", real=real, params=IL_params), circuit.qubits, inplace=True)
         #circuit.barrier()
 
     if input_H:
@@ -372,22 +392,22 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         if toggle_IL==False:
 
             if i % 2 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2), real=real), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2), real=real, params=AA_CL_params), target_register, inplace=True)
             elif i % 2 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2),real=real), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2),real=real, params=NN_CL_params), target_register, inplace=True)
         
         if toggle_IL==True:
 
             if i % 3 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3),real=real), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
             elif i % 3 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3),real=real), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
             elif i % 3 ==2:
                 # alternate between layers with control states 0 and 1 
                 if i % 2 == 1:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1,real=real), circuit.qubits, inplace=True) 
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
                 elif i % 2 == 0:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0,real=real), circuit.qubits, inplace=True)     
+                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
 
         if i != L-1:
             #circuit.barrier()
@@ -398,7 +418,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3, repeat_params):
     """
     Initialise circuit as QNN for training purposes.
     """
@@ -423,7 +443,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         mis=f"({mint})"
         meta+='(PR)'
     if real:
-        meta+='(r)'    
+        meta+='(r)'
+    if repeat_params != None:
+        meta+=f'({repeat_params})'        
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -431,7 +453,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     # generate circuit and set up as QNN 
     if train_superpos: 
-        qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real)
+        qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real, repeat_params=repeat_params)
         qnn = SamplerQNN(
                 circuit=qc.decompose(),            # decompose to avoid data copying (?)
                 sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -440,7 +462,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 input_gradients=False # ?? 
             ) 
     else:     
-        qc = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real)
+        qc = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real,repeat_params=repeat_params)
         qnn = SamplerQNN(
                 circuit=qc.decompose(),            # decompose to avoid data copying (?)
                 sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -612,12 +634,12 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         # set up circuit with calculated weights
         if train_superpos:
-            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real)
+            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real,repeat_params=repeat_params)
             with no_grad():
                 generated_weights = model.weight.detach().numpy()      
             circ = circ.assign_parameters(generated_weights)
         else:
-            circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real)
+            circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real,repeat_params=repeat_params)
 
             with no_grad():
                 generated_weights = model.weight.detach().numpy()
@@ -665,7 +687,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 enc=binary_to_encode_param(np.binary_repr(q,n))
                 params=np.concatenate((enc, generated_weights))  
 
-                qc = generate_network(n,m,L, encode=True,toggle_IL=True, real=real)
+                qc = generate_network(n,m,L, encode=True,toggle_IL=True, real=real,repeat_params=repeat_params)
                 qc = qc.assign_parameters(params) 
 
                 # get target array 
@@ -786,7 +808,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real, verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params, verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -806,7 +828,9 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
         mis=f"({mint})"
         meta+='(PR)' 
     if real:
-        meta+='(r)'               
+        meta+='(r)' 
+    if repeat_params != None:
+        meta+=f'({repeat_params})'                  
 
     # load weights 
     weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -828,7 +852,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
         enc=binary_to_encode_param(np.binary_repr(i,n))
         params=np.concatenate((enc, weights))  
 
-        circ = generate_network(n,m,L, encode=True,toggle_IL=True, real=real)
+        circ = generate_network(n,m,L, encode=True,toggle_IL=True, real=real,repeat_params=repeat_params)
         circ = circ.assign_parameters(params) 
 
         # get target array 
@@ -863,7 +887,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
 
     return 0 
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real):
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params):
     """
     For a given set of input parameters, check if training and testing results already exist. 
     """
@@ -883,7 +907,9 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
         mis=f"({mint})"
         meta+='(PR)'
     if real:
-        meta+='(r)'        
+        meta+='(r)'   
+    if repeat_params != None:
+        meta+=f'({repeat_params})'         
 
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -997,7 +1023,7 @@ def extract_phase(n):
 
     return circuit 
 
-def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_file=None, save=False):
+def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params=None, state_vec_file=None, save=False):
     """
     Amplitude encode (phase and amplitude) a quantum register using pre-trained weights.
     """
@@ -1016,7 +1042,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, state_vec_fil
     circuit = circuit.assign_parameters(weights_A)
     
     # evaluate function
-    qc = generate_network(n,m, L_p, real=real_p)
+    qc = generate_network(n,m, L_p, real=real_p,repeat_params=repeat_params)
     qc = qc.assign_parameters(weights_p)
     inv_qc = qc.inverse()
     circuit.compose(qc, [*input_register,*target_register], inplace=True) 
@@ -1085,11 +1111,20 @@ def psi(x):
     out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
     return out
 
-def A_generate_network(n,L):
+def A_generate_network(n,L, repeat_params=False):
     """
     Set up a network consisting of real convolutional layers acting on n 
     qubits used for amplitude encoding of a single register. 
     """
+
+    # initialise parameter vector 
+    if repeat_params:
+        AA_CL_params=ParameterVector(u"\u03B8_AA", length= int(2 * (0.5 * n * (n-1))))
+        NN_CL_params=ParameterVector(u"\u03B8_NN", length= int(2 * n))
+    else:
+        AA_CL_params = None 
+        NN_CL_params = None      
+
 
     # initialise empty input register 
     register = QuantumRegister(n, "reg")
@@ -1103,9 +1138,9 @@ def A_generate_network(n,L):
     for i in np.arange(L):
 
         if i % 2 ==0:
-            circuit.compose(conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2), real=True), register, inplace=True)
+            circuit.compose(conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2), real=True, params=AA_CL_params), register, inplace=True)
         elif i % 2 ==1:
-            circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True), register, inplace=True)
+            circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True, params=NN_CL_params), register, inplace=True)
           
         if i != L-1:
             #circuit.barrier()
@@ -1113,7 +1148,7 @@ def A_generate_network(n,L):
 
     return circuit 
 
-def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint):
+def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, repeat_params):
     """
     Train circuit for amplitude encoding. 
     """
@@ -1122,7 +1157,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
     algorithm_globals.random_seed= seed
     
     # generate circuit and set up as QNN 
-    qc = A_generate_network(n,L)
+    qc = A_generate_network(n,L,repeat_params)
     qnn = SamplerQNN(
             circuit=qc.decompose(),            # decompose to avoid data copying (?)
             sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -1224,7 +1259,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
         loss_vals[i]=loss.item()
 
         # set up circuit with calculated weights
-        circ = A_generate_network(n,L)
+        circ = A_generate_network(n,L, repeat_params)
 
         with no_grad():
             generated_weights = model.weight.detach().numpy()

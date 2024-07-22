@@ -13,6 +13,8 @@ parser.add_argument('-M','--meta', help="String with meta data.", default="")
 parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
 parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
 
+parser.add_argument('-RP','--repeat_params', help="Use the same parameter values for different layers", default=None ,choices=["CL", "IL", "both"])
+
 parser.add_argument('-r','--real', help="Output states with real amplitudes only.", action='store_true')
 parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
 parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
@@ -61,13 +63,13 @@ from tools import train_QNN, test_QNN
 
 for i in range(len(opt.L)):
     
-    dupl_files = check_duplicates(n=opt.n,m=opt.m,L=opt.L[i],epochs=opt.epochs,func_str=opt.f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real)
+    dupl_files = check_duplicates(n=opt.n,m=opt.m,L=opt.L[i],epochs=opt.epochs,func_str=opt.f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
 
     if dupl_files and opt.ignore_duplicates==False:
         print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
     else: 
-        train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, tau_1=opt.tau1,tau_2=opt.tau2,tau_3=opt.tau3)
-        test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real)    
+        train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, tau_1=opt.tau1,tau_2=opt.tau2,tau_3=opt.tau3, repeat_params=opt.repeat_params)
+        test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params)    
 
 
 
