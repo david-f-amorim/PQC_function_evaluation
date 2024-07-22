@@ -49,12 +49,12 @@
 \frametitle{Background}
 
 \begin{itemize}
-\item Hayes 2023\footnote{\url{https://arxiv.org/pdf/2306.11073}} presents a scheme to prepare a complex vector $\boldsymbol{h} =\{ \tilde{A}_j e^{i \Psi (j)} | 0 \leq j < N \}$ as the quantum state 
+\item Hayes 2023\footnote{\url{https://arxiv.org/pdf/2306.11073}} presents a scheme to\alert{ prepare a complex vector} $\boldsymbol{h} =\{ \tilde{A}_j e^{i \Psi (j)} | 0 \leq j < N \}$ as the quantum state 
 \begin{equation}
 \ket{h} = \frac{1}{|\tilde{A}|} \sum^{2^n-1}_{j=0} \tilde{A}(j) e^{i \Psi (j)} \ket{j}, 
 \end{equation}
 using $n = \lceil \log_2 N \rceil$ qubits
-\item This requires operators $\hat{U}_A$ and $\hat{U}_\Psi$ such that 
+\item This requires \alert{operators $\hat{U}_A$ and $\hat{U}_\Psi$} such that 
 \begin{align}
 \hat{U}_A \ket{0}^{\otimes n} &=  \frac{1}{|\tilde{A}|} \sum^{2^n-1}_{j=0} \tilde{A}(j) \ket{j}, \\
 \hat{U}_\Psi \ket{j} &= e^{i \Psi (j)} \ket{j}
@@ -289,7 +289,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz and $n=6$
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item The \alert{QCNN outperforms the QGAN} and \alert{nearly reaches GR} w.r.t. mismatch 
+\item The \alert{QCNN outperforms the QGAN} and \alert{reaches GR} w.r.t. mismatch 
 \item The QCNN ($L=3$, $n=6$) was trained in 600 epochs with SAM
 \item GR also requires 22 ancilla qubits
 \end{itemize}
@@ -300,7 +300,7 @@ with 40$\,$Hz $\leq f \leq $ 168$\,$Hz and $n=6$
 \textbf{Method} & \textbf{CX} & \textbf{Mismatch}  \\ \hline  
 QGAN & 100 & $8.6\times10^{-3}$   \\
 GR& 23,796 & $4.1\times 10^{-4}$   \\
-QCNN  & 72 & $7.1\times10^{-4}$
+QCNN  & 72 & $4.0\times10^{-4}$
 \end{tabular}
 \caption{Comparison of $\hat{U}_A$ implementations}
 \end{table}
@@ -349,11 +349,17 @@ QCNN  & 72 & $7.1\times10^{-4}$
 \section{Next Steps}
 \begin{frame}
 \frametitle{Next Steps}
+\alert{Priorities:}
 \begin{itemize}
-\item Continue work on WIM  
+\item Continue work on WIM (develop a distance measure taking into account $\Psi$, e.g. $w_j \sim L_\Psi (x,y)=\sum_j 2^{j-m} |x_j -y_j|$) 
+\item Change IL structure (all-to-all...)
+\item Keep parameters fixed for each layer
+\end{itemize}
+Others:
+\begin{itemize}
 \item Explore the QCNN parameter space further (e.g. circuit depth, network structure...) 
-\item Look into barren plateau mitigation (e.g. layer-by-layer training...)
-\item ...
+\item Look into barren plateau mitigation (e.g. layer-by-layer training, local loss functions...)
+\item Look into weight re-mapping
 \end{itemize}
 \end{frame}
 
