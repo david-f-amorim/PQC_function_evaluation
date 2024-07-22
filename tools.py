@@ -708,10 +708,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             
             # filter for outliers: focus on states 0.5 sigma or more above the mean
             WIM_weights_arr *= (WIM_weights_arr >= np.mean(WIM_weights_arr)+0.5 *np.std(WIM_weights_arr) ).astype(int) 
-
+            """
             # smoothen WIM weights 
             WIM_weights_arr=np.exp(tau_1 * WIM_weights_arr)
-            """     
+                
 
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
