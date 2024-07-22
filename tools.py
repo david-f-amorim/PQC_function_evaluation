@@ -475,7 +475,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     
     else:
         if train_superpos: 
-            initial_weights = algorithm_globals.random.random(len(qc.parameters))
+            initial_weights =np.zeros(len(qc.parameters)) # test: set to zero instead algorithm_globals.random.random(len(qc.parameters))
         else:    
             initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
     
