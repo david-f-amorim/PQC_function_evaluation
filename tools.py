@@ -693,11 +693,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 for j in np.arange(2**m):
                     ind = int(dec_to_bin(j,m,'unsigned mag',nint=m)+dec_to_bin(x_arr_temp[q],n,'unsigned mag',nint=nint),2) 
                     WIM_weights_arr[ind]= sum    
-
-            """    
-            # filter for outliers: focus on states 0.5 sigma or more above the mean
-            WIM_weights_arr *= (WIM_weights_arr >= np.mean(WIM_weights_arr)+0.5 *np.std(WIM_weights_arr) ).astype(int) 
-            """
+  
+            # focus on outliers: double-weight on states 0.5 sigma or more above the mean
+            WIM_weights_arr += (WIM_weights_arr >= np.mean(WIM_weights_arr)+0.5 *np.std(WIM_weights_arr) ).astype(int) 
+            
             # smoothen WIM weights 
             WIM_weights_arr=np.exp(tau_1 * WIM_weights_arr)
             print(WIM_weights_arr)
