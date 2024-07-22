@@ -699,9 +699,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             
             # smoothen WIM weights 
             WIM_weights_arr=np.exp(tau_1 * WIM_weights_arr)
-            print(WIM_weights_arr)
-                
-
+            
         # temporarily save outputs every hundred iterations
         temp_ind = epochs - 100 
         

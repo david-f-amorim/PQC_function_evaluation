@@ -38,6 +38,17 @@
 
 \frame{\titlepage}
 
+\section{Aims}
+
+\begin{frame}
+\frametitle{Aims}
+\begin{itemize}
+\item Continue work on WIM (develop a distance measure taking into account $\Psi$, e.g. $w_j \sim L_\Psi (x,y)=\sum_j 2^{j-m} |x_j -y_j|$) 
+\item Change IL structure (all-to-all...)
+\item Keep parameters fixed for each layer
+\end{itemize}
+\end{frame}
+
 \section{Improving the Loss Function}
 
 \subsection{Preliminary Definitions}
@@ -116,7 +127,8 @@ where
 \item $\ket{y} = \sum_{k=0}^{2^{n+m}-1} y_k \ket{k} $ is the target state, 
 \item $\tilde{w}_k \in \mathbb{R}_+$ are weighting factors 
 \end{itemize}
-\item 
+\item .... calculate $w_k$
+\item $\tilde{w}$
 \end{itemize}
 \end{frame}
 

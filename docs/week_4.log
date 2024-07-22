@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  22 JUL 2024 16:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  22 JUL 2024 16:38
 entering extended mode
 **./week_4.tex
 (week_4.tex
@@ -1001,33 +1001,37 @@ Package caption Info: End \AtBeginDocument code.
 {C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (week_4.toc) [2
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 50.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 50.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+esint on input line 6
-5.
+LaTeX Font Info:    Trying to load font information for U+esint on input line 5
+0.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/esint\uesint.fd
 File: uesint.fd 
 )
 [3
 
-] [4
+] (week_4.toc) [4
 
 ] [5
 
 ] [6
 
 ] [7
+
+] [8
+
+] [9
 
 ]
 \tf@nav=\write6
@@ -1041,16 +1045,16 @@ File: uesint.fd
 
  (week_4.aux)
 Package rerunfilecheck Info: File `week_4.out' has not changed.
-(rerunfilecheck)             Checksum: ABAE1545AF4C8C51D076A805AA3DE445;362.
+(rerunfilecheck)             Checksum: 62C50F50B1941EA6D3B0CF67215EBAC5;425.
  ) 
 Here is how much of TeX's memory you used:
- 23208 strings out of 478864
- 439865 string characters out of 2848660
+ 23243 strings out of 478864
+ 440760 string characters out of 2848660
  745152 words of memory out of 3000000
- 40594 multiletter control sequences out of 15000+600000
+ 40622 multiletter control sequences out of 15000+600000
  412596 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,124p,413b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 128i,15n,124p,413b,666s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -1071,9 +1075,9 @@ X/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/david/AppData/Loc
 al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week_4.pdf (7 pages, 224050 bytes).
+Output written on week_4.pdf (9 pages, 239209 bytes).
 PDF statistics:
- 317 PDF objects out of 1000 (max. 8388607)
- 17 named destinations out of 1000 (max. 500000)
- 95 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 378 PDF objects out of 1000 (max. 8388607)
+ 22 named destinations out of 1000 (max. 500000)
+ 103 words of extra memory for PDF output out of 10000 (max. 10000000)
 
