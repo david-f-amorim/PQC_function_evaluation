@@ -1,1 +1,3 @@
 \babel@toc {UKenglish}{}
+\beamer@sectionintoc {1}{Improving the Loss Function}{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{Preliminary Definitions}{3}{0}{1}
