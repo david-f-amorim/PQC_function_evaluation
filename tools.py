@@ -475,9 +475,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     
     else:
         if train_superpos: 
-            initial_weights =np.zeros(len(qc.parameters)) # test: set to zero instead algorithm_globals.random.random(len(qc.parameters))
+            initial_weights =np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))
         else:    
-            initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))
+            initial_weights = np.zeros(len(qc.parameters[n:])) #algorithm_globals.random.random(len(qc.parameters[n:]))
     
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -1153,10 +1153,10 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
         if recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
             initial_weights=np.load(recovered_weights)
         else:
-            initial_weights = algorithm_globals.random.random(len(qc.parameters))    
+            initial_weights =np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))    
     
     else:
-        initial_weights = algorithm_globals.random.random(len(qc.parameters))
+        initial_weights = np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))
     
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
