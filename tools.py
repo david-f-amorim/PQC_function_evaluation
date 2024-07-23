@@ -365,16 +365,20 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         AA_CL_params=None 
         NN_CL_params=None 
         IL_params=None 
+        IL_AA_params=None 
     elif repeat_params=="CL":
         IL_params=None 
+        IL_AA_params=None 
         AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
         NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))     
     elif repeat_params=="IL":
         IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))
+        IL_AA_params=ParameterVector(u"\u03B8_IL_AA", length= int((3 if real==False else 1) * n*m)) 
         AA_CL_params=None 
         NN_CL_params=None 
     elif repeat_params=="both":
         AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
+        IL_AA_params=ParameterVector(u"\u03B8_IL_AA", length= int((3 if real==False else 1) * n*m)) 
         NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))
         IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))    
         
@@ -390,7 +394,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     if initial_IL: 
         # apply input layer 
-        circuit.compose(input_layer(n,m, u"\u03B8_IN", real=real, params=IL_params), circuit.qubits, inplace=True)
+        circuit.compose(input_layer(n,m, u"\u03B8_IL_AA", real=real, params=IL_AA_params, AA=True), circuit.qubits, inplace=True)
         #circuit.barrier()
 
     if input_H:
@@ -417,9 +421,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
             elif i % 3 ==2:
                 # alternate between layers with control states 0 and 1 
                 if i % 2 == 1:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-1, ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-2, ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
                 elif i % 2 == 0:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-1, ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-2, ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
 
         if i != L-1:
             #circuit.barrier()
@@ -929,7 +933,7 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     
     return check_mismatch & check_weights & check_loss
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real):   
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params):   
     """
     For a given set of input parameters, check if temp files already exist. 
     """
@@ -950,7 +954,9 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
         mis=f"({mint})"
         meta+='(PR)'
     if real:
-        meta+='(r)'    
+        meta+='(r)'  
+    if repeat_params != None:
+        meta+=f'({repeat_params})'       
 
     check_mismatch=False 
     check_weights=False 
@@ -966,7 +972,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     
     return check_mismatch & check_weights & check_loss
 
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real):    
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real, repeat_params):    
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
     """
@@ -986,7 +992,9 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
         mis=f"({mint})"
         meta+='(PR)'   
     if real:
-        meta+='(r)'     
+        meta+='(r)' 
+    if repeat_params != None:
+        meta+=f'({repeat_params})'         
 
     log_str= ("" if log==False else "log_")
 

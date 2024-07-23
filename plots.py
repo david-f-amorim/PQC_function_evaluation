@@ -461,17 +461,10 @@ def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint,
         mis=""
     else:
         mis=f"({mint})"
-    if train_superpos:
-        meta+='(S)'
     if phase_reduce:
         mint = 0
         mis=f"({mint})"
-        meta+='(PR)' 
-    if real:
-        meta+='(r)'   
-    if repeat_params != None:
-        meta+=f'({repeat_params})'      
-
+ 
     log_str= ("" if log==False else "log_")
 
     mismatch_arr = np.empty(len(meta_arr), dtype=object)
@@ -479,6 +472,16 @@ def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint,
     bar_arr = np.empty(len(meta_arr), dtype=object)
 
     for i in np.arange(len(meta_arr)):
+
+        if train_superpos:
+            meta_arr[i]+='(S)'
+        if phase_reduce:
+            meta_arr[i]+='(PR)' 
+        if real:
+            meta_arr[i]+='(r)'   
+        if repeat_params != None:
+            meta_arr[i]+=f'({repeat_params})'
+
         mismatch = np.load(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta_arr[i]}.npy")) 
         loss= np.load(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta_arr[i]}.npy")) 
         bar = np.load(os.path.join("outputs",f"bar_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta_arr[i]}.npy"),allow_pickle='TRUE').item()
@@ -712,7 +715,7 @@ if __name__ == '__main__':
     parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=int)
     parser.add_argument('-m','--m', help="Number of target qubits.", default=2, type=int)
     parser.add_argument('-L','--L', help="Number of network layers.", default=[6],type=int, nargs="+")
-    parser.add_argument('-l','--loss', help="Loss function.", default=["CE"], nargs="+")
+    parser.add_argument('-l','--loss', help="Loss function.", default=["MM"], nargs="+")
     parser.add_argument('-fs','--f_str', help="String describing function.",nargs="+", default=["x"])
     parser.add_argument('-e','--epochs', help="Number of epochs.", default=[600],nargs="+", type=int)
     parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)

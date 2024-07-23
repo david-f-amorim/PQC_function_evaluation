@@ -7,7 +7,7 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_WIM_smooth(S)(PR)(r).npy"
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_noshift(S)(PR)(r).npy"
 
 repeat_params=None
 
@@ -31,7 +31,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = False
+phase_loss_comp = True 
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -341,7 +341,7 @@ if phase_L_comp==True:
 
     for i in np.arange(N):
 
-        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_arr[i],real_p=real_p)
+        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_arr[i],real_p=real_p,repeat_params=repeat_params)
         amplitude = np.abs(state_vec)
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 
@@ -386,20 +386,20 @@ if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr = np.array(["SAM","CE", "WIM"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_sine(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_3(0)_6_600_psi_CE_sine(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WIM_sine(S)(PR)(r).npy"
+    loss_arr =np.array(["no shift", "shift"]) #np.array(["SAM","CE", "WIM"])
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_noshift(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_shift(S)(PR)(r).npy"
+    #arr_3 ="outputs/weights_6_3(0)_6_600_psi_WIM_sine(S)(PR)(r).npy"
   
-    weights_arr =np.array([arr_1, arr_2, arr_3])
-    colours = ["red", "blue", "green"]
+    weights_arr =np.array([arr_1, arr_2]) #, arr_3])
+    colours = ["red", "blue"] #, "green"]
     N = len(weights_arr)
 
     phase_arr = np.empty(N, dtype="object")
 
     for i in np.arange(N):
 
-        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p)
+        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
         amplitude = np.abs(state_vec)
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 

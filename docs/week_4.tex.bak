@@ -49,6 +49,22 @@
 \end{itemize}
 \end{frame}
 
+\section{Keeping Parameters Fixed}
+
+\begin{frame}
+\frametitle{Keeping Parameters Fixed}
+\begin{itemize}
+\item Implemented the option to \alert{fix parameters for each layer type}
+\item This means that each IL, neighbour-to-neighbour CL, and all-to-all CL use the same set of parameters 
+\item This reduces the overall number of parameters to $n + m + \frac{1}{2} m * (m-1)$
+\end{itemize}
+
+ADDED FUNCTIONALITY, TEST !!! (does it make a difference?)
+-- definitely works in terms of parameters 
+-- not sure yet if makes a difference w.r.t. mismatch MAKES PERFORMANCE WORSE 
+-- should at least speed things up? but apparently not ... DOES NOT SPEED THINGS UP...
+\end{frame}
+
 \section{Improving the Loss Function}
 
 \subsection{Preliminary Definitions}
@@ -133,13 +149,12 @@ where
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Fixing Parameters}
-ADDED FUNCTIONALITY, TEST !!! (does it make a difference?)
--- definitely works in terms of parameters 
--- not sure yet if makes a difference w.r.t. mismatch 
--- should at least speed things up? but apparently not ...
 
+
+\begin{frame}
+\frametitle{IL Structure}
+-- added shifts to successive ILs (test effects..): seems to give slight improvements! 
+-- added functionality for AA layers (test later)..
 \end{frame}
 
 \end{document}
