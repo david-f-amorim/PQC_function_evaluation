@@ -174,8 +174,8 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
         for i in qubits[:n]:
             for j in qubits[n:]:
                 if real:
-                    qc.cry(params[int(param_index) : int(param_index + num_par)], qubits[i], qubits[j])
-                    param_index += num_par
+                    qc.cry(params[int(param_index)], qubits[i], qubits[j])
+                    param_index += 1
                 else:  
                     par = params[int(param_index) : int(param_index + num_par)] 
                     cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
