@@ -154,6 +154,9 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
     acting as targets. 
     """
 
+    # DELETE THIS LATER!!
+    shift = 0
+
     # set up circuit 
     qc = QuantumCircuit(n+m, name="Input Layer")
     qubits = list(range(n+m))

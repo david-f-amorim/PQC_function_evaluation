@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 5
+weights_phase = "outputs/weights_6_5(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 repeat_params=None
 
@@ -31,7 +31,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = True
+phase_loss_comp = False
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
