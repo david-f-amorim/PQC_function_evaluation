@@ -65,6 +65,14 @@ ADDED FUNCTIONALITY, TEST !!! (does it make a difference?)
 -- should at least speed things up? but apparently not ... DOES NOT SPEED THINGS UP...
 \end{frame}
 
+\section{Improving IL Structure}
+
+\begin{frame}
+\frametitle{Improving IL Structure}
+-- added shifts to successive ILs (test effects..): seems to give slight improvements! 
+-- added functionality for AA layers (test later)..
+\end{frame}
+
 \section{Improving the Loss Function}
 
 \subsection{Preliminary Definitions}
@@ -151,10 +159,6 @@ where
 
 
 
-\begin{frame}
-\frametitle{IL Structure}
--- added shifts to successive ILs (test effects..): seems to give slight improvements! 
--- added functionality for AA layers (test later)..
-\end{frame}
+
 
 \end{document}

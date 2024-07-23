@@ -365,20 +365,16 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         AA_CL_params=None 
         NN_CL_params=None 
         IL_params=None 
-        IL_AA_params=None 
     elif repeat_params=="CL":
-        IL_params=None 
-        IL_AA_params=None 
+        IL_params=None  
         AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
         NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))     
     elif repeat_params=="IL":
         IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))
-        IL_AA_params=ParameterVector(u"\u03B8_IL_AA", length= int((3 if real==False else 1) * n*m)) 
         AA_CL_params=None 
         NN_CL_params=None 
     elif repeat_params=="both":
         AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
-        IL_AA_params=ParameterVector(u"\u03B8_IL_AA", length= int((3 if real==False else 1) * n*m)) 
         NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))
         IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))    
         
@@ -394,7 +390,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     if initial_IL: 
         # apply input layer 
-        circuit.compose(input_layer(n,m, u"\u03B8_IL_AA", real=real, params=IL_AA_params, AA=True), circuit.qubits, inplace=True)
+        circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params), circuit.qubits, inplace=True)
         #circuit.barrier()
 
     if input_H:
@@ -414,16 +410,27 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         
         if toggle_IL==True:
 
-            if i % 3 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
-            elif i % 3 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
-            elif i % 3 ==2:
-                # alternate between layers with control states 0 and 1 
-                if i % 2 == 1:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-2, ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
-                elif i % 2 == 0:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-2, ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
+            # difference between number of input layers and number of target qubits:
+            del_IL = m - (1+ L //3) 
+
+            if del_IL <= 0:
+                if i % 3 ==0:
+                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
+                elif i % 3 ==1:
+                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
+                elif i % 3 ==2:
+                    # alternate between layers with control states 0 and 1 and add shifts
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3 +1),shift=(i//3)+1, ctrl_state=(i % 2),real=real,params=IL_params), circuit.qubits, inplace=True) 
+            else: 
+                if i % 3 ==0:
+                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
+                elif i % 3 ==1:
+                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
+                elif i % 3 ==2:
+                    for j in np.arange(del_IL // (L //3) +2):
+                        shift = (i // 3) +1 + j * (L //3)
+                        if shift <= m-1:
+                            circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(shift),shift=shift, ctrl_state=((shift-1) % 2),real=real,params=IL_params), circuit.qubits, inplace=True) 
 
         if i != L-1:
             #circuit.barrier()

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  23 JUL 2024 07:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  23 JUL 2024 08:01
 entering extended mode
 **./week_4.tex
 (week_4.tex
@@ -1029,15 +1029,18 @@ File: uesint.fd
 
 ] [7
 
-] [8
+] (week_4.toc) [8
 
 ] [9
 
 ] [10
 
-] [11
+]
+[11
 
 ] [12
+
+] [13
 
 ]
 \tf@nav=\write6
@@ -1049,42 +1052,50 @@ File: uesint.fd
 \tf@snm=\write8
 \openout8 = `week_4.snm'.
 
+ (week_4.aux)
 
-(week_4.aux)
-Package rerunfilecheck Info: File `week_4.out' has not changed.
-(rerunfilecheck)             Checksum: 82522BA2148C155140DB831EF7D1F065;594.
+Package rerunfilecheck Warning: File `week_4.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `week_4.out':
+(rerunfilecheck)             Before: 82522BA2148C155140DB831EF7D1F065;594
+(rerunfilecheck)             After:  04E96BDE1BFA98A992E1BC1E11B61207;753.
  ) 
 Here is how much of TeX's memory you used:
- 23262 strings out of 478864
- 440990 string characters out of 2848660
+ 23268 strings out of 478864
+ 441112 string characters out of 2848660
  745153 words of memory out of 3000000
  40632 multiletter control sequences out of 15000+600000
  412596 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,666s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmmi5.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/david/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/da
-vid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/U
-sers/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pf
-b><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/david/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week_4.pdf (12 pages, 260176 bytes).
+pdfTeX warning (dest): name{Outline0.3.1.7} has been referenced but does not 
+exist, replaced by a fixed one
+
+<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+ex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmmi5.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/david/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/davi
+d/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Use
+rs/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+r8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/david/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week_4.pdf (13 pages, 267080 bytes).
 PDF statistics:
- 467 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
+ 501 PDF objects out of 1000 (max. 8388607)
+ 33 named destinations out of 1000 (max. 500000)
  111 words of extra memory for PDF output out of 10000 (max. 10000000)
 
