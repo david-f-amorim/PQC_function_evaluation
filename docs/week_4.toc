@@ -1,6 +1,7 @@
 \babel@toc {UKenglish}{}
-\beamer@sectionintoc {1}{Aims}{2}{0}{1}
-\beamer@sectionintoc {2}{Keeping Parameters Fixed}{4}{0}{2}
-\beamer@sectionintoc {3}{Improving IL Structure}{6}{0}{3}
-\beamer@sectionintoc {4}{Improving the Loss Function}{8}{0}{4}
-\beamer@subsectionintoc {4}{1}{Preliminary Definitions}{9}{0}{4}
+\beamer@sectionintoc {1}{Changing Input Layer Structure}{4}{0}{1}
+\beamer@sectionintoc {2}{Fixing Parameters}{6}{0}{2}
+\beamer@sectionintoc {3}{Improving the Loss Function}{8}{0}{3}
+\beamer@subsectionintoc {3}{1}{Preliminary Definitions}{9}{0}{3}
+\beamer@sectionintoc {4}{Results}{14}{0}{4}
+\beamer@sectionintoc {5}{Next Steps}{16}{0}{5}

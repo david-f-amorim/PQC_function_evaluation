@@ -9,6 +9,8 @@
 \usepackage{braket}
 \usepackage{esint}
 \usepackage{float}
+\usepackage{tabularx}
+\usepackage{array}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \hypersetup{colorlinks=false, bookmarks=true}
@@ -38,39 +40,79 @@
 
 \frame{\titlepage}
 
-\section{Aims}
-
 \begin{frame}
-\frametitle{Aims}
-\begin{itemize}
-\item Continue work on WIM (develop a distance measure taking into account $\Psi$, e.g. $w_j \sim L_\Psi (x,y)=\sum_j 2^{j-m} |x_j -y_j|$) 
-\item Change IL structure (all-to-all...)
-\item Keep parameters fixed for each layer
-\end{itemize}
+\frametitle{Aims for the Week}
+The following aims were set at the last meeting (22/07/2024):
+
+\begin{alertblock}{1. Change Input Layer Structure}
+Improve the connectivity of input layers. Each input qubit should ideally control each target qubit at some point in the network. 
+\end{alertblock}
+
+\begin{alertblock}{2. Fix Parameters}
+Add the option to keep parameters fixed for each type of network layer. 
+\end{alertblock}
+
+\begin{alertblock}{3. Improve Loss Function}
+Develop a distance measure taking into account digital encoding. Either incorporate this into weights for an existing loss function or define a new loss function on this basis. 
+\end{alertblock}
 \end{frame}
 
-\section{Keeping Parameters Fixed}
+\begin{frame}
+\frametitle{Glossary}
+\begin{table}
+\begin{center}
+\begin{tabularx}{\textwidth}{ c|>{\centering}X}
+  \textbf{Acronym} & \textbf{Meaning} \tabularnewline
+  \hline 
+  CL  & convolutional layer   \tabularnewline
+  AA-CL  & all-to-all convolutional layer \tabularnewline
+  NN-CL  & neighbour-to-neighbour convolutional layer \tabularnewline
+  IL & input layer \tabularnewline 
+\end{tabularx}
+\caption{Acronyms and short-hands used in the following.}
+\end{center}
+\end{table}
+\begin{table}
+\begin{center}
+\begin{tabularx}{\textwidth}{>{$}c<{$}|>{\centering}X}
+  \textbf{Variable} & \textbf{Meaning} \tabularnewline
+  \hline 
+  n  & input register size   \tabularnewline
+  m  &  target register size \tabularnewline
+  L  & number of network layers \tabularnewline
+\end{tabularx}
+\caption{Variables used in the following.}
+\end{center}
+\end{table}
+\end{frame}
+
+
+\section{Changing Input Layer Structure}
 
 \begin{frame}
-\frametitle{Keeping Parameters Fixed}
+\frametitle{Changing Input Layer Structure}
+\begin{itemize}
+\item Previously, the $j$th input qubit controlled an operation on the $j$th target qubit (with wrap-around for $n >m$) 
+\item An optional \alert{shift parameter}, $s$, has now been added so that the $j$th input qubit controls an operation on the $j+s$th target qubit 
+\item This shift parameter is incremented for each successive IL 
+\item The QCNN is padded with additional ILs to ensure that the number of ILs is $\geq m$ 
+\item Thus, \alert{each input qubit now controls an operation on each target qubit} at some point in the QCNN 
+\item Note that ILs still alternate between control states 0 and 1
+\item FIND A WAY TO COMPARE THIS TO PREVIOUS OUTPUT! GRAPH! WHAT IS THE EFFECT OF THIS??
+\end{itemize}.
+\end{frame}
+
+\section{Fixing Parameters}
+
+\begin{frame}
+\frametitle{Fixing Parameters}
 \begin{itemize}
 \item Implemented the option to \alert{fix parameters for each layer type}
-\item This means that each IL, neighbour-to-neighbour CL, and all-to-all CL use the same set of parameters 
-\item This reduces the overall number of parameters to $n + m + \frac{1}{2} m * (m-1)$
+\item This means that each instance of a layer type (IL, AA-CL, NN-CL) uses the same set of parameters 
+\item This significantly \alert{reduces the number of trainable parameters} at large $L$
+\item Initial testing shows this to slightly decrease network performance (DO MORE TESTING!; GET A GRAPH?!) 
+\item Surprisingly, reducing the parameter space \alert{produces no noticeable speed-up} (so-called \alert{qiskit primitives}, i.e. the sampler, take up roughly 95\% of the computational time)
 \end{itemize}
-
-ADDED FUNCTIONALITY, TEST !!! (does it make a difference?)
--- definitely works in terms of parameters 
--- not sure yet if makes a difference w.r.t. mismatch MAKES PERFORMANCE WORSE 
--- should at least speed things up? but apparently not ... DOES NOT SPEED THINGS UP...
-\end{frame}
-
-\section{Improving IL Structure}
-
-\begin{frame}
-\frametitle{Improving IL Structure}
--- added shifts to successive ILs (test effects..): seems to give slight improvements! 
--- added functionality for AA layers (test later)..
 \end{frame}
 
 \section{Improving the Loss Function}
@@ -157,7 +199,22 @@ where
 \end{itemize}
 \end{frame}
 
+\section{Results}
 
+\begin{frame}
+\frametitle{Results}
+Show phase encoding with improved methods 
+show the full waveform [new frame]
+\end{frame}
+
+\section{Next Steps}
+
+\begin{frame}
+\frametitle{Next Steps}
+\begin{itemize}
+\item ...
+\end{itemize}
+\end{frame}
 
 
 
