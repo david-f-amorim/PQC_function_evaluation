@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 5
-weights_phase = "outputs/weights_6_5(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 4
+weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 repeat_params=None
 
@@ -19,11 +19,11 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
@@ -32,6 +32,8 @@ QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
 phase_loss_comp = False
+phase_shift_comp = False 
+phase_RP_comp=True 
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -381,28 +383,24 @@ if phase_L_comp==True:
     if show:
         plt.show()   
 
-
 if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr =np.array(["neither", "IL", "CL", "both"]) #np.array(["SAM","CE", "WIM"])
+    loss_arr =np.array(["SAM","CE", "WIM"])
     arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r)(IL).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r)(CL).npy"
-    arr_4 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r)(both).npy"
-  
-    repeat_params_arr =np.array([None, "IL", "CL", "both"])
-
-    weights_arr =np.array([arr_1, arr_2, arr_3, arr_4])
-    colours = ["red", "blue", "green", "purple"]
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    
+    weights_arr =np.array([arr_1, arr_2, arr_3])
+    colours = ["red", "blue", "green"]
     N = len(weights_arr)
 
     phase_arr = np.empty(N, dtype="object")
 
     for i in np.arange(N):
 
-        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params_arr[i])
+        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
         amplitude = np.abs(state_vec)
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 
@@ -442,3 +440,121 @@ if phase_loss_comp==True:
 
     if show:
         plt.show()                
+
+if phase_shift_comp==True:
+    """
+    PLOT QCNN PHASE VERSUS TARGET FOR IL SHIFT OR NOT
+    """
+    loss_arr =np.array(["shifts", "no shifts"])
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_noshift_linear(S)(PR)(r).npy"#"OLD/outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"  #
+    
+    weights_arr =np.array([arr_1, arr_2])
+    colours = ["red", "blue"]
+    N = len(weights_arr)
+
+    phase_arr = np.empty(N, dtype="object")
+
+    for i in np.arange(N):
+
+        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
+        amplitude = np.abs(state_vec)
+        phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
+        phase *= (amplitude > 1e-15).astype(float) 
+        phase_arr[i]=phase 
+
+        print(f"Norm {loss_arr[i]}: ",np.sum(amplitude**2))
+
+    if delta_round:
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+
+    fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
+    cmap = plt.get_cmap('Dark2', N)
+
+    ax[0].plot(x_arr,phase_target, color="black")
+    ax[0].plot(x_arr,phase_rounded, color="gray", ls="--")
+    
+    for i in np.arange(N):
+        ax[0].scatter(x_arr,phase_arr[i],label=f"{loss_arr[i]}", color=colours[i])
+
+    ax[0].set_ylabel(r"$\Psi (f)$", fontsize=fontsize)
+    ax[0].legend(fontsize=fontsize, loc='upper left')
+    ax[0].tick_params(axis="both", labelsize=ticksize)
+    ax[0].set_xticks([])
+
+    if delta_round:
+        phase_target = phase_rounded
+
+    for i in np.arange(N):
+        ax[1].scatter(x_arr,phase_target-phase_arr[i],label=f"{loss_arr[i]}", color=colours[i])
+    
+    ax[1].set_ylabel(r"$\Delta \Psi(f)$", fontsize=fontsize)
+    ax[1].tick_params(axis="both", labelsize=ticksize)
+    ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+
+    fig.tight_layout()
+    fig.savefig(f"full_encode/phase_shift_comp{pdf_str}", bbox_inches='tight', dpi=500)
+
+    if show:
+        plt.show()  
+
+
+if phase_RP_comp==True:
+    """
+    PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT RP SETTINGS
+    """
+    RP_arr =np.array([None,"CL","IL", "both"])
+    label_arr =np.array(["none","CL","IL", "both"])
+    arr_1 ="outputs/weights_6_4(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_4(0)_6_600_psi_MM_linear(S)(PR)(r)(CL).npy"
+    arr_3 ="outputs/weights_6_4(0)_6_600_psi_MM_linear(S)(PR)(r)(IL).npy"
+    arr_4 ="outputs/weights_6_4(0)_6_600_psi_MM_linear(S)(PR)(r)(both).npy"
+    
+    weights_arr =np.array([arr_1, arr_2, arr_3, arr_4])
+    colours = ["red", "blue", "green", "purple"]
+    N = len(weights_arr)
+
+    phase_arr = np.empty(N, dtype="object")
+
+    for i in np.arange(N):
+
+        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=RP_arr[i])
+        amplitude = np.abs(state_vec)
+        phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
+        phase *= (amplitude > 1e-15).astype(float) 
+        phase_arr[i]=phase 
+
+        print(f"Norm {label_arr[i]}: ",np.sum(amplitude**2))
+
+    if delta_round:
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+
+    fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
+    cmap = plt.get_cmap('Dark2', N)
+
+    ax[0].plot(x_arr,phase_target, color="black")
+    ax[0].plot(x_arr,phase_rounded, color="gray", ls="--")
+    
+    for i in np.arange(N):
+        ax[0].scatter(x_arr,phase_arr[i],label=f"{label_arr[i]}", color=colours[i])
+
+    ax[0].set_ylabel(r"$\Psi (f)$", fontsize=fontsize)
+    ax[0].legend(fontsize=fontsize, loc='upper left')
+    ax[0].tick_params(axis="both", labelsize=ticksize)
+    ax[0].set_xticks([])
+
+    if delta_round:
+        phase_target = phase_rounded
+
+    for i in np.arange(N):
+        ax[1].scatter(x_arr,phase_target-phase_arr[i],label=f"{label_arr[i]}", color=colours[i])
+    
+    ax[1].set_ylabel(r"$\Delta \Psi(f)$", fontsize=fontsize)
+    ax[1].tick_params(axis="both", labelsize=ticksize)
+    ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+
+    fig.tight_layout()
+    fig.savefig(f"full_encode/phase_RP_comp{pdf_str}", bbox_inches='tight', dpi=500)
+
+    if show:
+        plt.show()        

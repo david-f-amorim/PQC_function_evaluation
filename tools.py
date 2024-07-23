@@ -154,9 +154,6 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
     acting as targets. 
     """
 
-    # DELETE THIS LATER!!
-    shift = 0
-
     # set up circuit 
     qc = QuantumCircuit(n+m, name="Input Layer")
     qubits = list(range(n+m))
@@ -1137,8 +1134,8 @@ def psi(x):
 
     #out = np.pi /2 *(1+ np.sin(x /4 )) 
     #out = 0.0001* x**2 # change this back later 
-    #out = 0.5 + 0.01*x 
-    out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
+    out = 0.5 + 0.01*x 
+    #out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
     return out
 
 def A_generate_network(n,L, repeat_params=False):

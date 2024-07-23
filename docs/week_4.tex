@@ -68,6 +68,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
   AA-CL  & all-to-all convolutional layer \tabularnewline
   NN-CL  & neighbour-to-neighbour convolutional layer \tabularnewline
   IL & input layer \tabularnewline 
+  SAM & sign-adjusted mismatch
 \end{tabularx}
 \caption{Acronyms and short-hands used in the following.}
 \end{center}
@@ -98,9 +99,71 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \item The QCNN is padded with additional ILs to ensure that the number of ILs is $\geq m$ 
 \item Thus, \alert{each input qubit now controls an operation on each target qubit} at some point in the QCNN 
 \item Note that ILs still alternate between control states 0 and 1
-\item FIND A WAY TO COMPARE THIS TO PREVIOUS OUTPUT! GRAPH! WHAT IS THE EFFECT OF THIS??
 \end{itemize}.
 \end{frame}
+
+\begin{frame}
+\frametitle{Changing Input Layer Structure}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_shift_comp_linear_m3}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_shift_comp_quadratic_m3}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f^2$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Changing Input Layer Structure}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_shift_comp_linear_m4}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_shift_comp_quadratic_m4}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f^2$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Changing Input Layer Structure}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item The data for `no shifts' was obtained by setting  $s=0$ for all ILs instead of incrementing $s$
+\item This should be equivalent to last week's circuit structure 
+\item However, the `no shifts' results are significantly worse than the results shown last week
+\item Thus, the improvements due to the new IL structure are heavily exaggerated  
+\item FIND OUT WHY THIS IS! NONETHELESS SHIFTED SEEMS TO BE BETTER THAN BEFORE
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_shift_comp_psi_m3}
+\caption{Effects of shifted ILs for $\Psi_\text{Hayes 2023}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
 
 \section{Fixing Parameters}
 
@@ -113,6 +176,35 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \item Initial testing shows this to slightly decrease network performance (DO MORE TESTING!; GET A GRAPH?!) 
 \item Surprisingly, reducing the parameter space \alert{produces no noticeable speed-up} (so-called qiskit primitives, i.e. the sampler, take up roughly 95\% of the computational time)
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Changing Input Layer Structure}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_RP_comp_linear_m4}
+\caption{Effects of fixing parameters ILs for $\Psi(f) \sim f$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_RP_comp_quadratic_m4}
+\caption{Effects of fixing parameters for $\Psi(f) \sim f^2$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fixing Parameters}
+NOTE: RP versions significantly worse than normal w.r.t to amplitudes (find way to formalise this!)
+
+INTERPRET THIS! 
+
+ADD LEGEND ...
 \end{frame}
 
 \section{Improving the Loss Function}
