@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  23 JUL 2024 14:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  23 JUL 2024 18:49
 entering extended mode
 **./week_4.tex
 (week_4.tex
@@ -1088,17 +1088,17 @@ Overfull \vbox (4.5242pt too high) detected at line 165
 <im/phase_RP_comp_linear_m4.pdf, id=454, 715.47299pt x 719.27pt>
 File: im/phase_RP_comp_linear_m4.pdf Graphic file (type pdf)
 <use im/phase_RP_comp_linear_m4.pdf>
-Package pdftex.def Info: im/phase_RP_comp_linear_m4.pdf  used on input line 199
+Package pdftex.def Info: im/phase_RP_comp_linear_m4.pdf  used on input line 198
 .
 (pdftex.def)             Requested size: 171.14764pt x 172.04663pt.
 <im/phase_RP_comp_quadratic_m4.pdf, id=455, 715.47299pt x 716.66347pt>
 File: im/phase_RP_comp_quadratic_m4.pdf Graphic file (type pdf)
 <use im/phase_RP_comp_quadratic_m4.pdf>
 Package pdftex.def Info: im/phase_RP_comp_quadratic_m4.pdf  used on input line 
-199.
+198.
 (pdftex.def)             Requested size: 171.14764pt x 171.42317pt.
 
-Overfull \vbox (2.97604pt too high) detected at line 199
+Overfull \vbox (2.97604pt too high) detected at line 198
  []
 
 [11
@@ -1138,56 +1138,45 @@ Overfull \vbox (2.97604pt too high) detected at line 199
 \openout8 = `week_4.snm'.
 
  (week_4.aux)
-
-Package rerunfilecheck Warning: File `week_4.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `week_4.out':
-(rerunfilecheck)             Before: 52EC09413FD2D82259652A8E115C098D;870
-(rerunfilecheck)             After:  0CEB99E88DB8564D8D883F35FDE9D328;870.
+Package rerunfilecheck Info: File `week_4.out' has not changed.
+(rerunfilecheck)             Checksum: 0CEB99E88DB8564D8D883F35FDE9D328;870.
  ) 
 Here is how much of TeX's memory you used:
- 23572 strings out of 478864
- 447917 string characters out of 2848660
+ 23571 strings out of 478864
+ 447916 string characters out of 2848660
  748209 words of memory out of 3000000
  40900 multiletter control sequences out of 15000+600000
- 413785 words of font info for 71 fonts, out of 8000000 for 9000
+ 414497 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,777s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Navigation23} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{Outline0.3.1.15} has been referenced but does not e
-xist, replaced by a fixed one
-
-<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-ex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/david/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/da
-vid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/
-Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.p
+<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/david/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/
+david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C
+:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5
+.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmr6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
+sfonts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/david/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Us
+ers/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.p
 fb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
-/cmr6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local
-/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/david/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users
-/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
-C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cms
-y8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/symbols/msbm10.pfb>
-Output written on week_4.pdf (22 pages, 522483 bytes).
+/cmsy7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/amsfonts/symbols/msbm10.pfb>
+Output written on week_4.pdf (22 pages, 532262 bytes).
 PDF statistics:
- 923 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 500000)
+ 926 PDF objects out of 1000 (max. 8388607)
+ 51 named destinations out of 1000 (max. 500000)
  276 words of extra memory for PDF output out of 10000 (max. 10000000)
 

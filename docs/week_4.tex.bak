@@ -149,16 +149,16 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \begin{itemize}
 \item The data for `no shifts' was obtained by setting  $s=0$ for all ILs instead of incrementing $s$
 \item This should be equivalent to last week's circuit structure 
-\item However, the `no shifts' results are significantly worse than the results shown last week
-\item Thus, the improvements due to the new IL structure are heavily exaggerated  
-\item FIND OUT WHY THIS IS! NONETHELESS SHIFTED SEEMS TO BE BETTER THAN BEFORE
+\item However, the `no shifts' results are significantly worse than the results shown last week (\alert{???})
+\item Thus, the improvements due to the new IL structure are somewhat exaggerated  
+\item Nonetheless, \alert{increased IL connectivity clearly leads to improved performance}
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_shift_comp_psi_m3}
-\caption{Effects of shifted ILs for $\Psi_\text{Hayes 2023}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\caption{Effects of shifted ILs for $\Psi_\text{Hayes2023}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -173,14 +173,52 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \item Implemented the option to \alert{fix parameters for each layer type}
 \item This means that each instance of a layer type (IL, AA-CL, NN-CL) uses the same set of parameters 
 \item This significantly \alert{reduces the number of trainable parameters} at large $L$
-\item Initial testing shows this to slightly decrease network performance (DO MORE TESTING!; GET A GRAPH?!) 
 \item Surprisingly, reducing the parameter space \alert{produces no noticeable speed-up} (so-called qiskit primitives, i.e. the sampler, take up roughly 95\% of the computational time)
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Fixing Parameters}
-NOTE: RP versions significantly worse than normal w.r.t to amplitudes (find wa
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_RP_comp_linear_m4}
+\caption{Effects of fixing parameters ILs for $\Psi(f) \sim f$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/phase_RP_comp_quadratic_m4}
+\caption{Effects of fixing parameters for $\Psi(f) \sim f^2$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fixing Parameters}
+\begin{itemize}
+\item Legend for the plots on the previous slide:
+\begin{itemize}
+\item `\emph{none}' : no parameters fixed 
+\item `\emph{CL}': only CL parameters fixed
+\item `\emph{IL}': only IL parameters fixed 
+\item `\emph{both}': all parameters fixed  
+\end{itemize} 
+\item Evidently, keeping parameters fixed leads to (slightly or drastically) worse performance 
+\item This is likely due to a reduction of the search space 
+\item Note that `\emph{IL}' as well as`\emph{both}' lead to incomplete phase ext
+
+\item Initial testing shows this to slightly decrease network performance (DO MORE TESTING!; GET A GRAPH?!) 
+\end{itemize}
+
+NOTE: RP versions significantly worse than normal w.r.t to amplitudes (find way to formalise this!)
+
+INTERPRET THIS! 
+
+ADD LEGEND ...
 \end{frame}
 
 \section{Improving the Loss Function}
