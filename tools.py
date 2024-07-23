@@ -147,7 +147,7 @@ def twos_complement(binary):
     
     return compl
 
-def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None): 
+def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False, shift=0): 
     """
     Construct an input layer consisting of controlled single-qubit rotations
     with the n input qubits acting as controls and the m target qubits
@@ -162,7 +162,7 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None):
     num_par = 3 if real==False else 1
 
     # number of gates applied per layer 
-    num_gates = n
+    num_gates = n if AA==False else n*m
 
     # set up parameter vector 
     if params == None:
@@ -170,19 +170,31 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None):
     param_index = 0
 
     # apply gates to qubits 
-    for i in qubits[:n]:
+    if AA: 
+        for i in qubits[:n]:
+            for j in qubits[n:]:
+                if real:
+                    qc.cry(params[int(param_index) : int(param_index + num_par)], qubits[i], qubits[j])
+                    param_index += num_par
+                else:  
+                    par = params[int(param_index) : int(param_index + num_par)] 
+                    cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
+                    qc.append(cu3, [qubits[i], qubits[j]])
+                    param_index += num_par   
+    else:    
+        for i in qubits[:n]:
 
-        j = i  
-        if np.modf(j/m)[1] >= 1:
-            j -=int(np.modf(j/m)[1] * m)
+            j = i + shift  
+            if np.modf(j/m)[1] >= 1:
+                j -=int(np.modf(j/m)[1] * m)
 
-        if real:
-            qc.cry(params[i], qubits[i], qubits[j+n])
-        else:
-            par = params[int(param_index) : int(param_index + num_par)] 
-            cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
-            qc.append(cu3, [qubits[i], qubits[j+n]])
-            param_index += num_par
+            if real:
+                qc.cry(params[i], qubits[i], qubits[j+n])
+            else:
+                par = params[int(param_index) : int(param_index + num_par)] 
+                cu3 = U3Gate(par[0],par[1],par[2]).control(1, ctrl_state=ctrl_state)
+                qc.append(cu3, [qubits[i], qubits[j+n]])
+                param_index += num_par
         
 
     # package as instruction
@@ -355,16 +367,16 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         IL_params=None 
     elif repeat_params=="CL":
         IL_params=None 
-        AA_CL_params=ParameterVector(u"\u03B8_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
-        NN_CL_params=ParameterVector(u"\u03B8_NN", length= int((3 if real==False else 2) * m))     
+        AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
+        NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))     
     elif repeat_params=="IL":
-        IL_params=ParameterVector(u"\u03B8_IN", length= int((3 if real==False else 1) * n))
+        IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))
         AA_CL_params=None 
         NN_CL_params=None 
     elif repeat_params=="both":
-        AA_CL_params=ParameterVector(u"\u03B8_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
-        NN_CL_params=ParameterVector(u"\u03B8_NN", length= int((3 if real==False else 2) * m))
-        IL_params=ParameterVector(u"\u03B8_IN", length= int((3 if real==False else 1) * n))    
+        AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
+        NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))
+        IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))    
         
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")
@@ -392,29 +404,29 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         if toggle_IL==False:
 
             if i % 2 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 2), real=real, params=AA_CL_params), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 2), real=real, params=AA_CL_params), target_register, inplace=True)
             elif i % 2 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 2),real=real, params=NN_CL_params), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 2),real=real, params=NN_CL_params), target_register, inplace=True)
         
         if toggle_IL==True:
 
             if i % 3 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params), target_register, inplace=True)
             elif i % 3 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params), target_register, inplace=True)
             elif i % 3 ==2:
                 # alternate between layers with control states 0 and 1 
                 if i % 2 == 1:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-1, ctrl_state=1,real=real,params=IL_params), circuit.qubits, inplace=True) 
                 elif i % 2 == 0:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IN_{0}".format(i // 3), ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3),shift=i-1, ctrl_state=0,real=real,params=IL_params), circuit.qubits, inplace=True)     
 
         if i != L-1:
             #circuit.barrier()
             str=""
 
         if inverse:
-            circuit=circuit.inverse()    
+            circuit=circuit.inverse()   
 
     return circuit 
 
