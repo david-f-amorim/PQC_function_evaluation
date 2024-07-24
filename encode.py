@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-4_1-1.npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-4_1-1.npy
+m = 4
+weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-4_1-1.npy
 
 repeat_params=None
 
@@ -102,12 +102,16 @@ amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
 phase *= (amplitude > 1e-15).astype(float) 
 
-print("Norm: ",np.sum(amplitude**2))
-
 # get full wavefunction 
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
+# print info
+print("-----------------------------------")
+print("Norm: ",f"{np.sum(amplitude**2):.5f}")
+print("Epsilon: ",f"{1-np.sum(amplitude**2):.3e}")
+print("Chi: ",f"{np.mean(np.abs(phase - phase_rounded)):.3e}") 
+print("-----------------------------------")
  
 #------------------------------------------------------------------------------
 if no_A==False:

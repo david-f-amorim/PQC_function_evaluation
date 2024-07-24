@@ -4,15 +4,17 @@ from fractions import Fraction
 import matplotlib.pyplot as plt 
 import matplotlib.colors as colors
 from matplotlib import rcParams
+from tools import psi, dec_to_bin, bin_to_dec, full_encode
 
 m=3 
-L=9 
+L=6 
 e=600  
 
 p_arr =np.array([0.25, 0.5,0.75,1,1.25,1.5,1.75,2]) 
 q_arr =np.array([0,0.5,1, 1.5, 2, 2.5, 3]) 
 
-pdf=False
+pdf=True
+verbose=True
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
 rcParams['font.family'] = 'STIXGeneral'
@@ -40,7 +42,53 @@ def get_data(m,L,e,p,q):
         raise FileNotFoundError(f"File '{file}' or '{alt_file}' not found.")    
     vals=np.array(list(dic.values()))
 
-    return np.mean(vals), np.std(vals), np.median(vals)  
+    return np.mean(vals), np.std(vals) 
+
+def get_phase_target(m):
+
+    # define x array 
+    n = 6
+    x_min = 40
+    x_max = 168 
+    dx = (x_max-x_min)/(2**n) 
+    x_arr = np.arange(x_min, x_max, dx) 
+
+    # calculate target output for phase 
+    phase_target = psi(np.linspace(0, 2**n, len(x_arr)))
+
+    # calculate target for phase taking into account rounding 
+    phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
+    phase_reduced_bin = [dec_to_bin(i,m, "unsigned mag", 0) for i in phase_reduced]
+    phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
+    phase_rounded = 2 * np.pi * phase_reduced_dec
+
+    return phase_rounded
+
+def get_eps_chi(m,L,e,p,q):
+    # assume "default conditions"
+
+    file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{Fraction(p).numerator}-{Fraction(p).denominator}_{Fraction(q).numerator}-{Fraction(q).denominator}.npy") 
+    alt_file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{p if p != 1 else int(p)}_{q}.npy")
+    if os.path.isfile(file):
+        weights_phase=file 
+    elif os.path.isfile(alt_file):
+        weights_phase=alt_file    
+    else:
+        raise FileNotFoundError(f"File '{file}' or '{alt_file}' not found.")
+     
+    weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
+    state_vec = full_encode(6,m, weights_ampl, weights_phase, 3, L,real_p=True,repeat_params=None)
+
+    amplitude = np.abs(state_vec)
+    phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
+    phase *= (amplitude > 1e-15).astype(float) 
+
+    phase_rounded=get_phase_target(m)
+
+    epsilon = 1 - np.sum(amplitude**2)
+    chi = np.mean(np.abs(phase - phase_rounded))
+
+    return epsilon, chi 
 
 #------------------------------------------------------------------------------
 p_arr = np.append(p_arr[0],p_arr)
@@ -48,14 +96,19 @@ q_arr = np.append(q_arr[0],q_arr)
 
 mean = np.empty((len(q_arr)-1,len(p_arr)-1))
 std = np.empty((len(q_arr)-1,len(p_arr)-1))
-median = np.empty((len(q_arr)-1,len(p_arr)-1))
+chi = np.empty((len(q_arr)-1,len(p_arr)-1))
+eps = np.empty((len(q_arr)-1,len(p_arr)-1))
 
 for i in np.arange(len(p_arr)-1):
     for j in np.arange(len(q_arr)-1):
-        mean[j,i], std[j,i], median[j,i] = get_data(m,L,e, p_arr[i+1], q_arr[j+1])
+        mean[j,i], std[j,i] = get_data(m,L,e, p_arr[i+1], q_arr[j+1])
+        eps[j,i], chi[j,i] = get_eps_chi(m,L,e, p_arr[i+1], q_arr[j+1])
+
+        if verbose:
+            print(f"[p={p_arr[i+1]:.2f}; q={q_arr[j+1]:.2f}] mean: {mean[j,i]:.2e}; std: {std[j,i]:.2e}; eps: {eps[j,i]:.2e}; chi: {chi[j,i]:.2e} ")
         
-arrays = np.array([mean, std])   
-labels = np.array(["mean", "std"])   
+arrays = np.array([mean, std, eps, chi])   
+labels = np.array(["mean", "std", "eps", "chi"])   
 
 for i in np.arange(len(arrays)):
     plt.figure(figsize=figsize)

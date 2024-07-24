@@ -209,7 +209,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \end{itemize} 
 \item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance} 
 \item This is likely due to a reduction of the search space 
-\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}} (\textbf{formalise this concept!}) and hence somewhat meaningless results 
+\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}}\footnote{\textbf{Formalise this concept!}} and hence somewhat meaningless results 
 \item Thus, especially taking into account the equivalent computational times, \alert{not keeping parameters fixed yields better results} 
 \item These results suggest a particular importance of ILs compared to CLs 
 \end{itemize}
@@ -330,12 +330,24 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \begin{itemize}
 \item The following metrics are useful when testing WILL for different $p$, $q$:
 \begin{itemize}
-\item Let $\mathsf{M}_j$ be the mismatch between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
-\item Define \alert{$\mu \equiv \text{Mean}(\mathsf{M}_j)$} and \alert{$\sigma \equiv \text{STDEV}(\mathsf{M}_j)$}
+\item Let $\mathsf{M}_j$ be the \alert{mismatch} between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
+\item Then define 
+\begin{align}
+\mu &\equiv \text{Mean}(\mathsf{M}_j) \\
+\sigma &\equiv \text{STDEV}(\mathsf{M}_j)
+\end{align}
 \end{itemize}
-\item SAM tends to low $\mu$ but high $\sigma$, corresponding to the encoding working well for most input states and quite badly for some outliers
-\item DEFINE A NEW METRIC TRYING TO QUANTIFY INCOMPLETE PHASE EXTRACTION! NORM OF VECTOR? CHI SQUARED ERROR?
-
+\item Define additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
+\begin{itemize}
+\item Define the \alert{error on the normalisation} post phase extraction: 
+\begin{equation}
+\epsilon \equiv 1 - |\braket{\psi | \psi}_\text{final}|^2 
+\end{equation}
+\item Define the mean absolute \alert{error on the extracted phase function}, $\tilde{\Psi}$, compared to the target function, $\Psi$: 
+\begin{equation}
+\chi \equiv \text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)
+\end{equation}
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -354,6 +366,26 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \centering 
 \includegraphics[width=\textwidth]{im/std_3_6_600}
 \caption{Comparing $\sigma$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Testing WILL}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/eps_3_6_600}
+\caption{Comparing $\epsilon$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/chi_3_6_600}
+\caption{Comparing $\chi$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
 \end{figure}
 \end{column}
 \end{columns}
