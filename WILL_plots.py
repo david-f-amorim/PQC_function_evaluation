@@ -6,7 +6,7 @@ import matplotlib.colors as colors
 from matplotlib import rcParams
 
 m=3 
-L=6 
+L=9 
 e=600  
 
 p_arr =np.array([0.25, 0.5,0.75,1,1.25,1.5,1.75,2]) 

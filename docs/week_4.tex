@@ -209,7 +209,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \end{itemize} 
 \item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance} 
 \item This is likely due to a reduction of the search space 
-\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{incomplete phase extraction} (formalise this concept!) and hence somewhat meaningless results 
+\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}} (\textbf{formalise this concept!}) and hence somewhat meaningless results 
 \item Thus, especially taking into account the equivalent computational times, \alert{not keeping parameters fixed yields better results} 
 \item These results suggest a particular importance of ILs compared to CLs 
 \end{itemize}
@@ -334,10 +334,8 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \item Define \alert{$\mu \equiv \text{Mean}(\mathsf{M}_j)$} and \alert{$\sigma \equiv \text{STDEV}(\mathsf{M}_j)$}
 \end{itemize}
 \item SAM tends to low $\mu$ but high $\sigma$, corresponding to the encoding working well for most input states and quite badly for some outliers
-\item 
-\item SPEND SOME TIME PLAYING AROUND WITH p AND q!
-\item training (e600, L6, m3) p 0.25 0.5 0.75 1 1.25 1.5 1.75 2 with q 0, 0.5, 1, 1.5, 2, 2.5, 3 
-\item repeat above with L 9! Currently training: p 0.75 (completed: p 1)
+\item DEFINE A NEW METRIC TRYING TO QUANTIFY INCOMPLETE PHASE EXTRACTION! NORM OF VECTOR? CHI SQUARED ERROR?
+
 \end{itemize}
 \end{frame}
 
