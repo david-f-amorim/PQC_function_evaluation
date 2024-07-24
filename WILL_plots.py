@@ -7,7 +7,7 @@ from matplotlib import rcParams
 from tools import psi, dec_to_bin, bin_to_dec, full_encode
 
 m=3 
-L=6 
+L=9 
 e=600  
 
 p_arr =np.array([0.25, 0.5,0.75,1,1.25,1.5,1.75,2]) 
@@ -98,17 +98,20 @@ mean = np.empty((len(q_arr)-1,len(p_arr)-1))
 std = np.empty((len(q_arr)-1,len(p_arr)-1))
 chi = np.empty((len(q_arr)-1,len(p_arr)-1))
 eps = np.empty((len(q_arr)-1,len(p_arr)-1))
+omega =np.empty((len(q_arr)-1,len(p_arr)-1)) 
 
 for i in np.arange(len(p_arr)-1):
     for j in np.arange(len(q_arr)-1):
         mean[j,i], std[j,i] = get_data(m,L,e, p_arr[i+1], q_arr[j+1])
         eps[j,i], chi[j,i] = get_eps_chi(m,L,e, p_arr[i+1], q_arr[j+1])
 
+        omega[j,i] = 1/(mean[j,i] + std[j,i] + eps[j,i] + chi[j,i])
+
         if verbose:
-            print(f"[p={p_arr[i+1]:.2f}; q={q_arr[j+1]:.2f}] mean: {mean[j,i]:.2e}; std: {std[j,i]:.2e}; eps: {eps[j,i]:.2e}; chi: {chi[j,i]:.2e} ")
+            print(f"[p={p_arr[i+1]:.2f}; q={q_arr[j+1]:.2f}] mean: {mean[j,i]:.2e}; std: {std[j,i]:.2e}; eps: {eps[j,i]:.2e}; chi: {chi[j,i]:.2e}; omega: {omega[j,i]:.2e}")
         
-arrays = np.array([mean, std, eps, chi])   
-labels = np.array(["mean", "std", "eps", "chi"])   
+arrays = np.array([mean, std, eps, chi,omega])   
+labels = np.array(["mean", "std", "eps", "chi", "omega"])   
 
 for i in np.arange(len(arrays)):
     plt.figure(figsize=figsize)
@@ -116,8 +119,12 @@ for i in np.arange(len(arrays)):
     plt.xlabel("p", fontsize=fontsize)
     plt.xticks(p_arr[1:], labels=p_arr[1:])
     plt.yticks(q_arr[1:], labels=q_arr[1:])
-    plt.pcolormesh(p_arr, q_arr, arrays[i],norm=colors.LogNorm(vmin=arrays[i].min(), vmax=arrays[i].max()), cmap="turbo")# TURBO !! or nipy_spectral
-    cb=plt.colorbar(location='top', orientation='horizontal', pad=0.05) # format="{x:.1e}",
+    if labels[i] !="omega": 
+        plt.pcolormesh(p_arr, q_arr, arrays[i],norm=colors.LogNorm(vmin=arrays[i].min(), vmax=arrays[i].max()), cmap="turbo")   
+        cb=plt.colorbar(location='top', orientation='horizontal', pad=0.05) # format="{x:.1e}",
+    else: 
+        plt.pcolormesh(p_arr, q_arr, arrays[i],cmap="turbo_r")   
+        cb=plt.colorbar(location='top', orientation='horizontal', pad=0.05) # format="{x:.1e}"    
     cb.ax.tick_params(which='both',labelsize=ticksize)
     plt.tick_params(axis="both", labelsize=ticksize)
     plt.tight_layout()

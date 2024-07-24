@@ -337,7 +337,7 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \sigma &\equiv \text{STDEV}(\mathsf{M}_j)
 \end{align}
 \end{itemize}
-\item Define additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
+\item Consider additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
 \begin{itemize}
 \item Define the \alert{error on the normalisation} post phase extraction: 
 \begin{equation}
@@ -348,6 +348,11 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \chi \equiv \text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)
 \end{equation}
 \end{itemize}
+\item Finally define the \alert{super-metric} 
+\begin{equation}
+\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1},
+\end{equation}
+which is to be maximised
 \end{itemize}
 \end{frame}
 
@@ -386,6 +391,25 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \centering 
 \includegraphics[width=\textwidth]{im/chi_3_6_600}
 \caption{Comparing $\chi$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Testing Will}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item RUN TESTS WITH M=4 ??? FIND BEST COMBINATION ! THEN COMPARE TO MM! (including eps and chi) ....TRY AND LINK mu, sigma, chi, eps ... 
+\item Seems to suggest $p=0.25$, $q=1$ ? 
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/omega_3_6_600}
+\caption{Comparing $\Omega$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
 \end{figure}
 \end{column}
 \end{columns}
