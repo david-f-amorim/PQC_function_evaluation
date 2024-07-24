@@ -217,87 +217,122 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 
 \section{Improving the Loss Function}
 
-\subsection{Preliminary Definitions}
+\begin{frame}
+\frametitle{Preliminary Definitions}
+\begin{itemize}
+\item Consider a computational basis state, $\ket{k}$, of the \alert{combined} input-register-target-register \alert{system} 
+\item The state $\ket{k}$ is associated with a \alert{bit string} $k = \{0,1 \}^{n+m}$
+\item Denote by $[k]_n$ and $[k]_m$ the bit strings of length $n$ and $m$, respectively, associated with each of the registers and write their \alert{concatenation} as 
+\begin{equation}
+k \equiv [k]_n \diamond [k]_m
+\end{equation} 
+\item A general state of the two-register system is then written as 
+\begin{equation}
+\ket{z} = \sum^{2^{n+m}-1}_{k=0} z_k \ket{k}
+\end{equation}
+and referred to via its \alert{coefficients} $z_k$
+\end{itemize}
+\end{frame}
 
 \begin{frame}
 \frametitle{Preliminary Definitions}
 \begin{itemize}
-\item Consider a \alert{computational basis state}, $\ket{j}$, in a $p$-qubit register:
+\item When training in superposition, the \alert{desired state} of the system is 
 \begin{equation}
-\ket{j} = \bigotimes^{p-1}_{\alpha=0} \ket{j_\alpha}, \; \; \; \; \ket{j_\alpha} \in \{\ket{0},\ket{1} \}
+\ket{y} = \sum_{j=0}^{2^n-1} \frac{1}{\sqrt{2^n}} \ket{j}_i \ket{\Psi(j)}_t,
 \end{equation}
-\item Define 
+where the subscripts $i$ and $t$ indicate basis states of the input and target registers, respectively
+\item This state $\ket{y}$ can be written in terms of the \alert{combined basis} $\{ \ket{k} \}$ via 
 \begin{equation}
-j_\alpha \equiv \begin{cases}
-0 & \text{if } \ket{j_\alpha}=\ket{0} \\
-1 & \text{if }  \ket{j_\alpha}=\ket{1} \\
+y_k = \begin{cases}
+\frac{1}{\sqrt{2^n}}  & \text{if } k=[k]_n \diamond \Psi([k]_n) \\
+0 & \text{else} 
 \end{cases}
 \end{equation}
-\item Two \alert{digitally encoded binary numbers} can be associated with $\ket{j}$:
-\begin{align}
-j &\equiv \sum_{\alpha=0}^{p-1} j_\alpha 2^{\alpha} &(0 \leq j \leq 2^p-1 ), \\
-j' &\equiv \sum_{\alpha=0}^{p-1} j_\alpha 2^{\alpha-p} &(0 \leq j' \leq 1)
-\end{align}
+\item Further denote the \alert{output state} produced by the QCNN by $\ket{x}$, with associated coefficients $x_k$
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Preliminary Definitions}
+\frametitle{SAM and Beyond}
 \begin{itemize}
-\item Consider an $n$-qubit \alert{input register} and an $m$-qubit \alert{target register}, denoted with subscripts $i$ and $t$, respectively 
-\item A computational basis state of the combined system, $\ket{k}_{i+t}$, can be decomposed into
+\item Recall the definition of \alert{SAM}:
 \begin{equation}
-\ket{k}_{i+t} = \ket{j}_i \otimes \ket{l}_t,
+\text{SAM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k x_k y_k \right\vert 
 \end{equation}
-for computational basis states $\ket{j}_i$, $\ket{l}_t$ of the two registers
-\item Define 
-\begin{align}
-\mathsf{input}(\ket{k}_{i+t}) &\equiv \ket{j}_i \\
-\mathsf{target}(\ket{k}_{i+t}) &\equiv \ket{l}_t \\
-\end{align}
-\item A \alert{general state of the two-register system} is then 
+\item By construction, this is closely related to the \alert{mismatch} 
 \begin{equation}
-\ket{z} = \sum^{2^{n+m}-1}_{k=0} z_k \ket{k}_{i+t}
+\mathsf{M}(\ket{x}, \ket{y}) = 1 - |\braket{x|y}|
+\end{equation}
+\item While effective, SAM's \alert{fundamental flaw} is that it does not directly take into account the amplitudes $x_k$ for $k$ where $y_k =0$ (i.e. where $[k]_m \neq \Psi([k]_n)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{SAM and Beyond}
+\begin{itemize}
+\item Consider $k=a$ and $k=b$ with $[k]_m \neq \Psi([k]_n)$ for both and 
+\begin{equation}
+\Big|[a]_m - \Psi([a]_n) \Big| \geq \Big|[b]_m - \Psi([b]_n) \Big| 
+\end{equation}
+\item To improve performance, the loss function should punish a non-zero $x_a$ more than a non-zero $x_b$ which is not the case for SAM
+\item This could be achieved via a \alert{weighted mismatch}, 
+\begin{equation}
+\text{WIM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k \tilde{w}_k x_k y_k \right\vert, 
+\end{equation}
+where $\tilde{w}_k \in \mathbb{R}_+$ are appropriate weights
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{SAM and Beyond}
+\begin{itemize}
+\item It was discussed at the last meeting to base the weights on
+\begin{equation}
+w_k = \sum^{2^m -1}_{\substack{l=0, \\ l \neq [k]_m}} \Big|x_{[k]_n \diamond l} \Big| \Big| l - \Psi([k]_n) \Big|,
+\end{equation}
+with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing ($\tilde{w}_k \sim e^{\tau w_k}$)
+\item Implementing this \alert{proved to be uneffective}, with no improvement on SAM  
+\item This raises broader questions about the \alert{feasibility of WIM}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Limits of WIM}
+\begin{itemize}
+\item SAM is effective as it learns to maximise the $x_k$ for $k$ with $y_k \neq 0$ without regard for the remaining $x_k$
+\item It effectively optimises over a \alert{reduced set of states} 
+\item This is, presumably, why it outperforms more global loss functions, which directly take into account all coefficients, like L$_1$ loss 
+\item Thus, it seems that SAM's \alert{`fundamental flaw'}, of disregarding most $x_k$, is really the \alert{basis of its success} 
+\item Adding weights to SAM (WIM) likely is insufficient to alter its fundamental dynamic (or will alter it detrimentally)  
+\item Therefore, \alert{WIM will be abandoned for the foreseeable future}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introducing WILL}
+\begin{itemize}
+\item To improve on SAM, it could be beneficial to return to a loss function, which more directly takes into account all $x_k$ (e.g. L$_1$ loss)
+\item More generally, define \alert{L$_\text{p}$ loss} as 
+\begin{equation}
+\text{LL}_\text{p} (\ket{x}, \ket{y}) = \left( \sum_k |x_k -y_k|^p \right)^{1/p},
+\end{equation}
+for some $p \geq 1$
+\item Note that for phase encoding, \alert{computational basis states are not equidistant}: their distance depends on the value they encode on the input and target registers
+\item A \alert{weighted L$_\text{p}$ loss (WILL)} can factor in an appropriate distance measure for the state space:
+\begin{equation}
+\text{WILL}_\text{p,q} =  \left( \sum_k \Big|x_k -y_k \Big|^p \Big|[k]_m - \Psi([k]_n) \Big|^q \right)^{1/p}
 \end{equation}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Preliminary Definitions}
+\frametitle{Introducing WILL}
 \begin{itemize}
-\item For training in superposition, the two-register target state is 
-\begin{equation}
-\ket{y} = \sum_{j=0}^{2^n -1} \frac{1}{\sqrt{2^n}} \ket{j}_i \ket{\Psi'(j)}_t \equiv \sum_{k=0}^{2^{n+m}-1} y_k \ket{k}_{i+t}, 
-\end{equation}
-with $y_k =0$ if target($\ket{k}_{i+t}$)
+\item in practice, potentially work with mean/median instead of sum 
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Preliminary Definitions}
-\begin{itemize}
-\item FIND GOOD NOTATION FOR ALL THIS !!!
-\item THINK ABOUT THIS ALL MORE DEEPLY! MAYBE HAVE TO SWITCH TO WEIGHTED L1/2 LOSS INSTEAD? (WILL)
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Improving WIM}
-\begin{itemize}
-\item Recall the definition of \alert{WIM} (\alert{W}e\alert{I}ghted \alert{M}ismatch):
-\begin{equation}
-\mathsf{WIM}(x,y) =  \left\vert 1 - \sum_{k=0}^{2^{n+m}-1} \tilde{w}_k x_k y_k \right \vert, 
-\end{equation}
-where
-\begin{itemize}
-\item $\ket{x} = \sum_{k=0}^{2^{n+m}-1} x_k \ket{k} $ is the output state produced by the QCNN,
-\item $\ket{y} = \sum_{k=0}^{2^{n+m}-1} y_k \ket{k} $ is the target state, 
-\item $\tilde{w}_k \in \mathbb{R}_+$ are weighting factors 
-\end{itemize}
-\item .... calculate $w_k$
-\item $\tilde{w}$
-\end{itemize}
-\end{frame}
 
 \section{Results}
 

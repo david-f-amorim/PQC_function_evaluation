@@ -6,8 +6,8 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 4
-weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
+m = 3
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
 
 repeat_params=None
 
@@ -19,7 +19,7 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = True # save outputs as pdf 
+pdf = False # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
@@ -31,9 +31,9 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = False
+phase_loss_comp = True
 phase_shift_comp = False 
-phase_RP_comp=True 
+phase_RP_comp=False 
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -387,10 +387,10 @@ if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr =np.array(["SAM","CE", "WIM"])
+    loss_arr =np.array(["SAM","CE", "L1"])
     arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_CE_(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_L1_(S)(PR)(r).npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]
