@@ -315,9 +315,8 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \item To improve on SAM, it could be beneficial to return to a loss function, which more directly takes into account all $x_k$ (e.g. L$_1$ loss)
 \item More generally, define \alert{L$_\text{p}$ loss} as 
 \begin{equation}
-\text{LL}_\text{p} (\ket{x}, \ket{y}) = \left( \sum_k |x_k -y_k|^p \right)^{1/p},
+\text{LL}_\text{p} (\ket{x}, \ket{y}) = \left( \sum_k |x_k -y_k|^p \right)^{1/p}
 \end{equation}
-for some $p \geq 1$
 \item Note that for phase encoding, \alert{computational basis states are not equidistant}: their distance depends on the value they encode on the input and target registers
 \item A \alert{weighted L$_\text{p}$ loss (WILL)} can factor in an appropriate distance measure for the state space:
 \begin{equation}
@@ -330,8 +329,8 @@ for some $p \geq 1$
 \frametitle{Testing WILL}
 \begin{itemize}
 \item SPEND SOME TIME PLAYING AROUND WITH p AND q!
-\item SEEMS LIKE $q > 1$ makes the MEAN worse but reduces STD! (at least for p=1)  
-\item $q=0$ corresponds to L1 
+\item training (e600, L6, m3) p=1 1.25 2 with q 0, 0.5, 1, 1.5, 2, 2.5, 3 [REPEAT THIS FOR p 1.75 !; p 1.5 in progress]
+==> make heatmap plots with mean and std mismatch! 
 
 \end{itemize}
 \end{frame}

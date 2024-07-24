@@ -470,7 +470,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'           
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'             
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -878,7 +879,8 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
     if repeat_params != None:
         meta+=f'({repeat_params})'  
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'                    
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'                      
 
     # load weights 
     weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -959,7 +961,8 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     if repeat_params != None:
         meta+=f'({repeat_params})'
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'             
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'               
 
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -992,7 +995,8 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     if repeat_params != None:
         meta+=f'({repeat_params})'
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'           
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'             
 
     check_mismatch=False 
     check_weights=False 
@@ -1032,7 +1036,8 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'            
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'            
 
     log_str= ("" if log==False else "log_")
 
