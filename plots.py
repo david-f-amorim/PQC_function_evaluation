@@ -40,7 +40,8 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'      
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'        
           
     log_str= ("" if log==False else "log_")
 
@@ -113,7 +114,8 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'   
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'     
 
     log_str= ("" if log==False else "log_")
 
@@ -261,7 +263,8 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, ph
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'   
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'     
 
     log_str= ("" if log==False else "log_")
 
@@ -371,7 +374,8 @@ def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, ph
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'  
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'    
 
     log_str= ("" if log==False else "log_")
 
@@ -594,7 +598,8 @@ def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, min
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss_str=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'      
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'        
 
     log_str= ("" if log==False else "log_")
 
@@ -665,7 +670,8 @@ def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, ni
     if repeat_params != None:
         meta+=f'({repeat_params})' 
     if loss=="WILL":
-            meta +=f'_{WILL_p}_{WILL_q}'      
+            from fractions import Fraction
+            meta +=f'_{Fraction(WILL_p).numerator}-{Fraction(WILL_p).denominator}_{Fraction(WILL_q).numerator}-{Fraction(WILL_q).denominator}'        
 
     log_str= ("" if log==False else "log_") 
 
