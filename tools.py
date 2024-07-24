@@ -441,7 +441,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     return circuit 
 
-def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3, repeat_params):
+def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3, repeat_params, WILL_p, WILL_q):
     """
     Initialise circuit as QNN for training purposes.
     """
@@ -468,7 +468,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     if real:
         meta+='(r)'
     if repeat_params != None:
-        meta+=f'({repeat_params})'        
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'           
 
     # set seed for PRNG 
     algorithm_globals.random_seed= seed
@@ -620,11 +622,9 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 ind=int(bin_j + bin_i,2) 
                 distance_arr[ind] = bin_to_dec(dec_to_bin(j,m,'unsigned mag'),'unsigned mag',nint=mint) - fx_arr_rounded[i]  
         distance=Tensor(distance_arr)   
-
-        p=1 
-        q=1
+        p=WILL_p 
+        q=WILL_q 
         reduce='mean' 
-        
         def criterion(output, target):
             loss = torch.mul(torch.pow(torch.abs(output-target),p),torch.pow(torch.abs(distance),q)) 
             if reduce=='sum':
@@ -854,7 +854,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params, verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q, verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -876,7 +876,9 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
     if real:
         meta+='(r)' 
     if repeat_params != None:
-        meta+=f'({repeat_params})'                  
+        meta+=f'({repeat_params})'  
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'                    
 
     # load weights 
     weights = np.load(os.path.join("outputs",f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -933,7 +935,7 @@ def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,t
 
     return 0 
 
-def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params):
+def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params,WILL_p, WILL_q):
     """
     For a given set of input parameters, check if training and testing results already exist. 
     """
@@ -955,7 +957,9 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'         
+        meta+=f'({repeat_params})'
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'             
 
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
@@ -963,7 +967,7 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     
     return check_mismatch & check_weights & check_loss
 
-def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params):   
+def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params,WILL_p, WILL_q):   
     """
     For a given set of input parameters, check if temp files already exist. 
     """
@@ -986,7 +990,9 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     if real:
         meta+='(r)'  
     if repeat_params != None:
-        meta+=f'({repeat_params})'       
+        meta+=f'({repeat_params})'
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'           
 
     check_mismatch=False 
     check_weights=False 
@@ -1002,7 +1008,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     
     return check_mismatch & check_weights & check_loss
 
-def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real, repeat_params):    
+def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real, repeat_params, WILL_p, WILL_q):    
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
     """
@@ -1024,7 +1030,9 @@ def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_re
     if real:
         meta+='(r)' 
     if repeat_params != None:
-        meta+=f'({repeat_params})'         
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'            
 
     log_str= ("" if log==False else "log_")
 

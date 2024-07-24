@@ -18,7 +18,7 @@ figsize=(10,10)
 Show standard result (mismatch and loss as functions of epoch)
 """
 
-def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
     # set precision strings 
     if nint==None or nint==n:
@@ -38,7 +38,9 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'      
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'      
           
     log_str= ("" if log==False else "log_")
 
@@ -89,7 +91,7 @@ def standard(n,m,L,epochs,func_str, loss_str, meta, show, log, nint, mint, phase
 Show mismatch for various input states after training  
 """
 
-def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -109,7 +111,9 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'   
+        meta+=f'({repeat_params})' 
+    if loss=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'   
 
     log_str= ("" if log==False else "log_")
 
@@ -145,7 +149,7 @@ def standard_bar(n,m,L,epochs,func_str,loss,meta, show,  log, nint, mint, phase_
 Compare mismatch for different loss functions
 """
 
-def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -165,14 +169,16 @@ def comp_loss_funcs(n,m,L,epochs, func_str,loss_str_arr, meta, show,  log, nint,
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'   
-
+        meta+=f'({repeat_params})' 
+      
     log_str= ("" if log==False else "log_")
 
     mismatch_arr = np.empty(len(loss_str_arr), dtype=object)
     bar_arr = np.empty(len(loss_str_arr), dtype=object)
 
     for i in np.arange(len(loss_str_arr)):
+        if loss_str_arr[i]=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'
         mismatch = np.load(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str_arr[i]}_{meta}.npy")) 
         bar = np.load(os.path.join("outputs",f"bar_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str_arr[i]}_{meta}.npy"),allow_pickle='TRUE').item()
 
@@ -233,7 +239,7 @@ Compare results for QCNNs with different numbers of layers
 (expecting everything else to be identical)
 """
 
-def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -253,7 +259,9 @@ def comp_L(n,m,L_arr,epochs, func_str,loss_str, meta, show,  log, nint, mint, ph
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'   
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'   
 
     log_str= ("" if log==False else "log_")
 
@@ -341,7 +349,7 @@ Compare results for QCNNs evaluating different functions
 (expecting everything else to be identical)
 """
 
-def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -361,7 +369,9 @@ def comp_f(n,m,L,epochs, func_str_arr,loss_str, meta, show,  log, nint, mint, ph
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'  
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'  
 
     log_str= ("" if log==False else "log_")
 
@@ -450,7 +460,7 @@ Compare results for QCNNs with different meta strings.
 (expecting everything else to be identical)
 """
 
-def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_meta(n,m,L,epochs, func_str,loss_str, meta_arr, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -562,7 +572,7 @@ Compare results for QCNNs with different epochs.
 (expecting everything else to be identical)
 """
 
-def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -582,7 +592,9 @@ def comp_epochs(n,m,L,epochs_arr, func_str,loss_str, meta, show,  log, nint, min
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'      
+        meta+=f'({repeat_params})' 
+    if loss_str=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'      
 
     log_str= ("" if log==False else "log_")
 
@@ -631,7 +643,7 @@ Compare average mismatch for QCNNs with different epochs and L values
 (expecting everything else to be identical)
 """
 
-def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params):
+def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
 
      # set precision strings 
     if nint==None or nint==n:
@@ -651,7 +663,9 @@ def comp_mean_mismatch(n,m,L_arr,epochs_arr, func_str,loss, meta, show,  log, ni
     if real:
         meta+='(r)'   
     if repeat_params != None:
-        meta+=f'({repeat_params})'      
+        meta+=f'({repeat_params})' 
+    if loss=="WILL":
+            meta +=f'_{WILL_p}_{WILL_q}'      
 
     log_str= ("" if log==False else "log_") 
 
@@ -726,6 +740,9 @@ if __name__ == '__main__':
     parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
     parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
 
+    parser.add_argument('-p','--WILL_p', help="WILL p parameter.", default=1,type=float)
+    parser.add_argument('-q','--WILL_q', help="WILL q parameter.", default=1,type=float)
+
     parser.add_argument('-cL','--compL', help="Compare different L values (pass multiple).", action='store_true')
     parser.add_argument('-cf','--compf', help="Compare different f_str values (pass multiple).", action='store_true')
     parser.add_argument('-cM','--compM', help="Compare different meta values (pass multiple).", action='store_true')
@@ -753,25 +770,25 @@ if __name__ == '__main__':
         raise ValueError("Cannot do two comparisons at once.")
 
     if opt.compL:
-        comp_L(n=opt.n,m=opt.m,L_arr=opt.L,epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        comp_L(n=opt.n,m=opt.m,L_arr=opt.L,epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
     elif opt.compf:
-        comp_f(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str_arr=opt.f_str,loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        comp_f(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str_arr=opt.f_str,loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
     elif opt.compM:
-        comp_meta(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta_arr=opt.meta, show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params) 
+        comp_meta(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str=opt.loss[0], meta_arr=opt.meta, show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q) 
     elif opt.compl:
-        comp_loss_funcs(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str_arr=opt.loss, meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        comp_loss_funcs(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0], func_str=opt.f_str[0],loss_str_arr=opt.loss, meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
     elif opt.compe:
-        comp_epochs(n=opt.n,m=opt.m,L=opt.L[0],epochs_arr=opt.epochs, func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        comp_epochs(n=opt.n,m=opt.m,L=opt.L[0],epochs_arr=opt.epochs, func_str=opt.f_str[0],loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
     elif opt.compeL:
-        comp_mean_mismatch(n=opt.n,m=opt.m,L_arr=opt.L,epochs_arr=opt.epochs, func_str=opt.f_str[0],loss=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        comp_mean_mismatch(n=opt.n,m=opt.m,L_arr=opt.L,epochs_arr=opt.epochs, func_str=opt.f_str[0],loss=opt.loss[0], meta=opt.meta[0], show=opt.show, log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
     else:
-        dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0],func_str=opt.f_str[0],loss_str=opt.loss[0],meta=opt.meta[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+        dupl_files = check_plots(n=opt.n,m=opt.m,L=opt.L[0],epochs=opt.epochs[0],func_str=opt.f_str[0],loss_str=opt.loss[0],meta=opt.meta[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
 
         if dupl_files and opt.ignore_duplicates==False:
             print("\nThe required plots already exist and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
         else: 
-            standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
-            standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params)
+            standard(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss_str=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
+            standard_bar(n=opt.n, m=opt.m, L=opt.L[0], epochs=opt.epochs[0], loss=opt.loss[0], meta=opt.meta[0], show=opt.show, func_str=opt.f_str[0], log=opt.log, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
 
 
 
