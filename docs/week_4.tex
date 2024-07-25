@@ -44,15 +44,15 @@
 \frametitle{Aims for the Week}
 The following aims were set at the last meeting (22/07/2024):
 
-\begin{alertblock}{1. Change Input Layer Structure}
+\begin{alertblock}{Change Input Layer Structure}
 Improve the connectivity of input layers. Each input qubit should ideally control each target qubit at some point in the network. 
 \end{alertblock}
 
-\begin{alertblock}{2. Fix Parameters}
+\begin{alertblock}{Fix Parameters}
 Add the option to keep parameters fixed for each type of network layer. 
 \end{alertblock}
 
-\begin{alertblock}{3. Improve Loss Function}
+\begin{alertblock}{Improve Loss Function}
 Develop a distance measure taking into account digital encoding. Either incorporate this into weights for an existing loss function or define a new loss function on this basis. 
 \end{alertblock}
 \end{frame}
@@ -88,6 +88,40 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \end{table}
 \end{frame}
 
+\begin{frame}
+\frametitle{Useful Metrics}
+\begin{itemize}
+\item The following metrics are useful when testing and comparing QCNN performance:
+\begin{itemize}
+\item Let $\mathsf{M}_j$ be the \alert{mismatch} between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
+\item Then define 
+\begin{align}
+\mu &\equiv \text{Mean}(\mathsf{M}_j) \\
+\sigma &\equiv \text{STDEV}(\mathsf{M}_j)
+\end{align}
+\end{itemize}
+\item Consider additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
+\begin{itemize}
+\item Define the \alert{error on the normalisation} post phase extraction: 
+\begin{equation}
+\epsilon \equiv 1 - |\braket{\psi | \psi}_\text{final}|^2 
+\end{equation}
+\item Define the mean absolute \alert{error on the extracted phase function}, $\tilde{\Psi}$, compared to the target function, $\Psi$: 
+\begin{equation}
+\chi \equiv \text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)
+\end{equation}
+\end{itemize}
+\item Finally define the \alert{super-metric} 
+\begin{equation}
+\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1}
+\end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+maybe a handy summary table...
+... waffle abouot linking variables to evaluarte performance... talk about "phase extraction problem".... FRAME THIS AS A CENTRAL THEME!!
+\end{frame}
 
 \section{Changing Input Layer Structure}
 
@@ -107,17 +141,23 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \frametitle{Changing Input Layer Structure}
 \begin{columns}
 \begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/phase_shift_comp_linear_m3}
-\caption{Effects of shifted ILs for $\Psi(f) \sim f$ and $m=3$ ($L=6$, 600 epochs, SAM)}
-\end{figure}
+\begin{table}
+\begin{tabular}{c || c| c }
+& shifts & no shifts \\ \hline \hline 
+$\mu$ & 3.4e-2 & \alert{3.2e-2}  \\
+$\sigma$ & 1.4e-1 & 1.5e-1  \\
+$\epsilon$  & 2.0e-2 & 7.5e-2 \\
+$\chi$ & 3.2e-2 & 1.3e-0    \\ \hline 
+$\Omega$ &   4.46 & 0.63
+\end{tabular}
+\caption{Comparing metrics for $\Psi(f) \sim f$ ($L=6$, $m=3$, 600 epochs, SAM)}
+\end{table}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/phase_shift_comp_quadratic_m3}
-\caption{Effects of shifted ILs for $\Psi(f) \sim f^2$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\includegraphics[width=\textwidth]{im/phase_shift_comp_linear_m3}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f$ ($L=6$, $m=3$, 600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -127,17 +167,23 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \frametitle{Changing Input Layer Structure}
 \begin{columns}
 \begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/phase_shift_comp_linear_m4}
-\caption{Effects of shifted ILs for $\Psi(f) \sim f$ and $m=4$ ($L=6$, 600 epochs, SAM)}
-\end{figure}
+\begin{table}
+\begin{tabular}{c || c| c }
+& shifts & no shifts \\ \hline \hline 
+$\mu$ & 1.9e-1 & 2.4e-1   \\
+$\sigma$ & 1.2e-1 & 1.5e-1  \\
+$\epsilon$  & 2.2e-1 & 4.7e-1 \\
+$\chi$ & 1.9e-1 & 4.3e-1 \\ \hline 
+$\Omega$ & 1.39 &  0.78 
+\end{tabular}
+\caption{Comparing metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=3$, 600 epochs, SAM)}
+\end{table}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/phase_shift_comp_quadratic_m4}
-\caption{Effects of shifted ILs for $\Psi(f) \sim f^2$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\includegraphics[width=\textwidth]{im/phase_shift_comp_quadratic_m3}
+\caption{Effects of shifted ILs for $\Psi(f) \sim f^2$ ($L=6$, $m=3$ ,600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -159,7 +205,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_shift_comp_psi_m3}
-\caption{Effects of shifted ILs for $\Psi_\text{H23}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\caption{Effects of shifted ILs for $\Psi_\text{H23}$ ($L=6$, $m=3$, 600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -182,17 +228,49 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \frametitle{Fixing Parameters}
 \begin{columns}
 \begin{column}{0.5\textwidth}
+\begin{table}
+\begin{tabular}{c || c| c | c| c }
+&none & CL & IL & both \\ \hline \hline 
+$\mu$ & ..   \\
+$\sigma$ & ..  \\
+$\epsilon$  & .. \\
+$\chi$ & .. \\ \hline 
+$\Omega$ & .. 
+\end{tabular}
+\caption{Comparing metrics for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs, SAM)}
+\end{table}
+\end{column}
+\begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_RP_comp_linear_m4}
-\caption{Effects of fixing parameters ILs for $\Psi(f) \sim f$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\caption{Effects of fixing parameters ILs for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fixing Parameters}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{table}
+\begin{tabular}{c || c| c | c| c }
+&none & CL & IL & both \\ \hline \hline 
+$\mu$ & ..   \\
+$\sigma$ & ..  \\
+$\epsilon$  &.. \\
+$\chi$ & .. \\ \hline 
+$\Omega$ & ..
+\end{tabular}
+\caption{Comparing metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs, SAM)}
+\end{table}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_RP_comp_quadratic_m4}
-\caption{Effects of fixing parameters for $\Psi(f) \sim f^2$ and $m=4$ ($L=6$, 600 epochs, SAM)}
+\caption{Effects of fixing parameters for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -210,7 +288,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \end{itemize} 
 \item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance} 
 \item This is likely due to a reduction of the search space 
-\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}}\footnote{\textbf{Formalise this concept!}} and hence somewhat meaningless results 
+\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}} and hence somewhat meaningless results 
 \item Thus, especially taking into account the equivalent computational times, \alert{not keeping parameters fixed yields better results} 
 \item These results suggest a particular importance of ILs compared to CLs 
 \end{itemize}
@@ -322,36 +400,6 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing
 \item A \alert{weighted L$_\text{p}$ loss (WILL)} can factor in an appropriate distance measure for the state space:
 \begin{equation}
 \text{WILL}_\text{p,q} =  \left( \sum_k \Big|x_k -y_k \Big|^p \Big|[k]_m - \Psi([k]_n) \Big|^q \right)^{1/p}
-\end{equation}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Loss Function Metrics}
-\begin{itemize}
-\item The following metrics are useful when testing and comparing loss functions:
-\begin{itemize}
-\item Let $\mathsf{M}_j$ be the \alert{mismatch} between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
-\item Then define 
-\begin{align}
-\mu &\equiv \text{Mean}(\mathsf{M}_j) \\
-\sigma &\equiv \text{STDEV}(\mathsf{M}_j)
-\end{align}
-\end{itemize}
-\item Consider additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
-\begin{itemize}
-\item Define the \alert{error on the normalisation} post phase extraction: 
-\begin{equation}
-\epsilon \equiv 1 - |\braket{\psi | \psi}_\text{final}|^2 
-\end{equation}
-\item Define the mean absolute \alert{error on the extracted phase function}, $\tilde{\Psi}$, compared to the target function, $\Psi$: 
-\begin{equation}
-\chi \equiv \text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)
-\end{equation}
-\end{itemize}
-\item Finally define the \alert{super-metric} 
-\begin{equation}
-\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1}
 \end{equation}
 \end{itemize}
 \end{frame}
