@@ -2,5 +2,4 @@
 \beamer@sectionintoc {1}{Changing Input Layer Structure}{4}{0}{1}
 \beamer@sectionintoc {2}{Fixing Parameters}{9}{0}{2}
 \beamer@sectionintoc {3}{Improving the Loss Function}{13}{0}{3}
-\beamer@sectionintoc {4}{Results}{25}{0}{4}
-\beamer@sectionintoc {5}{Next Steps}{27}{0}{5}
+\beamer@sectionintoc {4}{Next Steps}{28}{0}{4}

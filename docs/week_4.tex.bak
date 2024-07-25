@@ -70,7 +70,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
   IL & input layer \tabularnewline 
   SAM & sign-adjusted mismatch
 \end{tabularx}
-\caption{Acronyms and short-hands used in the following.}
+\caption{Acronyms used in the following.}
 \end{center}
 \end{table}
 \begin{table}
@@ -81,6 +81,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
   n  & input register size   \tabularnewline
   m  &  target register size \tabularnewline
   L  & number of network layers \tabularnewline
+  \Psi_\text{H23} & phase function from Hayes 2023
 \end{tabularx}
 \caption{Variables used in the following.}
 \end{center}
@@ -291,8 +292,8 @@ where $\tilde{w}_k \in \mathbb{R}_+$ are appropriate weights
 \begin{equation}
 w_k = \sum^{2^m -1}_{\substack{l=0, \\ l \neq [k]_m}} \Big|x_{[k]_n \diamond l} \Big| \Big| l - \Psi([k]_n) \Big|,
 \end{equation}
-with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing ($\tilde{w}_k \sim e^{\tau w_k}$)
-\item Implementing this \alert{proved to be uneffective}, with no improvement on SAM  
+with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing
+\item Implementing this \alert{proved to be ineffective}, with no improvement on SAM  (see later)
 \item This raises broader questions about the \alert{feasibility of WIM}
 \end{itemize}
 \end{frame}
@@ -312,12 +313,12 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \begin{frame}
 \frametitle{Introducing WILL}
 \begin{itemize}
-\item To improve on SAM, it could be beneficial to return to a loss function, which more directly takes into account all $x_k$ (e.g. L$_1$ loss)
+\item To improve on SAM, it could be beneficial to return to a loss function which more directly takes into account all $x_k$ (e.g. L$_1$ loss)
 \item More generally, define \alert{L$_\text{p}$ loss} as 
 \begin{equation}
 \text{LL}_\text{p} (\ket{x}, \ket{y}) = \left( \sum_k |x_k -y_k|^p \right)^{1/p}
 \end{equation}
-\item Note that for phase encoding, \alert{computational basis states are not equidistant}: their distance depends on the value they encode on the input and target registers
+\item As discussed, \alert{computational basis states are not equidistant} for phase encoding: their distance depends on the value they encode on the input and target registers
 \item A \alert{weighted L$_\text{p}$ loss (WILL)} can factor in an appropriate distance measure for the state space:
 \begin{equation}
 \text{WILL}_\text{p,q} =  \left( \sum_k \Big|x_k -y_k \Big|^p \Big|[k]_m - \Psi([k]_n) \Big|^q \right)^{1/p}
@@ -326,9 +327,9 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \end{frame}
 
 \begin{frame}
-\frametitle{Testing WILL}
+\frametitle{Loss Function Metrics}
 \begin{itemize}
-\item The following metrics are useful when testing WILL for different $p$, $q$:
+\item The following metrics are useful when testing and comparing loss functions:
 \begin{itemize}
 \item Let $\mathsf{M}_j$ be the \alert{mismatch} between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
 \item Then define 
@@ -350,9 +351,8 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing (
 \end{itemize}
 \item Finally define the \alert{super-metric} 
 \begin{equation}
-\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1},
+\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1}
 \end{equation}
-which is to be maximised
 \end{itemize}
 \end{frame}
 
@@ -362,15 +362,15 @@ which is to be maximised
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/mean_3_6_600}
-\caption{Comparing $\mu$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\includegraphics[width=\textwidth]{im/omega_3_6_600_linear}
+\caption{Comparing $\Omega$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi(f)\sim f$)}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/std_3_6_600}
-\caption{Comparing $\sigma$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\includegraphics[width=\textwidth]{im/omega_3_6_600_quadratic}
+\caption{Comparing $\Omega$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi(f)\sim f^2$)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -378,41 +378,108 @@ which is to be maximised
 
 \begin{frame}
 \frametitle{Testing WILL}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/eps_3_6_600}
-\caption{Comparing $\epsilon$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
-\end{figure}
-\end{column}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/chi_3_6_600}
-\caption{Comparing $\chi$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Testing Will}
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{itemize}
-\item RUN TESTS WITH M=4 ??? FIND BEST COMBINATION ! THEN COMPARE TO MM! (including eps and chi) ....TRY AND LINK mu, sigma, chi, eps ... 
-\item Seems to suggest $p=\frac{1}{2}$, $q=\frac{3}{2}$ ? 
+\item These tests already reveal WILL's \alert{subpar performance}
 \end{itemize}
+\vspace{1cm}
+\begin{table}
+\centering
+\begin{tabular}{c || c| c | c }
+& $\Psi(f)\sim f$ & $\Psi(f) \sim f^2$ & $\Psi_\text{H23}$  \\ \hline \hline 
+$(p,q)$ & (0.75, 1.50) & (0.75, 2.50) & (0.5, 1.50) \\  
+$\mu$ &   & X.Xe-X & 7.1e-2 \\
+$\sigma$ &  1.8e-2 & 1. & 2.1e-1\\
+$\epsilon$  &  1.9e-1  & 3.8e-1 & 2.7e-2\\
+$\chi$ &  3.9e-1 &  6.8e-1 & 7.0e-2 \\ \hline
+$\Omega$ &  1.11 &   0.60 & 2.63
+\end{tabular}
+\caption{WILL metrics for different $\Psi$ using the best identified $p, q$ combination ($L=6$, $m=4$, 600 epochs)}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparing SAM, WIM, and WILL}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{table}
+\begin{tabular}{c || c| c| c }
+& SAM & WIM & WILL \\ \hline \hline 
+$\mu$ &  3.4e-2 & 6.0e-2 & 3.0e-1 \\
+$\sigma$ &  1.4e-1 & 1.1e-1 & 1.7e-2\\
+$\epsilon$  &  1.9e-2 & 9.2e-2 & 1.9e-1\\
+$\chi$ &  3.2e-2 & 5.1e-2  & 3.9e-1  \\ \hline 
+$\Omega$ &  4.46 & 3.19 & 1.11
+\end{tabular}
+\caption{Comparing loss function metrics for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs)}
+\end{table}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/omega_3_6_600}
-\caption{Comparing $\Omega$ for various $p$, $q$ ($L=6$, $m=3$, 600 epochs, $\Psi_\text{H23}$)}
+\includegraphics[width=\textwidth]{im/SAM_WIM_WILL_F}
+\caption{Comparing extracted phase functions for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs)}
 \end{figure}
 \end{column}
 \end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparing SAM, WIM, and WILL}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{table}
+\begin{tabular}{c || c| c| c }
+& SAM & WIM & WILL \\ \hline \hline 
+$\mu$ &  1.9e-1 & 2.3e-1 & 4.7e-1 \\
+$\sigma$ &  1.2e-1 & 1.0e-1 & 1.5e-1\\
+$\epsilon$  &  2.2e-1 & 4.2e-1 & 3.8e-1\\
+$\chi$ &  1.9e-1 & 2.0e-1 & 6.8e-1 \\ \hline 
+$\Omega$ &  1.39 & 1.05 & 0.60
+\end{tabular}
+\caption{Comparing loss function metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs)}
+\end{table}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/SAM_WIM_WILL_F2}
+\caption{Comparing extracted phase functions for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparing SAM, WIM, and WILL}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{table}
+\begin{tabular}{c || c| c| c }
+& SAM & WIM & WILL \\ \hline \hline 
+$\mu$ &  6.8e-2 & 8.4e-2 & 7.1e-2 \\
+$\sigma$ &  1.8e-1 & 1.2e-1 & 2.1e-1\\
+$\epsilon$  &  4.5e-2 & 1.8e-1 & 2.7e-2\\
+$\chi$ &  7.4e-2 & 1.0e-1 & 7.0e-2 \\ \hline 
+$\Omega$ &  2.75 & 2.07 & 2.63
+\end{tabular}
+\caption{Comparing loss function metrics for $\Psi_\text{H23}$ ($L=6$, $m=4$, 600 epochs)}
+\end{table}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/SAM_WIM_WILL_H}
+\caption{Comparing extracted phase functions for $\Psi_\text{H23}$ ($L=6$, $m=4$, 600 epochs)}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Loss Function Conclusion}
+...attempt to construct a wavefunction that improves upon SAM failed...
+in the process developed formalisation which makes discussion more rigorous and could be helpful for future loss function design...for now: no more ideas on how to imrpove ....
+Also identified 5 key metrics for QCNN performance in general ($\mu, \sigma, \chi, \epsilon, \Omega$)
 \end{frame}
 
 

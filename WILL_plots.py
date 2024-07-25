@@ -10,7 +10,9 @@ m=3
 L=6 
 e=600  
 
-p_arr =np.array([0.25, 0.5,0.75,1,1.25,1.5,1.75,2]) 
+meta=""
+
+p_arr =np.array([0.25, 0.5, 0.75,1,1.25,1.5,1.75,2]) 
 q_arr =np.array([0,0.5,1, 1.5, 2, 2.5, 3]) 
 
 pdf=True
@@ -32,8 +34,8 @@ figsize=(10,10)
  
 def get_data(m,L,e,p,q):
     # assuming "default conditions"
-    file=os.path.join("outputs",f"bar_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{Fraction(p).numerator}-{Fraction(p).denominator}_{Fraction(q).numerator}-{Fraction(q).denominator}.npy") 
-    alt_file=os.path.join("outputs",f"bar_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{p if p != 1 else int(p)}_{q}.npy")
+    file=os.path.join("outputs",f"bar_6_{m}(0)_{L}_{e}_psi_WILL_{meta}(S)(PR)(r)_{Fraction(p).numerator}-{Fraction(p).denominator}_{Fraction(q).numerator}-{Fraction(q).denominator}.npy") 
+    alt_file=os.path.join("outputs",f"bar_6_{m}(0)_{L}_{e}_psi_WILL_{meta}(S)(PR)(r)_{p if p != 1 else int(p)}_{q}.npy")
     if os.path.isfile(file):
         dic = np.load(file,allow_pickle='TRUE').item()
     elif os.path.isfile(alt_file):
@@ -67,8 +69,8 @@ def get_phase_target(m):
 def get_eps_chi(m,L,e,p,q):
     # assume "default conditions"
 
-    file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{Fraction(p).numerator}-{Fraction(p).denominator}_{Fraction(q).numerator}-{Fraction(q).denominator}.npy") 
-    alt_file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_(S)(PR)(r)_{p if p != 1 else int(p)}_{q}.npy")
+    file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_{meta}(S)(PR)(r)_{Fraction(p).numerator}-{Fraction(p).denominator}_{Fraction(q).numerator}-{Fraction(q).denominator}.npy") 
+    alt_file=os.path.join("outputs",f"weights_6_{m}(0)_{L}_{e}_psi_WILL_{meta}(S)(PR)(r)_{p if p != 1 else int(p)}_{q}.npy")
     if os.path.isfile(file):
         weights_phase=file 
     elif os.path.isfile(alt_file):
@@ -143,5 +145,5 @@ for i in np.arange(len(arrays)):
     cb.ax.tick_params(which='both',labelsize=ticksize)
     plt.tick_params(axis="both", labelsize=ticksize)
     plt.tight_layout()
-    plt.savefig(f"WILL/{labels[i]}_{m}_{L}_{e}{pdf_str}", bbox_inches='tight', dpi=500)
+    plt.savefig(f"WILL/{labels[i]}_{m}_{L}_{e}_{meta}{pdf_str}", bbox_inches='tight', dpi=500)
     plt.show()

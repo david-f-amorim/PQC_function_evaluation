@@ -7,7 +7,7 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-2_3-2.npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
 
 repeat_params=None
 
@@ -19,11 +19,11 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
@@ -31,7 +31,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = False
+phase_loss_comp = True 
 phase_shift_comp = False 
 phase_RP_comp=False 
 
@@ -401,10 +401,10 @@ if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr =np.array(["SAM","CE", "L1"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_CE_(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_L1_(S)(PR)(r).npy"
+    loss_arr =np.array(["SAM","WIM", "WILL"])
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_quadratic(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_quadratic(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_quadratic(S)(PR)(r)_3-4_5-2.npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]
@@ -420,7 +420,15 @@ if phase_loss_comp==True:
         phase *= (amplitude > 1e-15).astype(float) 
         phase_arr[i]=phase 
 
-        print(f"Norm {loss_arr[i]}: ",np.sum(amplitude**2))
+        bar =np.array(list(np.load("outputs/bar"+weights_arr[i][15:],allow_pickle='TRUE').item().values()))
+        mu = np.mean(bar) 
+        sigma = np.std(bar)
+        norm = np.sum(amplitude**2)
+        eps = 1 - norm 
+        chi = np.mean(np.abs(phase - phase_rounded))
+        omega= 1/(mu+sigma+eps+chi)
+
+        print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}  ")
 
     if delta_round:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following

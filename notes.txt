@@ -5,9 +5,15 @@ NOTES
 PLAY AROUND WITH WEIGHTED LOSS FUNCTION ???
 
 
-+++++++++++++++++ 
++++++++++++++++++++++++++++++++++++++++++++ 
+
+scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/PQC_function_evaluation/outputs/* Documents/Code/PQC_function_evaluation/outputs
+
+++++++++++++++++++++++++++++++++++++++++++++
 
 scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/PQC_function_evaluation/outputs Downloads/outputs
+
+
 
 scp -r 2538354a@quinn.physics.gla.ac.uk:/local1/scratch/qt-data/2538354a/code/PQC_function_evaluation/ampl_outputs Downloads/ampl_outputs
 
