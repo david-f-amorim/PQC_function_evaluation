@@ -7,7 +7,7 @@ from matplotlib import rcParams
 from tools import psi, dec_to_bin, bin_to_dec, full_encode
 
 m=3 
-L=9 
+L=6 
 e=600  
 
 p_arr =np.array([0.25, 0.5,0.75,1,1.25,1.5,1.75,2]) 
@@ -110,6 +110,21 @@ for i in np.arange(len(p_arr)-1):
         if verbose:
             print(f"[p={p_arr[i+1]:.2f}; q={q_arr[j+1]:.2f}] mean: {mean[j,i]:.2e}; std: {std[j,i]:.2e}; eps: {eps[j,i]:.2e}; chi: {chi[j,i]:.2e}; omega: {omega[j,i]:.2e}")
         
+#------------------
+mean_ind=np.unravel_index(np.argmin(mean, axis=None), mean.shape) 
+std_ind=np.unravel_index(np.argmin(std, axis=None), mean.shape) 
+eps_ind=np.unravel_index(np.argmin(eps, axis=None), mean.shape) 
+chi_ind=np.unravel_index(np.argmin(chi, axis=None), mean.shape) 
+omega_ind=np.unravel_index(np.argmax(omega, axis=None), mean.shape) 
+
+print("--------------")
+print(f"Minimum mu: p={p_arr[mean_ind[1]+1]:.2f}, q={q_arr[mean_ind[0]+1]:.2f}")
+print(f"Minimum sigma: p={p_arr[std_ind[1]+1]:.2f}, q={q_arr[std_ind[0]+1]:.2f}")
+print(f"Minimum epsilon: p={p_arr[eps_ind[1]+1]:.2f}, q={q_arr[eps_ind[0]+1]:.2f}")
+print(f"Minimum chi: p={p_arr[chi_ind[1]+1]:.2f}, q={q_arr[chi_ind[0]+1]:.2f}")
+print(f"Maximum omega: p={p_arr[omega_ind[1]+1]:.2f}, q={q_arr[omega_ind[0]+1]:.2f}")
+#------------------
+
 arrays = np.array([mean, std, eps, chi,omega])   
 labels = np.array(["mean", "std", "eps", "chi", "omega"])   
 

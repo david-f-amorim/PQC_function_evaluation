@@ -7,7 +7,7 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-4_1-1.npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_1-2_3-2.npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
 
 repeat_params=None
 
@@ -107,10 +107,20 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
+bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
+mu = np.mean(bar) 
+sigma = np.std(bar)
+norm = np.sum(amplitude**2)
+eps = 1 - norm 
+chi = np.mean(np.abs(phase - phase_rounded))
+omega= 1/(mu+sigma+eps+chi)
 print("-----------------------------------")
-print("Norm: ",f"{np.sum(amplitude**2):.5f}")
-print("Epsilon: ",f"{1-np.sum(amplitude**2):.3e}")
-print("Chi: ",f"{np.mean(np.abs(phase - phase_rounded)):.3e}") 
+print("Norm: ",f"{norm:.5f}")
+print("Epsilon: ",f"{eps:.3e}")
+print("Chi: ",f"{chi:.3e}") 
+print("Mu: ",f"{mu:.3e}") 
+print("Sigma: ",f"{sigma:.3e}") 
+print("Omega: ",f"{omega:.3f}") 
 print("-----------------------------------")
  
 #------------------------------------------------------------------------------

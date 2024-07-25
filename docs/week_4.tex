@@ -158,7 +158,7 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_shift_comp_psi_m3}
-\caption{Effects of shifted ILs for $\Psi_\text{Hayes2023}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
+\caption{Effects of shifted ILs for $\Psi_\text{H23}$ and $m=3$ ($L=6$, 600 epochs, SAM)}
 \end{figure}
 \end{column}
 \end{columns}
@@ -262,7 +262,7 @@ y_k = \begin{cases}
 \end{equation}
 \item By construction, this is closely related to the \alert{mismatch} 
 \begin{equation}
-\mathsf{M}(\ket{x}, \ket{y}) = 1 - |\braket{x|y}|
+\mathsf{M}(\ket{x}, \ket{y}) = 1 - \left|\sum_k x_k y_k\right|
 \end{equation}
 \item While effective, SAM's \alert{fundamental flaw} is that it does not directly take into account the amplitudes $x_k$ for $k$ where $y_k =0$ (i.e. where $[k]_m \neq \Psi([k]_n)$
 \end{itemize}
@@ -401,8 +401,8 @@ which is to be maximised
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item RUN TESTS WITH M=4 ??? FIND BEST COMBINATION ! THEN COMPARE TO MM! (including eps and chi) ....TRY AND LINK mu, sigma, chi, eps ... 
-\item Seems to suggest $p=0.25$, $q=1$ ? 
+\item ANALYSE PLOTS
+\item Seems to suggest $p=\frac{1}{2}$, $q=\frac{3}{2}$ ? 
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
