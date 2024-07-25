@@ -121,6 +121,24 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \begin{frame}
 maybe a handy summary table...
 ... waffle abouot linking variables to evaluarte performance... talk about "phase extraction problem".... FRAME THIS AS A CENTRAL THEME!!
+\begin{itemize}
+\item Let $\mathsf{M}_j$ be the mismatch between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
+\item Denote by $\ket{\psi}_\text{final}$ the state vector post phase extraction 
+\item Define $\tilde{\Psi}$ as the extracted phase function, in contrast to the target function, $\Psi$
+\end{itemize}
+
+\begin{table}
+\begin{tabular}{c | c | c | c}
+& \textbf{Definition} & \textbf{Description} & \textbf{Ideal Value} \\ \hline 
+$\boldsymbol{\mu}$ & $\text{Mean}(\mathsf{M}_j)$ & mean mismatch & 0  \\
+$\boldsymbol{\sigma}$ &  $\text{STDEV}(\mathsf{M}_j)$ & mismatch STDEV & 0  \\
+$\boldsymbol{\epsilon}$ & $1 - |\braket{\psi | \psi}_\text{final}|^2$ & normalisation error & 0 \\ 
+$\boldsymbol{\chi}$ &  $\text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)$ & phase function error & 0 \\
+$\boldsymbol{\Omega}$ & $\left( \mu + \sigma + \epsilon + \chi \right)^{-1}$ & super-metric & $\infty$
+\end{tabular}
+\caption{Metrics introduced to quantify QCNN performance}
+\end{table}
+
 \end{frame}
 
 \section{Changing Input Layer Structure}
@@ -231,11 +249,11 @@ $\Omega$ & 1.39 &  0.78
 \begin{table}
 \begin{tabular}{c || c| c | c| c }
 &none & CL & IL & both \\ \hline \hline 
-$\mu$ & ..   \\
-$\sigma$ & ..  \\
-$\epsilon$  & .. \\
-$\chi$ & .. \\ \hline 
-$\Omega$ & .. 
+$\mu$ & 1.3e-1 & 1.5e-1 & 4.5e-1 & 4.4e-1   \\
+$\sigma$ & 2.2e-1 & 2.1e-1 & 2.6e-1 & 1.6e-1  \\
+$\epsilon$  & 4.4e-2 & 1.5e-1 & 4.9e-1 & 5.8e-1 \\
+$\chi$ & 6.8e-2 & 8.0e-2 & 2.4e-1 & 2.3e-1 \\ \hline 
+$\Omega$ & 2.14 & 1.68 & 0.70 & 0.71 
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{table}
@@ -257,11 +275,11 @@ $\Omega$ & ..
 \begin{table}
 \begin{tabular}{c || c| c | c| c }
 &none & CL & IL & both \\ \hline \hline 
-$\mu$ & ..   \\
-$\sigma$ & ..  \\
-$\epsilon$  &.. \\
-$\chi$ & .. \\ \hline 
-$\Omega$ & ..
+$\mu$ & 2.3e-1 & 3.5e-1 & 5.8e-1 & 5.3e-1   \\
+$\sigma$ & 1.3e-1 & 1.6e-1 & 2.5e-1 & 2.0e-1  \\
+$\epsilon$  & 2.7e-1 & 4.4e-1 & 4.3e-1 & 3.3e-1 \\
+$\chi$ & 1.7e-1 & 1.8e-1 & 1.9e-0 & 3.6e-1 \\ \hline 
+$\Omega$ & 1.26 & 0.88 & 0.32 & 0.71
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{table}
