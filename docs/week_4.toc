@@ -1,5 +1,7 @@
 \babel@toc {UKenglish}{}
-\beamer@sectionintoc {1}{Changing Input Layer Structure}{6}{0}{1}
-\beamer@sectionintoc {2}{Fixing Parameters}{11}{0}{2}
-\beamer@sectionintoc {3}{Improving the Loss Function}{16}{0}{3}
-\beamer@sectionintoc {4}{Next Steps}{30}{0}{4}
+\beamer@sectionintoc {1}{Preliminaries}{2}{0}{1}
+\beamer@sectionintoc {2}{Changing Input Layer Structure}{7}{0}{2}
+\beamer@sectionintoc {3}{Fixing Parameters}{12}{0}{3}
+\beamer@sectionintoc {4}{Improving the Loss Function}{17}{0}{4}
+\beamer@sectionintoc {5}{Exploring Correlations}{30}{0}{5}
+\beamer@sectionintoc {6}{Next Steps}{35}{0}{6}

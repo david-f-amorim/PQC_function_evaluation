@@ -10,6 +10,7 @@ m = 4
 weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
 
 repeat_params=None
+psi_mode="psi"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -61,7 +62,7 @@ ampl_target = x_arr**(-7./6)
 ampl_target = ampl_target / np.sqrt(np.sum(ampl_target**2))
 
 # calculate target output for phase 
-phase_target = psi(np.linspace(0, 2**n, len(x_arr)))
+phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode)
 
 # calculate target output for wavefunc 
 h_target = ampl_target * np.exp(2*1.j*np.pi* phase_target)
@@ -309,7 +310,7 @@ if QGAN_comp:
 if phase_round_comp:
 
     if delta_round:
-        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following
 
     def phi_round(p):
         phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
@@ -365,7 +366,7 @@ if phase_L_comp==True:
         print("Norm: ",np.sum(amplitude**2))
 
     if delta_round:
-        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
     cmap = plt.get_cmap('Dark2', N)
@@ -431,7 +432,7 @@ if phase_loss_comp==True:
         print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}  ")
 
     if delta_round:
-        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
     cmap = plt.get_cmap('Dark2', N)
@@ -496,7 +497,7 @@ if phase_shift_comp==True:
         print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}  ")
 
     if delta_round:
-        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr)), mode=psi_mode) # set back to previous value for the following
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
     cmap = plt.get_cmap('Dark2', N)
@@ -565,7 +566,7 @@ if phase_RP_comp==True:
         print(f"[{label_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}  ")
 
     if delta_round:
-        phase_target = psi(np.linspace(0, 2**n, len(x_arr))) # set back to previous value for the following
+        phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
     cmap = plt.get_cmap('Dark2', N)

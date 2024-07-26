@@ -11,6 +11,7 @@ L=6
 e=600  
 
 meta=""
+psi_mode="psi"
 
 p_arr =np.array([0.25, 0.5, 0.75,1,1.25,1.5,1.75,2]) 
 q_arr =np.array([0,0.5,1, 1.5, 2, 2.5, 3]) 
@@ -56,7 +57,7 @@ def get_phase_target(m):
     x_arr = np.arange(x_min, x_max, dx) 
 
     # calculate target output for phase 
-    phase_target = psi(np.linspace(0, 2**n, len(x_arr)))
+    phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode)
 
     # calculate target for phase taking into account rounding 
     phase_reduced = np.modf(phase_target / (2* np.pi))[0] 

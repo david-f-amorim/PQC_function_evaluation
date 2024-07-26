@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{mathtools}
 \usepackage[UKenglish]{babel}
 \usepackage{enumerate}
 \usepackage{graphicx}
@@ -40,6 +41,7 @@
 
 \frame{\titlepage}
 
+\section{Preliminaries}
 \begin{frame}
 \frametitle{Aims for the Week}
 The following aims were set at the last meeting (22/07/2024):
@@ -55,6 +57,50 @@ Add the option to keep parameters fixed for each type of network layer.
 \begin{alertblock}{Improve Loss Function}
 Develop a distance measure taking into account digital encoding. Either incorporate this into weights for an existing loss function or define a new loss function on this basis. 
 \end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Additional Aim: Understanding Phase Extraction}
+\begin{itemize}
+\item Phase encoding is based on two operators, \alert{$\hat{Q}_\Psi$ and $\hat{R}$}, defined via 
+\begin{align}
+\hat{Q}_\Psi \ket{j}\ket{0} &= \ket{j}\ket{\Psi(j)} \\
+\hat{R} \ket{l} &= e^{i l} \ket{l}
+\end{align}
+\item Encoding proceeds in \alert{three steps}:
+\begin{equation}
+\ket{j}\ket{0}\xmapsto{\alert{\hat{Q}_\Psi}} \ket{j}\ket{\Psi(j)} \xmapsto{\alert{\hat{I} \otimes \hat{R}}} \ket{j} e^{i \Psi(j)} \ket{\Psi(j)} \xmapsto{\alert{\hat{Q}_\Psi^\dagger}} e^{i \Psi (j)} \ket{j} \ket{0}, 
+\end{equation}
+\item The phase $e^{i \Psi (j)}$ of the final state is extracted \alert{assuming the ancilla register is clear} (i.e. in the state $\ket{0}$)
+\item However, when $\hat{Q}_\Psi$ does not produce an eigenstate of $\hat{I} \otimes \hat{R}$, applying $\hat{Q}^\dagger$ does not generally clear the ancilla
+\item  A flawed implementation of $\hat{Q}_\Psi$ \alert{non-trivially affects the extracted phase function} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Additional Aim: Understanding Phase Extraction}
+\begin{itemize}
+\item To investigate this relationship between $\hat{Q}_\Psi$ and the extracted phase (`\alert{phase extraction problem}'), make the following definitions:
+\begin{itemize}
+\item $\mathsf{M}_j$:  mismatch between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
+\item $\ket{\psi}_\text{final}$: state vector post phase extraction 
+\item $\tilde{\Psi}$: extracted phase function  (in contrast to the target function, $\Psi$)
+\end{itemize}
+\item Based on the above, define \alert{five metrics} that quantify the quality of $\hat{Q}_\Psi$ as well as of phase extraction:
+\end{itemize}
+
+\begin{table}
+\begin{tabular}{c | c | c | c}
+& \textbf{Definition} & \textbf{Description} & \textbf{Ideal Value} \\ \hline 
+$\boldsymbol{\mu}$ & $\text{Mean}(\mathsf{M}_j)$ & mean mismatch & 0  \\
+$\boldsymbol{\sigma}$ &  $\text{STDEV}(\mathsf{M}_j)$ & mismatch STDEV & 0  \\
+$\boldsymbol{\epsilon}$ & $1 - |\braket{\psi | \psi}_\text{final}|^2$ & normalisation error & 0 \\ 
+$\boldsymbol{\chi}$ &  $\text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)$ & phase function error & 0 \\
+$\boldsymbol{\Omega}$ & $\left( \mu + \sigma + \epsilon + \chi \right)^{-1}$ & super-metric & $\infty$
+\end{tabular}
+\caption{Metrics introduced to quantify QCNN performance}
+\end{table}
+
 \end{frame}
 
 \begin{frame}
@@ -88,59 +134,6 @@ Develop a distance measure taking into account digital encoding. Either incorpor
 \end{table}
 \end{frame}
 
-\begin{frame}
-\frametitle{Useful Metrics}
-\begin{itemize}
-\item The following metrics are useful when testing and comparing QCNN performance:
-\begin{itemize}
-\item Let $\mathsf{M}_j$ be the \alert{mismatch} between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
-\item Then define 
-\begin{align}
-\mu &\equiv \text{Mean}(\mathsf{M}_j) \\
-\sigma &\equiv \text{STDEV}(\mathsf{M}_j)
-\end{align}
-\end{itemize}
-\item Consider additional figures of merit to explore the \alert{link between mismatch and successful phase extraction}:
-\begin{itemize}
-\item Define the \alert{error on the normalisation} post phase extraction: 
-\begin{equation}
-\epsilon \equiv 1 - |\braket{\psi | \psi}_\text{final}|^2 
-\end{equation}
-\item Define the mean absolute \alert{error on the extracted phase function}, $\tilde{\Psi}$, compared to the target function, $\Psi$: 
-\begin{equation}
-\chi \equiv \text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)
-\end{equation}
-\end{itemize}
-\item Finally define the \alert{super-metric} 
-\begin{equation}
-\Omega \equiv \left( \mu + \sigma + \epsilon + \chi \right)^{-1}
-\end{equation}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-maybe a handy summary table...
-... waffle abouot linking variables to evaluarte performance... talk about "phase extraction problem".... FRAME THIS AS A CENTRAL THEME!!
-\begin{itemize}
-\item Let $\mathsf{M}_j$ be the mismatch between $\ket{j} \ket{\Psi(j)}$ and $\hat{Q}_\Psi \ket{j}\ket{0}$
-\item Denote by $\ket{\psi}_\text{final}$ the state vector post phase extraction 
-\item Define $\tilde{\Psi}$ as the extracted phase function, in contrast to the target function, $\Psi$
-\end{itemize}
-
-\begin{table}
-\begin{tabular}{c | c | c | c}
-& \textbf{Definition} & \textbf{Description} & \textbf{Ideal Value} \\ \hline 
-$\boldsymbol{\mu}$ & $\text{Mean}(\mathsf{M}_j)$ & mean mismatch & 0  \\
-$\boldsymbol{\sigma}$ &  $\text{STDEV}(\mathsf{M}_j)$ & mismatch STDEV & 0  \\
-$\boldsymbol{\epsilon}$ & $1 - |\braket{\psi | \psi}_\text{final}|^2$ & normalisation error & 0 \\ 
-$\boldsymbol{\chi}$ &  $\text{Mean}(|\tilde{\Psi}(j) - \Psi(j)|)$ & phase function error & 0 \\
-$\boldsymbol{\Omega}$ & $\left( \mu + \sigma + \epsilon + \chi \right)^{-1}$ & super-metric & $\infty$
-\end{tabular}
-\caption{Metrics introduced to quantify QCNN performance}
-\end{table}
-
-\end{frame}
-
 \section{Changing Input Layer Structure}
 
 \begin{frame}
@@ -162,11 +155,11 @@ $\boldsymbol{\Omega}$ & $\left( \mu + \sigma + \epsilon + \chi \right)^{-1}$ & s
 \begin{table}
 \begin{tabular}{c || c| c }
 & shifts & no shifts \\ \hline \hline 
-$\mu$ & 3.4e-2 & \alert{3.2e-2}  \\
-$\sigma$ & 1.4e-1 & 1.5e-1  \\
-$\epsilon$  & 2.0e-2 & 7.5e-2 \\
-$\chi$ & 3.2e-2 & 1.3e-0    \\ \hline 
-$\Omega$ &   4.46 & 0.63
+$\mu$ & 3.4e-2 & \alert{\textbf{3.2e-2}}  \\
+$\sigma$ & \textbf{1.4e-1} & 1.5e-1  \\
+$\epsilon$  & \textbf{2.0e-2} & 7.5e-2 \\
+$\chi$ & \textbf{3.2e-2} & 1.3e-0    \\ \hline 
+$\Omega$ &  \textbf{ 4.46} & 0.63
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f$ ($L=6$, $m=3$, 600 epochs, SAM)}
 \end{table}
@@ -188,11 +181,11 @@ $\Omega$ &   4.46 & 0.63
 \begin{table}
 \begin{tabular}{c || c| c }
 & shifts & no shifts \\ \hline \hline 
-$\mu$ & 1.9e-1 & 2.4e-1   \\
-$\sigma$ & 1.2e-1 & 1.5e-1  \\
-$\epsilon$  & 2.2e-1 & 4.7e-1 \\
-$\chi$ & 1.9e-1 & 4.3e-1 \\ \hline 
-$\Omega$ & 1.39 &  0.78 
+$\mu$ & \textbf{1.9e-1} & 2.4e-1   \\
+$\sigma$ & \textbf{1.2e-1} & 1.5e-1  \\
+$\epsilon$  & \textbf{2.2e-1} & 4.7e-1 \\
+$\chi$ &\textbf{ 1.9e-1} & 4.3e-1 \\ \hline 
+$\Omega$ & \textbf{1.39} &  0.78 
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=3$, 600 epochs, SAM)}
 \end{table}
@@ -245,20 +238,20 @@ $\Omega$ & 1.39 &  0.78
 \begin{frame}
 \frametitle{Fixing Parameters}
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.52\textwidth}
 \begin{table}
 \begin{tabular}{c || c| c | c| c }
 &none & CL & IL & both \\ \hline \hline 
-$\mu$ & 1.3e-1 & 1.5e-1 & 4.5e-1 & 4.4e-1   \\
-$\sigma$ & 2.2e-1 & 2.1e-1 & 2.6e-1 & 1.6e-1  \\
-$\epsilon$  & 4.4e-2 & 1.5e-1 & 4.9e-1 & 5.8e-1 \\
-$\chi$ & 6.8e-2 & 8.0e-2 & 2.4e-1 & 2.3e-1 \\ \hline 
-$\Omega$ & 2.14 & 1.68 & 0.70 & 0.71 
+$\mu$ & \textbf{1.3e-1} & 1.5e-1 & 4.5e-1 & 4.4e-1   \\
+$\sigma$ & 2.2e-1 & \textbf{2.1e-1} & 2.6e-1 & 1.6e-1  \\
+$\epsilon$  & \textbf{4.4e-2} & 1.5e-1 & 4.9e-1 & 5.8e-1 \\
+$\chi$ & \textbf{6.8e-2} & 8.0e-2 & 2.4e-1 & 2.3e-1 \\ \hline 
+$\Omega$ & \textbf{2.14} & 1.68 & 0.70 & 0.71 
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{table}
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.48\textwidth}
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_RP_comp_linear_m4}
@@ -271,20 +264,20 @@ $\Omega$ & 2.14 & 1.68 & 0.70 & 0.71
 \begin{frame}
 \frametitle{Fixing Parameters}
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.52\textwidth}
 \begin{table}
 \begin{tabular}{c || c| c | c| c }
 &none & CL & IL & both \\ \hline \hline 
-$\mu$ & 2.3e-1 & 3.5e-1 & 5.8e-1 & 5.3e-1   \\
-$\sigma$ & 1.3e-1 & 1.6e-1 & 2.5e-1 & 2.0e-1  \\
-$\epsilon$  & 2.7e-1 & 4.4e-1 & 4.3e-1 & 3.3e-1 \\
-$\chi$ & 1.7e-1 & 1.8e-1 & 1.9e-0 & 3.6e-1 \\ \hline 
-$\Omega$ & 1.26 & 0.88 & 0.32 & 0.71
+$\mu$ & \textbf{2.3e-1} & 3.5e-1 & 5.8e-1 & 5.3e-1   \\
+$\sigma$ & \textbf{1.3e-1} & 1.6e-1 & 2.5e-1 & 2.0e-1  \\
+$\epsilon$  &\textbf{ 2.7e-1} & 4.4e-1 & 4.3e-1 & 3.3e-1 \\
+$\chi$ & \textbf{1.7e-1} & 1.8e-1 & 1.9e-0 & 3.6e-1 \\ \hline 
+$\Omega$ & \textbf{1.26} & 0.88 & 0.32 & 0.71
 \end{tabular}
 \caption{Comparing metrics for $\Psi(f) \sim f^2$ ($L=6$, $m=4$, 600 epochs, SAM)}
 \end{table}
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.48\textwidth}
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/phase_RP_comp_quadratic_m4}
@@ -304,9 +297,8 @@ $\Omega$ & 1.26 & 0.88 & 0.32 & 0.71
 \item `\emph{IL}': only IL parameters fixed 
 \item `\emph{both}': all parameters fixed  
 \end{itemize} 
-\item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance} 
-\item This is likely due to a reduction of the search space 
-\item Note that `\emph{IL}' as well as `\emph{both}' lead to \alert{\emph{incomplete phase extraction}} and hence somewhat meaningless results 
+\item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance}, likely due to a reduction of the search space  
+\item Note that `\emph{IL}' as well as `\emph{both}' lead to high $\epsilon$ and hence somewhat meaningless results 
 \item Thus, especially taking into account the equivalent computational times, \alert{not keeping parameters fixed yields better results} 
 \item These results suggest a particular importance of ILs compared to CLs 
 \end{itemize}
@@ -315,7 +307,7 @@ $\Omega$ & 1.26 & 0.88 & 0.32 & 0.71
 \section{Improving the Loss Function}
 
 \begin{frame}
-\frametitle{Preliminary Definitions}
+\frametitle{Formalisation}
 \begin{itemize}
 \item Consider a computational basis state, $\ket{k}$, of the \alert{combined} input-register-target-register \alert{system} 
 \item The state $\ket{k}$ is associated with a \alert{bit string} $k = \{0,1 \}^{n+m}$
@@ -332,7 +324,7 @@ and referred to via its \alert{coefficients} $z_k$
 \end{frame}
 
 \begin{frame}
-\frametitle{Preliminary Definitions}
+\frametitle{Formalisation}
 \begin{itemize}
 \item When training in superposition, the \alert{desired state} of the system is 
 \begin{equation}
@@ -370,10 +362,10 @@ y_k = \begin{cases}
 \begin{itemize}
 \item Consider $k=a$ and $k=b$ with $[k]_m \neq \Psi([k]_n)$ for both and 
 \begin{equation}
-\Big|[a]_m - \Psi([a]_n) \Big| \geq \Big|[b]_m - \Psi([b]_n) \Big| 
+\Big|[a]_m - \Psi([a]_n) \Big| > \Big|[b]_m - \Psi([b]_n) \Big| 
 \end{equation}
 \item To improve performance, the loss function should punish a non-zero $x_a$ more than a non-zero $x_b$ which is not the case for SAM
-\item This could be achieved via a \alert{weighted mismatch}, 
+\item This could be achieved via a \alert{weighted mismatch (WIM)}, 
 \begin{equation}
 \text{WIM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k \tilde{w}_k x_k y_k \right\vert, 
 \end{equation}
@@ -390,27 +382,15 @@ w_k = \sum^{2^m -1}_{\substack{l=0, \\ l \neq [k]_m}} \Big|x_{[k]_n \diamond l} 
 \end{equation}
 with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing
 \item Implementing this \alert{proved to be ineffective}, with no improvement on SAM  (see later)
-\item This raises broader questions about the \alert{feasibility of WIM}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{The Limits of WIM}
-\begin{itemize}
-\item SAM is effective as it learns to maximise the $x_k$ for $k$ with $y_k \neq 0$ without regard for the remaining $x_k$
-\item It effectively optimises over a \alert{reduced set of states} 
-\item This is, presumably, why it outperforms more global loss functions, which directly take into account all coefficients, like L$_1$ loss 
-\item Thus, it seems that SAM's \alert{`fundamental flaw'}, of disregarding most $x_k$, is really the \alert{basis of its success} 
-\item Adding weights to SAM (WIM) likely is insufficient to alter its fundamental dynamic (or will alter it detrimentally)  
-\item Therefore, \alert{WIM will be abandoned for the foreseeable future}
+\item This raises broader questions about the \alert{feasibility of WIM}: is adding weights sufficient to alter SAM's fundamental dynamic of neglecting $x_k$ fpr $k$ with $y_k =0$?
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Introducing WILL}
 \begin{itemize}
-\item To improve on SAM, it could be beneficial to return to a loss function which more directly takes into account all $x_k$ (e.g. L$_1$ loss)
-\item More generally, define \alert{L$_\text{p}$ loss} as 
+\item To improve on SAM, it could instead be beneficial to return to a loss function which more directly takes into account all $x_k$ 
+\item Define \alert{L$_\text{p}$ loss} as 
 \begin{equation}
 \text{LL}_\text{p} (\ket{x}, \ket{y}) = \left( \sum_k |x_k -y_k|^p \right)^{1/p}
 \end{equation}
@@ -543,16 +523,88 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.63
 
 \begin{frame}
 \frametitle{Loss Function Conclusion}
-...attempt to construct a wavefunction that improves upon SAM failed...
-in the process developed formalisation which makes discussion more rigorous and could be helpful for future loss function design...for now: no more ideas on how to imrpove ....
-Also identified 5 key metrics for QCNN performance in general ($\mu, \sigma, \chi, \epsilon, \Omega$)
-
-
-AT THIS POINT MOSTLY WINDOW DRESSING... 
-
-ALSO CALCULATE METRICS FOR LAYER STRUCTURE AND FIXED PARAMETERS??!!
+\begin{itemize}
+\item The attempts to improve upon SAM via \alert{WIM and WILL have failed} 
+\item No further \emph{ansatz} to design a new loss function could be identified  
+\item Further \alert{QCNN improvements} might have to come from something \alert{other than the loss function} 
+\end{itemize}
 \end{frame}
 
+\section{Exploring Correlations}
+
+\begin{frame}
+\frametitle{Exploring Correlations}
+\begin{itemize}
+\item The following investigates \alert{correlations between the metrics} $\mu$, $\sigma$, $\chi$, and $\epsilon$ in an attempt to better understand the relationship between phase extraction and $\hat{Q}_\Psi$
+\item This is done by analysing the outputs of $N=267$ different QCNNs with various different configurations (i.e. $L$, $m$, loss functions, $\Psi$,...)
+\item Key questions to answer are:
+\begin{itemize}
+\item Is a low normalisation error $\epsilon$ an indicator of a good fit, i.e. low $\chi$?
+\item Is a low mean mismatch $\mu$ a guarantee of low $\epsilon$, $\chi$? 
+\item What is the role of $\sigma$?
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exploring Correlations}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/eps_v_chi}
+\caption{Correlation $R$ between $\epsilon$ and $\chi$.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+includegraphics[width=\textwidth]{im/mu_v_chi}
+\caption{Correlation $R$ between $\mu$ and $\chi$.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exploring Correlations}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/mu_v_eps}
+\caption{Correlation $R$ between $\mu$ and $\epsilon$.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+includegraphics[width=\textwidth]{im/mu_v_sigma}
+\caption{Correlation $R$ between $\mu$ and $\sigma$.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exploring Correlations}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/sigma_v_eps}
+\caption{Correlation $R$ between $\sigma$ and $\epsilon$.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+includegraphics[width=\textwidth]{im/sigma_v_chi}
+\caption{Correlation $R$ between $\sigma$ and $\chi$.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
 
 \section{Next Steps}
 

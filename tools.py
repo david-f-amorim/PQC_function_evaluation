@@ -1133,7 +1133,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     else:
         return state_v
 
-def psi(x):
+def psi(x, mode="psi"):
     """
     Phase function to encode for Hayes 2023. 
 
@@ -1168,10 +1168,15 @@ def psi(x):
         
     x = x_trans(x)
 
-    #out = np.pi /2 *(1+ np.sin(x /4 )) 
-    out = 0.0001* x**2 # change this back later 
-    #out = 0.5 + 0.01*x 
-    #out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
+    if mode=="sin":
+        out = np.pi /2 *(1+ np.sin(x /4 )) 
+    elif mode=="quadratic":    
+        out = 0.0001* x**2 # change this back later 
+    elif mode=="linear":    
+        out = 0.5 + 0.01*x
+    elif mode=="psi":     
+        out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
+    
     return out
 
 def A_generate_network(n,L, repeat_params=False):
