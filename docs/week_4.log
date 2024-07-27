@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  26 JUL 2024 10:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  27 JUL 2024 19:05
 entering extended mode
 **./week_4.tex
 (week_4.tex
@@ -1104,7 +1104,7 @@ ne 201.
 <im/phase_shift_comp_psi_m3.pdf, id=419, 705.3834pt x 715.47299pt>
 File: im/phase_shift_comp_psi_m3.pdf Graphic file (type pdf)
 <use im/phase_shift_comp_psi_m3.pdf>
-Package pdftex.def Info: im/phase_shift_comp_psi_m3.pdf  used on input line 223
+Package pdftex.def Info: im/phase_shift_comp_psi_m3.pdf  used on input line 221
 .
 (pdftex.def)             Requested size: 171.14764pt x 173.59479pt.
  [11
@@ -1114,20 +1114,20 @@ Package pdftex.def Info: im/phase_shift_comp_psi_m3.pdf  used on input line 223
 ] [13
 
 ]
-Overfull \hbox (11.93031pt too wide) in paragraph at lines 262--262
+Overfull \hbox (11.93031pt too wide) in paragraph at lines 260--260
  [] 
  []
 
 <im/phase_RP_comp_linear_m4.pdf, id=516, 715.47299pt x 719.27pt>
 File: im/phase_RP_comp_linear_m4.pdf Graphic file (type pdf)
 <use im/phase_RP_comp_linear_m4.pdf>
-Package pdftex.def Info: im/phase_RP_comp_linear_m4.pdf  used on input line 262
+Package pdftex.def Info: im/phase_RP_comp_linear_m4.pdf  used on input line 260
 .
 (pdftex.def)             Requested size: 164.30028pt x 165.1652pt.
 [14
 
  <./im/phase_RP_comp_linear_m4.pdf>]
-Overfull \hbox (12.90356pt too wide) in paragraph at lines 288--288
+Overfull \hbox (12.90356pt too wide) in paragraph at lines 286--286
  [] 
  []
 
@@ -1135,7 +1135,7 @@ Overfull \hbox (12.90356pt too wide) in paragraph at lines 288--288
 File: im/phase_RP_comp_quadratic_m4.pdf Graphic file (type pdf)
 <use im/phase_RP_comp_quadratic_m4.pdf>
 Package pdftex.def Info: im/phase_RP_comp_quadratic_m4.pdf  used on input line 
-288.
+286.
 (pdftex.def)             Requested size: 164.30028pt x 164.56668pt.
 [15
 
@@ -1160,94 +1160,80 @@ Package pdftex.def Info: im/phase_RP_comp_quadratic_m4.pdf  used on input line
 <im/omega_3_6_600_linear.pdf, id=824, 715.47299pt x 676.55568pt>
 File: im/omega_3_6_600_linear.pdf Graphic file (type pdf)
 <use im/omega_3_6_600_linear.pdf>
-Package pdftex.def Info: im/omega_3_6_600_linear.pdf  used on input line 423.
+Package pdftex.def Info: im/omega_3_6_600_linear.pdf  used on input line 421.
 (pdftex.def)             Requested size: 171.14764pt x 161.82953pt.
 <im/omega_3_6_600_quadratic.pdf, id=825, 715.47299pt x 676.55568pt>
 File: im/omega_3_6_600_quadratic.pdf Graphic file (type pdf)
 <use im/omega_3_6_600_quadratic.pdf>
-Package pdftex.def Info: im/omega_3_6_600_quadratic.pdf  used on input line 423
+Package pdftex.def Info: im/omega_3_6_600_quadratic.pdf  used on input line 421
 .
 (pdftex.def)             Requested size: 171.14764pt x 161.82953pt.
  [24
 
- <./im/omega_3_6_600_linear.pdf> <./im/omega_3_6_600_quadratic.pdf>] [25
-
-]
-<im/SAM_WIM_WILL_F.pdf, id=897, 715.47299pt x 715.47299pt>
+ <./im/omega_3_6_600_linear.pdf> <./im/omega_3_6_600_quadratic.pdf>]
+<im/SAM_WIM_WILL_F.pdf, id=870, 715.47299pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F.pdf  used on input line 470.
+Package pdftex.def Info: im/SAM_WIM_WILL_F.pdf  used on input line 447.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-Overfull \vbox (2.06783pt too high) detected at line 470
+Overfull \vbox (2.06783pt too high) detected at line 447
  []
 
-[26
+[25
 
  <./im/SAM_WIM_WILL_F.pdf>]
-<im/SAM_WIM_WILL_F2.pdf, id=940, 731.54634pt x 715.47299pt>
+<im/SAM_WIM_WILL_F2.pdf, id=914, 731.54634pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F2.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F2.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F2.pdf  used on input line 496.
+Package pdftex.def Info: im/SAM_WIM_WILL_F2.pdf  used on input line 473.
 (pdftex.def)             Requested size: 171.14764pt x 167.38289pt.
- [27
+ [26
 
  <./im/SAM_WIM_WILL_F2.pdf>]
-<im/SAM_WIM_WILL_H.pdf, id=980, 742.67374pt x 715.47299pt>
+<im/SAM_WIM_WILL_H.pdf, id=954, 742.67374pt x 715.47299pt>
 File: im/SAM_WIM_WILL_H.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_H.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_H.pdf  used on input line 522.
+Package pdftex.def Info: im/SAM_WIM_WILL_H.pdf  used on input line 499.
 (pdftex.def)             Requested size: 171.14764pt x 164.87192pt.
- [28
+ [27
 
- <./im/SAM_WIM_WILL_H.pdf>] [29
+ <./im/SAM_WIM_WILL_H.pdf>] [28
 
-] (week_4.toc) [30
+] (week_4.toc) [29
 
-] [31
+] [30
 
 ]
-<im/eps_v_chi_.pdf, id=1107, 715.20367pt x 715.47299pt>
+<im/eps_v_chi_.pdf, id=1081, 715.20367pt x 715.47299pt>
 File: im/eps_v_chi_.pdf Graphic file (type pdf)
 <use im/eps_v_chi_.pdf>
-Package pdftex.def Info: im/eps_v_chi_.pdf  used on input line 567.
+Package pdftex.def Info: im/eps_v_chi_.pdf  used on input line 544.
 (pdftex.def)             Requested size: 171.14764pt x 171.21483pt.
-<im/mu_v_chi_.pdf, id=1108, 715.47299pt x 715.47299pt>
+<im/mu_v_chi_.pdf, id=1082, 715.47299pt x 715.47299pt>
 File: im/mu_v_chi_.pdf Graphic file (type pdf)
 <use im/mu_v_chi_.pdf>
-Package pdftex.def Info: im/mu_v_chi_.pdf  used on input line 567.
+Package pdftex.def Info: im/mu_v_chi_.pdf  used on input line 544.
+(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
+ [31
+
+ <./im/eps_v_chi_.pdf> <./im/mu_v_chi_.pdf>]
+<im/mu_v_eps_.pdf, id=1126, 715.47299pt x 715.14168pt>
+File: im/mu_v_eps_.pdf Graphic file (type pdf)
+<use im/mu_v_eps_.pdf>
+Package pdftex.def Info: im/mu_v_eps_.pdf  used on input line 564.
+(pdftex.def)             Requested size: 171.14764pt x 171.05916pt.
+<im/mu_v_sigma_.pdf, id=1127, 715.47299pt x 715.47299pt>
+File: im/mu_v_sigma_.pdf Graphic file (type pdf)
+<use im/mu_v_sigma_.pdf>
+Package pdftex.def Info: im/mu_v_sigma_.pdf  used on input line 564.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
  [32
 
- <./im/eps_v_chi_.pdf> <./im/mu_v_chi_.pdf>]
-<im/mu_v_eps_.pdf, id=1151, 715.47299pt x 715.14168pt>
-File: im/mu_v_eps_.pdf Graphic file (type pdf)
-<use im/mu_v_eps_.pdf>
-Package pdftex.def Info: im/mu_v_eps_.pdf  used on input line 587.
-(pdftex.def)             Requested size: 171.14764pt x 171.05916pt.
-<im/mu_v_sigma_.pdf, id=1152, 715.47299pt x 715.47299pt>
-File: im/mu_v_sigma_.pdf Graphic file (type pdf)
-<use im/mu_v_sigma_.pdf>
-Package pdftex.def Info: im/mu_v_sigma_.pdf  used on input line 587.
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
- [33
+ <./im/mu_v_eps_.pdf> <./im/mu_v_sigma_.pdf>] (week_4.toc)
+[33
 
- <./im/mu_v_eps_.pdf> <./im/mu_v_sigma_.pdf>]
-<im/sigma_v_eps_.pdf, id=1194, 714.06079pt x 715.14168pt>
-File: im/sigma_v_eps_.pdf Graphic file (type pdf)
-<use im/sigma_v_eps_.pdf>
-Package pdftex.def Info: im/sigma_v_eps_.pdf  used on input line 607.
-(pdftex.def)             Requested size: 171.14764pt x 171.40836pt.
-<im/sigma_v_chi_.pdf, id=1195, 714.06079pt x 715.47299pt>
-File: im/sigma_v_chi_.pdf Graphic file (type pdf)
-<use im/sigma_v_chi_.pdf>
-Package pdftex.def Info: im/sigma_v_chi_.pdf  used on input line 607.
-(pdftex.def)             Requested size: 171.14764pt x 171.48776pt.
- [34
-
- <./im/sigma_v_eps_.pdf> <./im/sigma_v_chi_.pdf>] (week_4.toc) [35
-
-] [36
+] [34
 
 ]
 \tf@nav=\write6
@@ -1264,41 +1250,45 @@ Package rerunfilecheck Info: File `week_4.out' has not changed.
 (rerunfilecheck)             Checksum: F8149E40918B1DCD61ED68018155E0DC;880.
  ) 
 Here is how much of TeX's memory you used:
- 24315 strings out of 478864
- 460817 string characters out of 2848660
+ 24327 strings out of 478864
+ 461016 string characters out of 2848660
  764087 words of memory out of 3000000
- 41586 multiletter control sequences out of 15000+600000
- 417267 words of font info for 82 fonts, out of 8000000 for 9000
+ 41598 multiletter control sequences out of 15000+600000
+ 419185 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,782s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmbx10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Use
-rs/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb
-><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr17.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmr6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/da
-vid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C
-:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmsy6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week_4.pdf (36 pages, 744781 bytes).
+pdfTeX warning (dest): name{Navigation35} has been referenced but does not ex
+ist, replaced by a fixed one
+
+<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+bx10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users
+/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><
+C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+17.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmr6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/david/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Us
+ers/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.
+pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmsy6.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week_4.pdf (34 pages, 724784 bytes).
 PDF statistics:
- 1396 PDF objects out of 1440 (max. 8388607)
- 79 named destinations out of 1000 (max. 500000)
- 321 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1331 PDF objects out of 1440 (max. 8388607)
+ 76 named destinations out of 1000 (max. 500000)
+ 311 words of extra memory for PDF output out of 10000 (max. 10000000)
 

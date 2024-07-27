@@ -206,10 +206,8 @@ $\Omega$ & \textbf{1.39} &  0.78
 \begin{column}{0.5\textwidth}
 \begin{itemize}
 \item The data for `no shifts' was obtained by setting  $s=0$ for all ILs instead of incrementing $s$
-\item This should be equivalent to last week's circuit structure 
-\item However, the `no shifts' results are significantly worse than the results shown last week (\alert{???})
-\item Thus, the improvements due to the new IL structure are somewhat exaggerated  
-\item Nonetheless, \alert{increased IL connectivity clearly leads to improved performance}
+\item This corresponds to last week's circuit structure of each input qubit controlling precisely one target qubit
+\item Clearly, \alert{increased IL connectivity leads to improved performance}
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -230,7 +228,7 @@ $\Omega$ & \textbf{1.39} &  0.78
 \begin{itemize}
 \item Implemented the option to \alert{fix parameters for each layer type}
 \item This means that each instance of a layer type (IL, AA-CL, NN-CL) uses the same set of parameters 
-\item This significantly \alert{reduces the number of trainable parameters} at large $L$
+\item This \alert{reduces the number of trainable parameters}, particularly at large $L$
 \item Surprisingly, reducing the parameter space \alert{produces no noticeable speed-up} (so-called qiskit primitives, i.e. the sampler, take up roughly 95\% of the computational time)
 \end{itemize}
 \end{frame}
@@ -297,10 +295,10 @@ $\Omega$ & \textbf{1.26} & 0.88 & 0.32 & 0.71
 \item `\emph{IL}': only IL parameters fixed 
 \item `\emph{both}': all parameters fixed  
 \end{itemize} 
-\item Evidently, keeping parameters fixed leads to (slightly, for `\emph{CL}', or drastically, for `\emph{IL}' and `\emph{both}') \alert{worse performance}, likely due to a reduction of the search space  
-\item Note that `\emph{IL}' as well as `\emph{both}' lead to high $\epsilon$ and hence somewhat meaningless results 
+\item Evidently, keeping parameters fixed leads to  \alert{worse performance}, likely due to a reduction of the search space  
+\item Note that fixing parameters leads to high $\epsilon$ and hence potentially somewhat meaningless results 
 \item Thus, especially taking into account the equivalent computational times, \alert{not keeping parameters fixed yields better results} 
-\item These results suggest a particular importance of ILs compared to CLs 
+\item Notably `\emph{IL}' results in worse performance than `\emph{CL}',  suggesting a particular importance of ILs compared to CLs 
 \end{itemize}
 \end{frame}
 
@@ -382,7 +380,7 @@ w_k = \sum^{2^m -1}_{\substack{l=0, \\ l \neq [k]_m}} \Big|x_{[k]_n \diamond l} 
 \end{equation}
 with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing
 \item Implementing this \alert{proved to be ineffective}, with no improvement on SAM  (see later)
-\item This raises broader questions about the \alert{feasibility of WIM}: is adding weights sufficient to alter SAM's fundamental dynamic of neglecting $x_k$ fpr $k$ with $y_k =0$?
+\item This raises broader questions about the \alert{feasibility of WIM}: is adding weights sufficient to alter SAM's fundamental dynamic of neglecting $x_k$ for $k$ with $y_k =0$?
 \end{itemize}
 \end{frame}
 
@@ -423,27 +421,6 @@ with the $\tilde{w}_k$ obtained from the $w_k$ via normalisation and smoothing
 \end{frame}
 
 \begin{frame}
-\frametitle{Testing WILL}
-\begin{itemize}
-\item These tests already reveal WILL's \alert{subpar performance}
-\end{itemize}
-\vspace{1cm}
-\begin{table}
-\centering
-\begin{tabular}{c || c| c | c }
-& $\Psi(f)\sim f$ & $\Psi(f) \sim f^2$ & $\Psi_\text{H23}$  \\ \hline \hline 
-$(p,q)$ & (0.75, 1.50) & (0.75, 2.50) & (0.5, 1.50) \\  
-$\mu$ & 3.0e-1  & 4.7e-1 & 7.1e-2 \\
-$\sigma$ &  1.8e-2 & 1.5e-1 & 2.1e-1\\
-$\epsilon$  &  1.9e-1  & 3.8e-1 & 2.7e-2\\
-$\chi$ &  3.9e-1 &  6.8e-1 & 7.0e-2 \\ \hline
-$\Omega$ &  1.11 &   0.60 & 2.63
-\end{tabular}
-\caption{WILL metrics for different $\Psi$ using the best identified $p, q$ combination ($L=6$, $m=4$, 600 epochs)}
-\end{table}
-\end{frame}
-
-\begin{frame}
 \frametitle{Comparing SAM, WIM, and WILL}
 \begin{columns}
 \begin{column}{0.5\textwidth}
@@ -451,7 +428,7 @@ $\Omega$ &  1.11 &   0.60 & 2.63
 \begin{tabular}{c || c| c| c }
 & SAM & WIM & WILL \\ \hline \hline 
 $\mu$ &  \textbf{3.4e-2} & 6.0e-2 & 3.0e-1 \\
-$\sigma$ &  1.4e-1 &\textbf{ 1.1e-1} & 1.7e-2\\
+$\sigma$ &  1.4e-1 &1.1e-1 & \textbf{ 1.7e-2}\\
 $\epsilon$  &  \textbf{1.9e-2} & 9.2e-2 & 1.9e-1\\
 $\chi$ & \textbf{ 3.2e-2} & 5.1e-2  & 3.9e-1  \\ \hline 
 $\Omega$ &  \textbf{4.46} & 3.19 & 1.11
@@ -524,8 +501,8 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.63
 \begin{frame}
 \frametitle{Loss Function Conclusion}
 \begin{itemize}
-\item The attempts to improve upon SAM via \alert{WIM and WILL have failed} 
-\item No further \emph{ansatz} to design a new loss function could be identified  
+\item The attempts to improve upon SAM via \alert{WIM and WILL have failed}\footnote{A fix in the definition of WILL could potentially change this!} 
+\item No further \emph{ansatz} to design a new loss function could be identified
 \item Further \alert{QCNN improvements} might have to come from something \alert{other than the loss function} 
 \end{itemize}
 \end{frame}
@@ -586,34 +563,16 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.63
 \end{columns}
 \end{frame}
 
-\begin{frame}
-\frametitle{Exploring Correlations}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/sigma_v_eps_}
-\caption{Correlation between $\sigma$ and $\epsilon$.}
-\end{figure}
-\end{column}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/sigma_v_chi_}
-\caption{Correlation between $\sigma$ and $\chi$.}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
 \section{Next Steps}
 
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
+\item Fix WILL by replacing $\Big|[k]_m - \Psi([k]_n) \Big|^q$ with $\left( 1 + \Big|[k]_m - \Psi([k]_n) \Big| \right)^q$ 
 \item Try to formalise and further investigate the relationship between $\hat{Q}_\Psi$ and the extracted phase (phase extraction problem)
 \item Look into adding more ILs compared to CLs 
 \item Look into barren plateau mitigation techniques 
+\item Explore QCNN parameter space further (number of layers,...)
 \item ...? 
 \end{itemize}
 \end{frame}
