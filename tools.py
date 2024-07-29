@@ -687,7 +687,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         state_vector = result.get_statevector()
         
         target_arr=np.asarray(state_vector)
-        target=Tensor(np.conjugate(target_arr))
+        target=torch.polar(Tensor(np.abs(target_arr)), Tensor(np.angle(target_arr)))
 
         def criterion(output):
             return  1. -torch.abs(torch.sum(torch.mul(output, target)))
