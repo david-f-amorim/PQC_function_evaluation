@@ -687,10 +687,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         state_vector = result.get_statevector()
         
         target_arr=np.asarray(state_vector)
-        target=Tensor(np.abs(target_arr))
+        target=Tensor(np.conjugate(target_arr))
 
         def criterion(output):
-            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)
+            return  1. -torch.abs(torch.sum(torch.mul(output, target)))
         
     """
         def criterion(model):
@@ -775,7 +775,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 WIM_weights_tensor=Tensor(WIM_weights_arr)
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
             elif loss_str=="CHIL":
-                loss = criterion(torch.sqrt(torch.abs(model(input))+1e-10))
+                loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor))
             else:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
         else: 

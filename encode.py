@@ -7,10 +7,10 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
+weights_phase ="outputs/__TEMP100_weights_6_3(0)_6_600_psi_CHIL_quadratic(S)(PR)(r).npy"     #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="psi"
+psi_mode="quadratic"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -20,11 +20,11 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = True # save outputs as pdf 
+pdf = False # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 # additional plots 
@@ -32,7 +32,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = True 
+phase_loss_comp = False 
 phase_shift_comp = False 
 phase_RP_comp=False 
 
@@ -108,6 +108,7 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
+
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
 sigma = np.std(bar)
@@ -123,7 +124,7 @@ print("Mu: ",f"{mu:.3e}")
 print("Sigma: ",f"{sigma:.3e}") 
 print("Omega: ",f"{omega:.3f}") 
 print("-----------------------------------")
- 
+
 #------------------------------------------------------------------------------
 if no_A==False:
     """
