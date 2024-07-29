@@ -627,7 +627,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         q=WILL_q 
         reduce='mean' 
         def criterion(output, target):
-            loss = torch.mul(torch.pow(torch.abs(output-target),p),torch.pow(distance),q) 
+            loss = torch.mul(torch.pow(torch.abs(output-target),p),torch.pow(distance,q)) 
             if reduce=='sum':
                 return torch.sum(loss)**(1/p) 
             elif reduce=='mean':
