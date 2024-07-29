@@ -672,7 +672,24 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 return torch.sum(loss)**(1/p) / torch.numel(loss)
     elif loss_str=="CHIL":  
         #raise DeprecationWarning("NEEDS FIXING")
-         def criterion(output, target):
+        input_register = QuantumRegister(n, "input")
+        target_register = QuantumRegister(m, "target")
+        circ = QuantumCircuit(input_register, target_register) 
+            
+        # encode amplitudes 
+        circ.compose(A_generate_network(n, 3), input_register, inplace=True)
+        circ = circ.assign_parameters(weights_A)
+
+        # get target 
+        backend = Aer.get_backend('statevector_simulator')
+        job = execute(circuit, backend)
+        result = job.result()
+        state_vector = result.get_statevector()
+        
+        target_arr=np.asarray(state_vector)
+        target=Tensor(np.abs(target_arr))
+
+        def criterion(output):
             return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)
         
     """
@@ -758,7 +775,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 WIM_weights_tensor=Tensor(WIM_weights_arr)
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
             elif loss_str=="CHIL":
-                loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))
+                loss = criterion(torch.sqrt(torch.abs(model(input))+1e-10))
             else:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
         else: 
@@ -778,10 +795,37 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         # set up circuit with calculated weights
         if train_superpos:
-            circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real,repeat_params=repeat_params)
-            with no_grad():
-                generated_weights = model.weight.detach().numpy()      
-            circ = circ.assign_parameters(generated_weights)
+            if loss_str=="CHIL":
+                # set up registers 
+                input_register = QuantumRegister(n, "input")
+                target_register = QuantumRegister(m, "target")
+                circuit = QuantumCircuit(input_register, target_register) 
+
+                # encode amplitudes 
+                circuit.compose(A_generate_network(n, 3), input_register, inplace=True)
+                circuit = circuit.assign_parameters(weights_A)
+                
+                # evaluate function
+                qc = generate_network(n,m, L, real=real,repeat_params=repeat_params)
+                with no_grad():
+                    generated_weights = model.weight.detach().numpy()
+                qc = qc.assign_parameters(generated_weights)
+                inv_qc = qc.inverse()
+                circuit.compose(qc, [*input_register,*target_register], inplace=True) 
+                
+                # extract phases 
+                circuit.compose(extract_phase(m),target_register, inplace=True) 
+
+                # clear ancilla register 
+                circuit.compose(inv_qc, [*input_register,*target_register], inplace=True)
+
+                circ=circuit
+
+            else:    
+                circ = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real,repeat_params=repeat_params)
+                with no_grad():
+                    generated_weights = model.weight.detach().numpy()      
+                circ = circ.assign_parameters(generated_weights)
         else:
             circ = generate_network(n,m,L, encode=True, toggle_IL=True, initial_IL=True, real=real,repeat_params=repeat_params)
 
@@ -802,10 +846,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         angle_arr = np.angle(np.conjugate(state_vector))
 
         # extract signs of state vector 
-        sign_arr= np.ones(2**(n+m), dtype=float) * np.sign(state_vector) 
+        sign_arr= np.sign(np.real(state_vector)) 
 
         # calculate fidelity and mismatch 
-        fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
+        if loss_str =="CHIL":
+            fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
+        else:        
+            fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
+        
         mismatch = 1. - np.sqrt(fidelity)
 
         # save mismatch for plotting 
