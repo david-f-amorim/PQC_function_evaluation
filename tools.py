@@ -478,8 +478,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     algorithm_globals.random_seed= seed
     rng = np.random.default_rng(seed=seed)
 
-    # check conditions for CHIL loss:
-    if loss_str=="CHIL":
+    # check conditions for QRQ loss:
+    if loss_str=="QRQ":
         if train_superpos==False:
             raise ValueError("This loss function requires training in superposition.")
         if n != 6:
@@ -489,7 +489,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     if train_superpos: 
         qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real, repeat_params=repeat_params)
 
-        if loss_str=="CHIL":
+        if loss_str=="QRQ":
             input_register = QuantumRegister(n, "input")
             target_register = QuantumRegister(m, "target")
             circuit = QuantumCircuit(input_register, target_register) 
@@ -670,7 +670,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 return torch.sum(loss)**(1/p) 
             elif reduce=='mean':
                 return torch.sum(loss)**(1/p) / torch.numel(loss)
-    elif loss_str=="CHIL":  
+    elif loss_str=="QRQ":  
         #raise DeprecationWarning("NEEDS FIXING")
         input_register = QuantumRegister(n, "input")
         target_register = QuantumRegister(m, "target")
@@ -687,6 +687,19 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         state_vector = result.get_statevector()
         
         target_arr=np.asarray(state_vector)
+
+        # add phase 
+        fx_arr_rounded = [bin_to_dec(dec_to_bin(i,m,'unsigned mag', nint=mint),'unsigned mag',nint=mint) for i in fx_arr]
+        phase_arr = np.empty(2**(n+m))
+        
+        for i in np.arange(2**n):
+            bin_i=dec_to_bin(i,n,'unsigned mag') 
+            for j in np.arange(2**m):
+                bin_j=dec_to_bin(j,m,'unsigned mag')
+                ind=int(bin_j + bin_i,2) 
+                phase_arr[ind] = fx_arr_rounded[i]
+        target_arr=state_vector * np.exp(2*1.j*np.pi* phase_arr)      
+
         target=torch.polar(Tensor(np.abs(target_arr)), Tensor(np.angle(target_arr)))
 
         def criterion(output):
@@ -774,14 +787,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             if loss_str=="WIM":
                 WIM_weights_tensor=Tensor(WIM_weights_arr)
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
-            elif loss_str=="CHIL":
+            elif loss_str=="QRQ":
                 loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor))
             else:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
         else: 
             if loss_str=="MM":    
                 loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number in sqrt !
-            #elif loss_str=="CHIL":
+            #elif loss_str=="QRQ":
             #    loss=criterion(model)
             #    loss.requires_grad = True
             else:
@@ -795,7 +808,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         # set up circuit with calculated weights
         if train_superpos:
-            if loss_str=="CHIL":
+            if loss_str=="QRQ":
                 # set up registers 
                 input_register = QuantumRegister(n, "input")
                 target_register = QuantumRegister(m, "target")
@@ -849,7 +862,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         sign_arr= np.sign(np.real(state_vector)) 
 
         # calculate fidelity and mismatch 
-        if loss_str =="CHIL":
+        if loss_str =="QRQ":
             fidelity = np.abs(np.dot(target_arr,np.conjugate(state_vector)))**2
         else:        
             fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2

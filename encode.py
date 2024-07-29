@@ -108,7 +108,7 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
-
+"""
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
 sigma = np.std(bar)
@@ -124,7 +124,7 @@ print("Mu: ",f"{mu:.3e}")
 print("Sigma: ",f"{sigma:.3e}") 
 print("Omega: ",f"{omega:.3f}") 
 print("-----------------------------------")
-
+"""
 #------------------------------------------------------------------------------
 if no_A==False:
     """
