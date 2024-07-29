@@ -1,5 +1,5 @@
 import argparse 
-from tools import check_duplicates, generate_seed, psi 
+from tools import check_duplicates, generate_seed, psi, psi_linear, psi_quadratic, psi_sine 
 
 parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
 parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=int)
@@ -14,6 +14,7 @@ parser.add_argument('-ni','--nint', help="Number of integer input qubits.", defa
 parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
 
 parser.add_argument('-RP','--repeat_params', help="Use the same parameter values for different layers", default=None ,choices=["CL", "IL", "both"])
+parser.add_argument('-PM','--psi_mode', help="Toggle psi", default=None ,choices=["linear", "quadratic", "sine"])
 
 parser.add_argument('-r','--real', help="Output states with real amplitudes only.", action='store_true')
 parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
@@ -45,7 +46,17 @@ if opt.f_str==None:
     opt.f_str=opt.f 
 
 if opt.f=="psi":
-    opt.f=psi   
+    if opt.psi_mode==None:
+        opt.f=psi 
+    elif opt.psi_mode=="linear":
+        opt.f=psi_linear 
+        opt.meta += "linear"
+    elif opt.psi_mode=="quadratic":
+        opt.f=psi_quadratic   
+        opt.meta += "quadratic"
+    elif opt.psi_mode=="sine": 
+        opt.f=psi_sine   
+        opt.meta += "sine"
 else:
     f = str(opt.f)
     opt.f=lambda x: eval(f)      
@@ -58,8 +69,19 @@ if opt.hayes:
     opt.phase_reduce=True 
     opt.train_superpos=True 
     opt.real=True 
-    opt.f=psi 
-    opt.f_str="psi"     
+    opt.f_str="psi"
+
+    if opt.psi_mode==None:
+        opt.f=psi 
+    elif opt.psi_mode=="linear":
+        opt.f=psi_linear 
+        opt.meta += "linear"
+    elif opt.psi_mode=="quadratic":
+        opt.f=psi_quadratic   
+        opt.meta += "quadratic"
+    elif opt.psi_mode=="sine": 
+        opt.f=psi_sine   
+        opt.meta += "sine"     
 
 # check for duplicates
 from tools import train_QNN, test_QNN

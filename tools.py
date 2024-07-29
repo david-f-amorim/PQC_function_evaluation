@@ -621,13 +621,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             for j in np.arange(2**m):
                 bin_j=dec_to_bin(j,m,'unsigned mag')
                 ind=int(bin_j + bin_i,2) 
-                distance_arr[ind] = bin_to_dec(dec_to_bin(j,m,'unsigned mag'),'unsigned mag',nint=mint) - fx_arr_rounded[i]  
+                distance_arr[ind] = 1 + np.abs(bin_to_dec(dec_to_bin(j,m,'unsigned mag'),'unsigned mag',nint=mint) - fx_arr_rounded[i])  
         distance=Tensor(distance_arr)   
         p=WILL_p 
         q=WILL_q 
         reduce='mean' 
         def criterion(output, target):
-            loss = torch.mul(torch.pow(torch.abs(output-target),p),torch.pow(torch.abs(distance),q)) 
+            loss = torch.mul(torch.pow(torch.abs(output-target),p),torch.pow(distance),q) 
             if reduce=='sum':
                 return torch.sum(loss)**(1/p) 
             elif reduce=='mean':
@@ -855,7 +855,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
     return 0 
 
-def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q, verbose=True):   
+def test_QNN(n,m,L,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
@@ -1178,6 +1178,99 @@ def psi(x, mode="psi"):
         out = (((3./128))*((np.pi*Mc*x)**(-5./3))*( 1.+ (20./9)*((743./336)+(11./4)*eta)*(np.pi*Mt*x)**(2./3) -4.*(4.*np.pi - beta)*(np.pi*Mt*x) + 10.*((3058673./1016064) + (eta*5429./1008) + (617*(eta**2)/144) - sig)*(np.pi*Mt*x)**(4./3)) + 2.*np.pi*x*DT)/(2.*np.pi)
     
     return out
+
+def psi_linear(x):
+    n = 6 
+    nint = n 
+    fmin=40.
+    fmax=168. 
+    m1=(4.926e-6)*35
+    m2=(4.926e-6)*30. 
+    beta=0.
+    sig=0.
+    Tfrac = 100.
+     
+    df = (fmax-fmin)/(2**n)
+    T = 1./df
+    tc = T + (T/Tfrac)
+    DT = tc%T
+    Mt = m1 + m2
+    nu = (m1*m2)/Mt
+    eta = nu/Mt
+    Mc = Mt*eta**(3./5)
+
+    def x_trans(x):
+        xmax = np.power(2,nint) - np.power(2,nint-n)
+        x = x/xmax
+        x = x*(fmax-fmin-df)
+        x = x + fmin
+        return x
+        
+    x = x_trans(x)
+
+    return 0.5 + 0.01*x
+
+def psi_quadratic(x):
+    n = 6 
+    nint = n 
+    fmin=40.
+    fmax=168. 
+    m1=(4.926e-6)*35
+    m2=(4.926e-6)*30. 
+    beta=0.
+    sig=0.
+    Tfrac = 100.
+     
+    df = (fmax-fmin)/(2**n)
+    T = 1./df
+    tc = T + (T/Tfrac)
+    DT = tc%T
+    Mt = m1 + m2
+    nu = (m1*m2)/Mt
+    eta = nu/Mt
+    Mc = Mt*eta**(3./5)
+
+    def x_trans(x):
+        xmax = np.power(2,nint) - np.power(2,nint-n)
+        x = x/xmax
+        x = x*(fmax-fmin-df)
+        x = x + fmin
+        return x
+        
+    x = x_trans(x)
+
+    return 0.0001* x**2
+
+def psi_sine(x):
+    n = 6 
+    nint = n 
+    fmin=40.
+    fmax=168. 
+    m1=(4.926e-6)*35
+    m2=(4.926e-6)*30. 
+    beta=0.
+    sig=0.
+    Tfrac = 100.
+     
+    df = (fmax-fmin)/(2**n)
+    T = 1./df
+    tc = T + (T/Tfrac)
+    DT = tc%T
+    Mt = m1 + m2
+    nu = (m1*m2)/Mt
+    eta = nu/Mt
+    Mc = Mt*eta**(3./5)
+
+    def x_trans(x):
+        xmax = np.power(2,nint) - np.power(2,nint-n)
+        x = x/xmax
+        x = x*(fmax-fmin-df)
+        x = x + fmin
+        return x
+        
+    x = x_trans(x)
+
+    return np.pi /2 *(1+ np.sin(x /4 )) 
 
 def A_generate_network(n,L, repeat_params=False):
     """
