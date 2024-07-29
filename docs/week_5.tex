@@ -1,0 +1,77 @@
+\documentclass{beamer}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage[UKenglish]{babel}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{braket}
+\usepackage{esint}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false, bookmarks=true}
+
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usefonttheme{professionalfonts}
+\useinnertheme{circles}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\setbeamertemplate{caption}[numbered]
+
+\title[QCNN State Preparation]{A QCNN for Quantum State Preparation}
+\subtitle{Carnegie Vacation Scholarship}
+\author[David Amorim]{David Amorim}
+\institute[]{}
+\date[05/08/2024]{Week 5 \\(29/07/2024 - 02/08/2024)}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Preliminaries}
+\begin{frame}
+\frametitle{Aims for the Week}
+The following aims were set at the last meeting (29/07/2024):
+
+\begin{alertblock}{Improve Loss Function}
+Work on an improved version of WILL. Incorporate some phase extraction metrics (e.g. $\chi$, $\epsilon$) into the loss function. 
+\end{alertblock}
+
+\begin{alertblock}{Investigate Phase Extraction}
+Study the relationship between mismatch and the extracted phase, i.e. study the operator $\tilde{Q}^\dagger (\hat{I} \otimes\hat{R}) \tilde{Q}$. 
+\end{alertblock}
+
+\begin{alertblock}{Mitigate Barren Plateaus}
+Work on strategies to mitigate barren plateaus, e.g. implement layer-by-layer training.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+THIS WEEK INCLUDE EXAMPLES WITH HIGH $m$ !!
+\end{frame}
+
+\section{Next Steps}
+
+\begin{frame}
+\frametitle{Next Steps}
+\begin{itemize}
+\item ...
+\end{itemize}
+\end{frame}
+
+
+
+\end{document}

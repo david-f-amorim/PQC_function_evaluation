@@ -22,8 +22,8 @@ parser.add_argument('-TS','--train_superpos', help="Train circuit in superpositi
 
 parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR -f psi. Still set own m.", action='store_true')
 
-parser.add_argument('-p','--WILL_p', help="WILL p parameter.", default=1,type=float)
-parser.add_argument('-q','--WILL_q', help="WILL q parameter.", default=1,type=float)
+parser.add_argument('-p','--WILL_p', help="WILL p parameter.", default=[1],type=float, nargs="+")
+parser.add_argument('-q','--WILL_q', help="WILL q parameter.", default=[1],type=float, nargs="+")
 
 parser.add_argument('--tau1', help="WIM tau1 parameter.", default=0.8,type=float)
 parser.add_argument('--tau2', help="WIM tau2 parameter.", default=10,type=float)
@@ -86,15 +86,18 @@ if opt.hayes:
 # check for duplicates
 from tools import train_QNN, test_QNN
 
-for i in range(len(opt.L)):
-    
-    dupl_files = check_duplicates(n=opt.n,m=opt.m,L=opt.L[i],epochs=opt.epochs,func_str=opt.f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
+for j in range(len(opt.WILL_p)):
+    for k in range(len(opt.WILL_q)):
 
-    if dupl_files and opt.ignore_duplicates==False:
-        print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
-    else: 
-        train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, tau_1=opt.tau1,tau_2=opt.tau2,tau_3=opt.tau3, repeat_params=opt.repeat_params,  WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)
-        test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p, WILL_q=opt.WILL_q)    
+        for i in range(len(opt.L)):
+            
+            dupl_files = check_duplicates(n=opt.n,m=opt.m,L=opt.L[i],epochs=opt.epochs,func_str=opt.f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])
+
+            if dupl_files and opt.ignore_duplicates==False:
+                print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
+            else: 
+                train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), shots=int(opt.shots), lr=float(opt.lr), b1=float(opt.b1), b2=float(opt.b2), epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, tau_1=opt.tau1,tau_2=opt.tau2,tau_3=opt.tau3, repeat_params=opt.repeat_params,WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])
+                test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),epochs=int(opt.epochs), func=opt.f, func_str=opt.f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])    
 
 
 

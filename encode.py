@@ -405,7 +405,7 @@ if phase_loss_comp==True:
     loss_arr =np.array(["SAM","WIM", "WILL"])
     arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
     arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_linear(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_linear(S)(PR)(r)_5-4_2-1.npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_linear(S)(PR)(r)_1-4_1-2.npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]
