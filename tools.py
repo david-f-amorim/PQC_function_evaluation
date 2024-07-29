@@ -9,7 +9,8 @@ from qiskit.utils import algorithm_globals
 from qiskit.primitives import Sampler
 from torch.optim import Adam
 from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
-from torch import Tensor, no_grad 
+from torch import Tensor, no_grad
+from torch.autograd import Variable
 import sys, time, os 
 import torch 
 import warnings
@@ -477,9 +478,43 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     algorithm_globals.random_seed= seed
     rng = np.random.default_rng(seed=seed)
 
+    # check conditions for CHIL loss:
+    if loss_str=="CHIL":
+        if train_superpos==False:
+            raise ValueError("This loss function requires training in superposition.")
+        if n != 6:
+            raise ValueError("This loss function requires n=6.")
+
     # generate circuit and set up as QNN 
     if train_superpos: 
         qc = generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=True, real=real, repeat_params=repeat_params)
+
+        if loss_str=="CHIL":
+            input_register = QuantumRegister(n, "input")
+            target_register = QuantumRegister(m, "target")
+            circuit = QuantumCircuit(input_register, target_register) 
+
+            # load weights 
+            weights_A = np.load("ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy") 
+            
+            # encode amplitudes 
+            circuit.compose(A_generate_network(n, 3), input_register, inplace=True)
+            circuit = circuit.assign_parameters(weights_A)
+            
+            # evaluate function
+            qc = generate_network(n,m, L, real=real,repeat_params=repeat_params)
+            inv_qc = qc.inverse()
+            circuit.compose(qc, [*input_register,*target_register], inplace=True) 
+            
+            # extract phases 
+            circuit.compose(extract_phase(m),target_register, inplace=True) 
+
+            # clear ancilla register 
+            circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
+
+            # export as qc 
+            qc=circuit 
+
         qnn = SamplerQNN(
                 circuit=qc.decompose(),            # decompose to avoid data copying (?)
                 sampler=Sampler(options={"shots": shots, "seed": algorithm_globals.random_seed}),
@@ -614,8 +649,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     elif loss_str=="WILL":  
         if train_superpos==False:
             raise ValueError("This loss function requires training in superposition.")
+        
         fx_arr_rounded = [bin_to_dec(dec_to_bin(i,m,'unsigned mag', nint=mint),'unsigned mag',nint=mint) for i in fx_arr]
         distance_arr = np.empty(2**(n+m))
+        
         for i in np.arange(2**n):
             bin_i=dec_to_bin(i,n,'unsigned mag') 
             for j in np.arange(2**m):
@@ -626,13 +663,68 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         p=WILL_p 
         q=WILL_q 
         reduce='mean' 
+        
         def criterion(output, target):
             loss =torch.pow(torch.abs(output-target),p) + torch.mul(torch.abs(output),torch.pow(distance,q)) 
             if reduce=='sum':
                 return torch.sum(loss)**(1/p) 
             elif reduce=='mean':
                 return torch.sum(loss)**(1/p) / torch.numel(loss)
+    elif loss_str=="CHIL":  
+        #raise DeprecationWarning("NEEDS FIXING")
+         def criterion(output, target):
+            return  torch.abs(1. -torch.sum(torch.mul(output, target)))  # redefine to punish sign errors (moved abs outwards)
+        
+    """
+        def criterion(model):
+            weights=model.weight.detach().numpy()
+                    
+            # set up registers 
+            input_register = QuantumRegister(n, "input")
+            target_register = QuantumRegister(m, "target")
+            circuit = QuantumCircuit(input_register, target_register) 
 
+            # load weights 
+            weights_A = np.load("ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy") 
+            
+            # encode amplitudes 
+            circuit.compose(A_generate_network(n, 3), input_register, inplace=True)
+            circuit = circuit.assign_parameters(weights_A)
+            
+            # evaluate function
+            qc = generate_network(n,m, L, real=real,repeat_params=repeat_params)
+            qc = qc.assign_parameters(weights)
+            inv_qc = qc.inverse()
+            circuit.compose(qc, [*input_register,*target_register], inplace=True) 
+            
+            # extract phases 
+            circuit.compose(extract_phase(m),target_register, inplace=True) 
+
+            # clear ancilla register 
+            circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
+        
+            # get resulting statevector 
+            backend = Aer.get_backend('statevector_simulator')
+            job = execute(circuit, backend)
+            result = job.result()
+            state_vector = result.get_statevector()
+            state_vector = np.asarray(state_vector).reshape((2**m,2**n))
+            state_v = state_vector[0,:].flatten()
+
+            state_vec=full_encode(n=6, m=m, weights_A_str="ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy",weights_p_str=weights, L_A=3, L_p=L, real_p=real, repeat_params=repeat_params)
+
+            amplitude = np.abs(state_vec)
+            phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
+            phase *= (amplitude > 1e-15).astype(float) 
+            phase_rounded=get_phase_target(m=m, func=func)
+
+            phase_tensor=Tensor(phase)
+            phase_rounded_tensor=Tensor(phase_rounded)
+
+            chi = torch.mean(torch.abs(phase_tensor - phase_rounded_tensor))
+
+            return chi
+    """
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
@@ -665,11 +757,16 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             if loss_str=="WIM":
                 WIM_weights_tensor=Tensor(WIM_weights_arr)
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
+            elif loss_str=="CHIL":
+                loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))
             else:
                 loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
         else: 
             if loss_str=="MM":    
                 loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number in sqrt !
+            #elif loss_str=="CHIL":
+            #    loss=criterion(model)
+            #    loss.requires_grad = True
             else:
                 loss = criterion(model(input), target)
 
@@ -1098,7 +1195,10 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
 
     # load weights 
     weights_A = np.load(weights_A_str)
-    weights_p = np.load(weights_p_str)
+    if type(weights_p_str) !=str:
+        weights_p=weights_p_str
+    else:    
+        weights_p = np.load(weights_p_str)
     
     # encode amplitudes 
     circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
@@ -1527,3 +1627,23 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, shots, lr, b1, b2, epochs, func,func_st
     np.save(os.path.join("ampl_outputs", f"statevec_{n}{nis}_{L}_{epochs}_{func_str}_{loss_str}_{x_min}_{x_max}_{meta}"),np.real(state_vector))
 
     return 0
+
+def get_phase_target(m, func):
+
+    # define x array 
+    n = 6
+    x_min = 40
+    x_max = 168 
+    dx = (x_max-x_min)/(2**n) 
+    x_arr = np.arange(x_min, x_max, dx) 
+
+    # calculate target output for phase 
+    phase_target = func(np.linspace(0, 2**n, len(x_arr)))
+
+    # calculate target for phase taking into account rounding 
+    phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
+    phase_reduced_bin = [dec_to_bin(i,m, "unsigned mag", 0) for i in phase_reduced]
+    phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
+    phase_rounded = 2 * np.pi * phase_reduced_dec
+
+    return phase_rounded

@@ -10,7 +10,7 @@ m = 3
 weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
 
 repeat_params=None
-psi_mode="linear"
+psi_mode="psi"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -403,9 +403,9 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr =np.array(["SAM","WIM", "WILL"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_linear(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_linear(S)(PR)(r)_1-4_1-2.npy"
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_2-1.npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]
@@ -415,7 +415,7 @@ if phase_loss_comp==True:
 
     for i in np.arange(N):
 
-        state_vec = full_encode(n,m, weights_ampl, weights_arr[i], L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
+        state_vec = full_encode(n,m, weights_ampl, str(weights_arr[i]), L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
         amplitude = np.abs(state_vec)
         phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
         phase *= (amplitude > 1e-15).astype(float) 
