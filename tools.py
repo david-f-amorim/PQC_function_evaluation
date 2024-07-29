@@ -698,7 +698,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 bin_j=dec_to_bin(j,m,'unsigned mag')
                 ind=int(bin_j + bin_i,2) 
                 phase_arr[ind] = fx_arr_rounded[i]
-        target_arr=state_vector * np.exp(2*1.j*np.pi* phase_arr)      
+        target_arr=target_arr * np.exp(2*1.j*np.pi* phase_arr)      
 
         target=torch.polar(Tensor(np.abs(target_arr)), Tensor(np.angle(target_arr)))
 
