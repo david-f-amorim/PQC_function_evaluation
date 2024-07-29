@@ -10,8 +10,8 @@ m=3
 L=6 
 e=600  
 
-meta=""
-psi_mode="psi"
+meta="linear"
+psi_mode="linear"
 
 p_arr =np.array([0.25, 0.5, 0.75,1,1.25,1.5,1.75,2]) 
 q_arr =np.array([0,0.5,1, 1.5, 2, 2.5, 3]) 

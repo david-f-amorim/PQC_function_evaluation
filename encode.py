@@ -6,11 +6,11 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 # config 
 L_phase = 6
 real_p = True 
-m = 4
-weights_phase = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
+m = 3
+weights_phase = "outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" # weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_1-1.npy
 
 repeat_params=None
-psi_mode="psi"
+psi_mode="linear"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -20,7 +20,7 @@ L_ampl =3
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
@@ -32,9 +32,9 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = False 
+phase_loss_comp = True 
 phase_shift_comp = False 
-phase_RP_comp=True 
+phase_RP_comp=False 
 
 #------------------------------------------------------------------------------
 rcParams['mathtext.fontset'] = 'stix'
@@ -403,9 +403,9 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr =np.array(["SAM","WIM", "WILL"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_quadratic(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_quadratic(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_quadratic(S)(PR)(r)_3-4_5-2.npy"
+    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"
+    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_linear(S)(PR)(r).npy"
+    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_linear(S)(PR)(r)_5-4_2-1.npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]

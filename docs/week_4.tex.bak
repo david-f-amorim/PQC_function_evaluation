@@ -31,7 +31,7 @@
 
 \setbeamertemplate{caption}[numbered]
 
-\title[PQC Function Evaluation]{PQC Function Evaluation}
+\title[QCNN State Preparation]{A QCNN for Quantum State Preparation}
 \subtitle{Carnegie Vacation Scholarship}
 \author[David Amorim]{David Amorim}
 \institute[]{}
@@ -568,7 +568,7 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.63
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
-
+\item Fix WILL by replacing $\Big|[k]_m - \Psi([k]_n) \Big|^q$ with $\left( 1 + \Big|[k]_m - \Psi([k]_n) \Big| \right)^q$ 
 \item Try to formalise and further investigate the relationship between $\hat{Q}_\Psi$ and the extracted phase (phase extraction problem)
 \item Look into adding more ILs compared to CLs 
 \item Look into barren plateau mitigation techniques 
