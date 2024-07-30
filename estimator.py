@@ -90,7 +90,7 @@ for i in np.arange(epochs):
         pars=ParameterVector("theta_new", 3*n)
         for j in np.arange(n):
             par = pars[int(param_index) : int(param_index + 3)]
-            qc.u(par[0],par[1],par[2], qubits[i])
+            qc.u(par[0],par[1],par[2], qubits[j])
             param_index +=3 
 
         with no_grad():
