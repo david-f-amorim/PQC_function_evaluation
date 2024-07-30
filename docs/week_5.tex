@@ -168,6 +168,53 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.48
 \end{columns}
 \end{frame}
 
+\begin{frame}
+\frametitle{Other Approaches}
+\begin{itemize}
+\item Attempts to define a loss function based directly on $\hat{Q}^\dagger \hat{R} \hat{Q}$, e.g. minimising $\chi$, were \alert{unsuccessful} 
+\item This is due to the \emph{qiskit machine learning} environment being build around \alert{sampler primitives} which return quasi-probabilities instead of probability amplitudes 
+\item Thus, phases cannot be directly taken into account for gradient calculation 
+\item A possible work-around could be to switch to a QCNN based on an \alert{estimator primitive}, which calculates the expectation value of an observable w.r.t to the state prepared by the network 
+\item This would require the construction of an \alert{appropriate operator} (note: qiskit supports non-Hermitian observables) 
+\item Beyond this, no further \emph{ansatze} for loss functions come to mind
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{An Estimator-based PQC}
+\begin{itemize}
+\item Let $\ket{\tilde{\phi}}$ be the two-register state produced by applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$:
+\begin{equation}
+\ket{\tilde{\phi}}= \sum_k A(k) e^{i \tilde{\Psi}(k)} \ket{k}
+\end{equation}
+\item The desired output state is 
+\begin{equation}
+\ket{\phi}= \sum_k A(k) e^{i \Psi(k)} \ket{k}
+\end{equation}
+\item An estimator-based optimiser calculates the loss and gradients for each epoch based on the expectation value 
+\begin{equation} \mathbb{E}(\tilde{\phi}) = \braket{\tilde{\phi}| \hat{O}| \tilde{\phi}} = \sum_{k, k'} A(k')A(k) \exp \left(i \left[ \tilde{\Psi}(k) - \tilde{\Psi}(k') \right] \right) \braket{k' | \hat{O}| k}, 
+\end{equation}
+for some operator $\hat{O}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{An Estimator-based PQC}
+\begin{itemize}
+\item Now construct $\hat{O}$ such that 
+\begin{equation}
+\braket{k' | \hat{O} | k} \equiv \frac{1}{A(k')A(k)}  \exp \left( - i \left[ \Psi(k) - \Psi(k') \right] \right)
+\end{equation}
+for $A(k), A(k') \neq 0$
+\item Then 
+\begin{equation}
+|\mathbb{E}(\tilde{\phi})| \leq |\mathbb{E}(\phi)|
+\end{equation}
+so that we can train the network to generate $\ket{\phi}$ by maximising $|\mathbb{E}(\phi)|$
+\item \alert{This is highly speculative} but could be worth trying?
+\end{itemize}
+\end{frame}
+
 \section{Next Steps}
 
 \begin{frame}

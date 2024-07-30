@@ -716,58 +716,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
             return torch.mean(chi)
 
-            #return  1. -torch.abs(torch.sum(torch.mul(output, target)))
-        
-    """
-        def criterion(model):
-            weights=model.weight.detach().numpy()
-                    
-            # set up registers 
-            input_register = QuantumRegister(n, "input")
-            target_register = QuantumRegister(m, "target")
-            circuit = QuantumCircuit(input_register, target_register) 
-
-            # load weights 
-            weights_A = np.load("ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy") 
-            
-            # encode amplitudes 
-            circuit.compose(A_generate_network(n, 3), input_register, inplace=True)
-            circuit = circuit.assign_parameters(weights_A)
-            
-            # evaluate function
-            qc = generate_network(n,m, L, real=real,repeat_params=repeat_params)
-            qc = qc.assign_parameters(weights)
-            inv_qc = qc.inverse()
-            circuit.compose(qc, [*input_register,*target_register], inplace=True) 
-            
-            # extract phases 
-            circuit.compose(extract_phase(m),target_register, inplace=True) 
-
-            # clear ancilla register 
-            circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
-        
-            # get resulting statevector 
-            backend = Aer.get_backend('statevector_simulator')
-            job = execute(circuit, backend)
-            result = job.result()
-            state_vector = result.get_statevector()
-            state_vector = np.asarray(state_vector).reshape((2**m,2**n))
-            state_v = state_vector[0,:].flatten()
-
-            state_vec=full_encode(n=6, m=m, weights_A_str="ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy",weights_p_str=weights, L_A=3, L_p=L, real_p=real, repeat_params=repeat_params)
-
-            amplitude = np.abs(state_vec)
-            phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
-            phase *= (amplitude > 1e-15).astype(float) 
-            phase_rounded=get_phase_target(m=m, func=func)
-
-            phase_tensor=Tensor(phase)
-            phase_rounded_tensor=Tensor(phase_rounded)
-
-            chi = torch.mean(torch.abs(phase_tensor - phase_rounded_tensor))
-
-            return chi
-    """
     # start training 
     print(f"\n\nTraining started. Epochs: {epochs}. Input qubits: {n}. Target qubits: {m}. QCNN layers: {L}. \n")
     start = time.time() 
@@ -807,9 +755,6 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         else: 
             if loss_str=="MM":    
                 loss = criterion(torch.polar(torch.sqrt(model(input)+1e-10),angle_tensor), torch.sqrt(target))     # add small number in sqrt !
-            #elif loss_str=="QRQ":
-            #    loss=criterion(model)
-            #    loss.requires_grad = True
             else:
                 loss = criterion(model(input), target)
 

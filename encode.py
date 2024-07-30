@@ -108,7 +108,6 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
-
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
 sigma = np.std(bar)

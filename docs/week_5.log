@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  29 JUL 2024 20:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  30 JUL 2024 08:29
 entering extended mode
 **./week_5.tex
 (week_5.tex
@@ -1098,16 +1098,22 @@ Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 143.
  [8
 
  <./im/SAM_WIM_WILL_F2_new.pdf>]
-<im/SAM_WIM_WILL_H_new.pdf, id=340, 742.67374pt x 715.47299pt>
+<im/SAM_WIM_WILL_H_new.pdf, id=341, 742.67374pt x 715.47299pt>
 File: im/SAM_WIM_WILL_H_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_H_new.pdf>
 Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 169.
 (pdftex.def)             Requested size: 171.14764pt x 164.87192pt.
  [9
 
- <./im/SAM_WIM_WILL_H_new.pdf>] (week_5.toc) [10
+ <./im/SAM_WIM_WILL_H_new.pdf>] [10
 
 ] [11
+
+] [12
+
+] (week_5.toc) [13
+
+] [14
 
 ]
 \tf@nav=\write6
@@ -1124,11 +1130,11 @@ Package rerunfilecheck Info: File `week_5.out' has not changed.
 (rerunfilecheck)             Checksum: EE00A5039936B822C228038EC7E0028C;391.
  ) 
 Here is how much of TeX's memory you used:
- 24021 strings out of 478864
- 454670 string characters out of 2848660
+ 24035 strings out of 478864
+ 454801 string characters out of 2848660
  762247 words of memory out of 3000000
- 41374 multiletter control sequences out of 15000+600000
- 413197 words of font info for 69 fonts, out of 8000000 for 9000
+ 41381 multiletter control sequences out of 15000+600000
+ 413553 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,793s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
@@ -1145,11 +1151,14 @@ vid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:
 2.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmssbx10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on week_5.pdf (11 pages, 339003 bytes).
+pe1/public/amsfonts/cm/cmssi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/david/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week_5.pdf (14 pages, 387071 bytes).
 PDF statistics:
- 494 PDF objects out of 1000 (max. 8388607)
- 26 named destinations out of 1000 (max. 500000)
+ 589 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 500000)
  226 words of extra memory for PDF output out of 10000 (max. 10000000)
 
