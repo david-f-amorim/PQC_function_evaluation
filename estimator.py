@@ -56,7 +56,7 @@ qnn = EstimatorQNN(
 initial_weights =np.zeros(len(circuit.parameters))
 model = TorchConnector(qnn, initial_weights)
 
-optimizer = Adam(model.parameters(), lr=0.01, betas=(0.7, 0.999), weight_decay=0.005, maximize=True) 
+optimizer = Adam(model.parameters(), lr=0.01, betas=(0.7, 0.999), weight_decay=0.005,) 
 input=Tensor([])
 
 loss_vals=np.empty(epochs)
@@ -72,7 +72,7 @@ for i in np.arange(epochs):
 
         # train model  
         optimizer.zero_grad()
-        loss = torch.abs(model(input)) / (2**(2*n))
+        loss = torch.abs(1 - model(input))
         loss.backward()
         optimizer.step()
 

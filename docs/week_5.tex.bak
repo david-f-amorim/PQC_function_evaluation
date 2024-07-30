@@ -181,7 +181,7 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.48
 \end{frame}
 
 \begin{frame}
-\frametitle{An Estimator-based QCNN}
+\frametitle{An Estimator-based PQC}
 \begin{itemize}
 \item Let $\ket{\tilde{\phi}}$ be the two-register state produced by applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$:
 \begin{equation}
@@ -199,7 +199,7 @@ for some operator $\hat{O}$
 \end{frame}
 
 \begin{frame}
-\frametitle{An Estimator-based QCNN}
+\frametitle{An Estimator-based PQC}
 \begin{itemize}
 \item Now construct $\hat{O}$ such that 
 \begin{equation}
