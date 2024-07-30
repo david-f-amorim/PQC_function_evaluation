@@ -183,16 +183,16 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.48
 \begin{frame}
 \frametitle{An Estimator-based PQC}
 \begin{itemize}
-\item Let $\ket{\tilde{\phi}}$ be the two-register state produced by applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$:
+\item Let $\ket{\tilde{\phi}}$ be the state produced by the PQC:
 \begin{equation}
-\ket{\tilde{\phi}}= \sum_k A(k) e^{i \tilde{\Psi}(k)} \ket{k}
+\ket{\tilde{\phi}}= \sum_k \tilde{A}(k) e^{i \tilde{\Psi}(k)} \ket{k}
 \end{equation}
 \item The desired output state is 
 \begin{equation}
 \ket{\phi}= \sum_k A(k) e^{i \Psi(k)} \ket{k}
 \end{equation}
 \item An estimator-based optimiser calculates the loss and gradients for each epoch based on the expectation value 
-\begin{equation} \mathbb{E}(\tilde{\phi}) = \braket{\tilde{\phi}| \hat{O}| \tilde{\phi}} = \sum_{k, k'} A(k')A(k) \exp \left(i \left[ \tilde{\Psi}(k) - \tilde{\Psi}(k') \right] \right) \braket{k' | \hat{O}| k}, 
+\begin{equation} \mathbb{E}(\tilde{\phi}) = \braket{\tilde{\phi}| \hat{O}| \tilde{\phi}} = \sum_{k, k'} \tilde{A}(k')\tilde{A}(k) \exp \left(i \left[ \tilde{\Psi}(k) - \tilde{\Psi}(k') \right] \right) \braket{k' | \hat{O}| k}, 
 \end{equation}
 for some operator $\hat{O}$
 \end{itemize}
@@ -208,9 +208,9 @@ for some operator $\hat{O}$
 for $A(k), A(k') \neq 0$
 \item Then 
 \begin{equation}
-|\mathbb{E}(\tilde{\phi})| \leq |\mathbb{E}(\phi)|
+\mathbb{E}(\phi)=1
 \end{equation}
-so that we can train the network to generate $\ket{\phi}$ by maximising $|\mathbb{E}(\phi)|$
+so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mathbb{E}(\tilde{\phi})|$
 \item \alert{This is highly speculative} but could be worth trying?
 \end{itemize}
 \end{frame}

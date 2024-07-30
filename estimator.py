@@ -72,7 +72,7 @@ for i in np.arange(epochs):
 
         # train model  
         optimizer.zero_grad()
-        loss = torch.abs(1 - model(input))
+        loss = torch.abs(1 - model(input) / (2**(2*n)))
         loss.backward()
         optimizer.step()
 
