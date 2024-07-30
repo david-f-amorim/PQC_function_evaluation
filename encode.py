@@ -7,7 +7,7 @@ from tools import psi, bin_to_dec, dec_to_bin, full_encode
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase ="outputs/__TEMP100_weights_6_3(0)_6_600_psi_CHIL_quadratic(S)(PR)(r).npy"     #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase ="outputs/__TEMP100_weights_6_3(0)_6_600_psi_QRQ_quadratic(S)(PR)(r).npy"     #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
 psi_mode="quadratic"
@@ -108,7 +108,7 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
-"""
+
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
 sigma = np.std(bar)
@@ -124,7 +124,7 @@ print("Mu: ",f"{mu:.3e}")
 print("Sigma: ",f"{sigma:.3e}") 
 print("Omega: ",f"{omega:.3f}") 
 print("-----------------------------------")
-"""
+
 #------------------------------------------------------------------------------
 if no_A==False:
     """

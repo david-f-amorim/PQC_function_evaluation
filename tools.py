@@ -484,6 +484,8 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             raise ValueError("This loss function requires training in superposition.")
         if n != 6:
             raise ValueError("This loss function requires n=6.")
+        if phase_reduce !=True:
+            raise ValueError("This loss function required phase reduction.")
 
     # generate circuit and set up as QNN 
     if train_superpos: 
@@ -702,8 +704,19 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         target=torch.polar(Tensor(np.abs(target_arr)), Tensor(np.angle(target_arr)))
 
+        phase_tensor_target= Tensor(2*np.pi*phase_arr)
+
         def criterion(output):
-            return  1. -torch.abs(torch.sum(torch.mul(output, target)))
+
+            # get phase of output
+            phase_tensor=torch.angle(output) 
+
+            # compare to target 
+            chi=torch.abs(phase_tensor - phase_tensor_target)
+
+            return torch.mean(chi)
+
+            #return  1. -torch.abs(torch.sum(torch.mul(output, target)))
         
     """
         def criterion(model):
