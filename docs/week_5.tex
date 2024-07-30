@@ -176,14 +176,13 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.48
 \item Thus, phases cannot be directly taken into account for gradient calculation 
 \item A possible work-around could be to switch to a QCNN based on an \alert{estimator primitive}, which calculates the expectation value of an observable w.r.t to the state prepared by the network 
 \item This would require the construction of an \alert{appropriate operator} (note: qiskit supports non-Hermitian observables) 
-\item Beyond this, no further \emph{ansatze} for loss functions come to mind
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{An Estimator-based PQC}
 \begin{itemize}
-\item Let $\ket{\tilde{\phi}}$ be the state produced by the PQC:
+\item Let $\ket{\tilde{\phi}}$ be the $n$-qubit state produced by the PQC:
 \begin{equation}
 \ket{\tilde{\phi}}= \sum_k \tilde{A}(k) e^{i \tilde{\Psi}(k)} \ket{k}
 \end{equation}
@@ -192,7 +191,7 @@ $\Omega$ &  \textbf{2.75} & 2.07 & 2.48
 \ket{\phi}= \sum_k A(k) e^{i \Psi(k)} \ket{k}
 \end{equation}
 \item An estimator-based optimiser calculates the loss and gradients for each epoch based on the expectation value 
-\begin{equation} \mathbb{E}(\tilde{\phi}) = \braket{\tilde{\phi}| \hat{O}| \tilde{\phi}} = \sum_{k, k'} \tilde{A}(k')\tilde{A}(k) \exp \left(i \left[ \tilde{\Psi}(k) - \tilde{\Psi}(k') \right] \right) \braket{k' | \hat{O}| k}, 
+\begin{equation} \mathbb{E}(\tilde{\phi}) \equiv \braket{\tilde{\phi}| \hat{O}| \tilde{\phi}} = \sum_{k, k'} \tilde{A}(k')\tilde{A}(k) \exp \left(i \left[ \tilde{\Psi}(k) - \tilde{\Psi}(k') \right] \right) \braket{k' | \hat{O}| k}, 
 \end{equation}
 for some operator $\hat{O}$
 \end{itemize}
@@ -208,11 +207,60 @@ for some operator $\hat{O}$
 for $A(k), A(k') \neq 0$
 \item Then 
 \begin{equation}
-\mathbb{E}(\phi)=1
+\mathbb{E}(\phi)= \sum_{k,k'} 1 =2^{2n}
 \end{equation}
-so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mathbb{E}(\tilde{\phi})|$
-\item \alert{This is highly speculative} but could be worth trying?
+so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mathbb{E}(\tilde{\phi}) / 2^{2n}|$
+\item \alert{This is highly speculative} and computationally very expensive even for simple PQCs due to the way custom operators are handed in qiskit
+\item Thus, \alert{estimator-based PQCs cannot feasibly replace the sampler-based QCNN}
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Loss Function: Conclusion}
+\begin{itemize}
+\item The design of the \emph{qiskit machine learning} library \alert{constrains the customisability} of loss functions, in particular relating to phases 
+\item Thus, \alert{loss functions based directly on the extracted phase} factors are (apparently) \alert{impossible} 
+\item Within the limits of these constraints the \alert{best} possible loss function seems to be \alert{SAM} 
+\item Beyond the unsuccessful attempts of WIM and WILL no further  \emph{ansatze} for loss functions come to mind 
+\item For the time being, the search for an improved loss function will be \alert{put on hold}
+\end{itemize}
+\end{frame}
+
+\section{Investigating Phase Extraction}
+
+\begin{frame}
+\frametitle{Investigating Phase Extraction}
+\begin{itemize}
+\item Consider a general unitary operator $\tilde{Q}$ as well as its adjoint $\tilde{Q}^\dagger$ each acting on a computational basis state:
+\begin{align}
+\tilde{Q} \ket{k} &= \sum_j \alpha_{kj} \ket{j}, \\
+\tilde{Q}^\dagger \ket{k} &= \sum_j \beta_{kj} \ket{j}
+\end{align}
+\item Unitarity imposes
+\begin{equation}
+\ket{k} = \tilde{Q}^\dagger \tilde{Q} \ket{k} = \tilde{Q}^\dagger \left( \sum_j \alpha_{kj} \ket{j} \right) = \sum_{m} \left(\sum_j \alpha_{kj} \beta_{jm} \right)  \ket{m}
+\end{equation}
+\item This implies 
+\begin{equation}
+\delta_{km}= \sum_j \alpha_{kj} \beta_{jm}
+\end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+$\hat{Q}$ is defined via $\hat{Q}\ket{j}\ket{0} =\ket{j}\ket{\Psi_j}$ which \alert{underdetermines the operator}! Behaviour $\hat{Q} \ket{j} \ket{k}$ for arbitrary $k$ not specified: really, there is a family of $\hat{Q}$ operators!!! A general unitary acting on $n+m$ qubits has $(n+m)^2$ free parameters; we specify the behaviour for precisely $n$ of those cases, so that there are 
+\begin{equation}
+(n+m)^2 - n = n^2 + m^2 + 2m(n-1)
+\end{equation}
+equally valid operators $\hat{Q} \in \mathcal{Q}$, where $\mathcal{Q}$ represents a family of operators  ???
+We can represent $\tilde{Q} = \hat{Q} + \lambda \hat{P}$ for a dimensionless order parameter $\lambda$ and an `offset operator' $\hat{P}$. Then 
+\begin{equation}
+\tilde{Q}\hat{R} \tilde{Q} = (\hat{Q} + \lambda \hat{P})^\dagger \hat{R} (\hat{Q} + \lambda \hat{P}) = \hat{Q}^\dagger \hat{R} \hat{Q} + \lambda \left( \hat{Q}^\dagger  \hat{R} \hat{P} + \hat{P}^\dagger \hat{R} \hat{Q}\right) + \lambda^2 \hat{P}^\dagger \hat{R} \hat{P}
+\end{equation}
+ 
+ 
+THINK THIS THROUGH PROPERLY AND THEN DO BARREN PLATEAUS!! 
+ 
 \end{frame}
 
 \section{Next Steps}

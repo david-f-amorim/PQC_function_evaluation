@@ -1,16 +1,16 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from matplotlib import rcParams
-from tools import psi, bin_to_dec, dec_to_bin, full_encode  
+from tools import psi, bin_to_dec, dec_to_bin, full_encode, get_com  
 
 # config 
 L_phase = 6
 real_p = True 
-m = 3
-weights_phase ="outputs/__TEMP100_weights_6_3(0)_6_600_psi_QRQ_quadratic(S)(PR)(r).npy"     #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+m = 5
+weights_phase ="outputs/weights_6_5(0)_6_600_psi_MM_(S)(PR)(r).npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="quadratic"
+psi_mode="psi"
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -107,6 +107,9 @@ phase *= (amplitude > 1e-15).astype(float)
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
+# get commutator 
+com= np.abs(np.mean(get_com(m,L_phase, real_p, repeat_params, weights_phase)))
+
 # print info
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
@@ -121,7 +124,8 @@ print("Epsilon: ",f"{eps:.3e}")
 print("Chi: ",f"{chi:.3e}") 
 print("Mu: ",f"{mu:.3e}") 
 print("Sigma: ",f"{sigma:.3e}") 
-print("Omega: ",f"{omega:.3f}") 
+print("Omega: ",f"{omega:.3f}")
+#print("Com: ", f"{com:.3e}") 
 print("-----------------------------------")
 
 #------------------------------------------------------------------------------
@@ -428,8 +432,9 @@ if phase_loss_comp==True:
         eps = 1 - norm 
         chi = np.mean(np.abs(phase - phase_rounded))
         omega= 1/(mu+sigma+eps+chi)
+        #com= np.abs(np.mean(get_com(m,L_phase, real_p, repeat_params, str(weights_arr[i]))))
 
-        print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}  ")
+        print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}") #; com: {com:.3e}  ")
 
     if delta_round:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following

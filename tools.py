@@ -6,6 +6,7 @@ from qiskit_machine_learning.neural_networks import SamplerQNN
 from qiskit_machine_learning.connectors import TorchConnector
 from qiskit.circuit.library import U3Gate
 from qiskit.utils import algorithm_globals
+import qiskit.quantum_info as qi
 from qiskit.primitives import Sampler
 from torch.optim import Adam
 from torch.nn import MSELoss, L1Loss, CrossEntropyLoss, KLDivLoss
@@ -1222,7 +1223,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     # encode amplitudes 
     circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
     circuit = circuit.assign_parameters(weights_A)
-    
+
     # evaluate function
     qc = generate_network(n,m, L_p, real=real_p,repeat_params=repeat_params)
     qc = qc.assign_parameters(weights_p)
@@ -1666,3 +1667,34 @@ def get_phase_target(m, func):
     phase_rounded = 2 * np.pi * phase_reduced_dec
 
     return phase_rounded
+
+def get_com(m,L_p, real_p, repeat_params, weights_p):
+    """Assume standard conditions"""
+    n=6 
+
+    weights=np.load(weights_p)
+
+    # set up circuits 
+    input_register = QuantumRegister(n, "input")
+    target_register = QuantumRegister(m, "target")
+    circuit = QuantumCircuit(input_register, target_register) 
+    input_register2=QuantumRegister(n, "input")
+    target_register2 = QuantumRegister(m, "target")
+    circuit2 = QuantumCircuit(input_register2, target_register2) 
+
+    # evaluate function
+    qc = generate_network(n,m, L_p, real=real_p,repeat_params=repeat_params)
+    qc = qc.assign_parameters(weights)
+    circuit.compose(qc, [*input_register,*target_register], inplace=True) 
+    op=qi.Operator(circuit)
+    op_arr=op.data 
+
+    # extract phases 
+    circuit2.compose(extract_phase(m),target_register2, inplace=True)
+    op2=qi.Operator(circuit2)
+    op_arr2=op2.data 
+
+    ## get commutator 
+    com= (op_arr @ op_arr2) - (op_arr2 @ op_arr)
+
+    return com 
