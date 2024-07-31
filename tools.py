@@ -542,6 +542,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
         recovered_weights=None
         recovered_mismatch=None 
         recovered_loss=None 
+        recovered_grad=None 
         for k in np.arange(100,epochs, step=100):
             if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
                 recovered_weights=os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
@@ -549,15 +550,17 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
                 recovered_mismatch=os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")
             if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
-                recovered_loss=os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")        
+                recovered_loss=os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy") 
+            if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+                recovered_grad=os.path.join("outputs", f"__TEMP{k}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")            
         
         if recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
             initial_weights=np.load(recovered_weights)
         else:
             if train_superpos: 
-                 initial_weights = algorithm_globals.random.random(len(qc.parameters))
+                initial_weights =np.zeros(len(qc.parameters))  #algorithm_globals.random.random(len(qc.parameters))
             else:    
-                initial_weights = algorithm_globals.random.random(len(qc.parameters[n:]))    
+                initial_weights =np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters[n:]))    
     
     else:
         if train_superpos: 
@@ -572,12 +575,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     optimizer = Adam(model.parameters(), lr=lr, betas=(b1, b2), weight_decay=0.005) # Adam optimizer 
                 
     # set up arrays to store training outputs 
-    if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None:
+    if recover_temp and recovered_weights != None and recovered_mismatch != None and recovered_loss != None and recovered_grad !=None:
         mismatch_vals=np.load(recovered_mismatch)
         loss_vals=np.load(recovered_loss)
+        grad_vals=np.load(recovered_grad)
     else:    
         mismatch_vals = np.empty(epochs)
         loss_vals = np.empty(epochs)
+        grad_vals = np.empty(epochs)
 
     # generate x and f(x) values
     pn =n - nint
@@ -759,12 +764,14 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             else:
                 loss = criterion(model(input), target)
 
+
         loss.backward()
         optimizer.step()
 
-        # save loss for plotting 
+        # save loss and grad for plotting 
         loss_vals[i]=loss.item()
-
+        grad_vals[i]=torch.mean(model.weight.grad).numpy()
+        
         # set up circuit with calculated weights
         if train_superpos:
             if loss_str=="QRQ":
@@ -896,11 +903,13 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             np.save(os.path.join("outputs", f"__TEMP{i}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
             np.save(os.path.join("outputs", f"__TEMP{i}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
             np.save(os.path.join("outputs", f"__TEMP{i}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+            np.save(os.path.join("outputs", f"__TEMP{i}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),grad_vals)
             
             # delete previous temp files
             prev_weights=f"__TEMP{i-100}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
             prev_mismatch=f"__TEMP{i-100}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
             prev_loss=f"__TEMP{i-100}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+            prev_grad=f"__TEMP{i-100}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
 
             if os.path.isfile(os.path.join("outputs", prev_weights)):
                 os.remove(os.path.join("outputs", prev_weights))
@@ -909,7 +918,10 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
                 os.remove(os.path.join("outputs", prev_mismatch))
 
             if os.path.isfile(os.path.join("outputs", prev_loss)):
-                os.remove(os.path.join("outputs", prev_loss))        
+                os.remove(os.path.join("outputs", prev_loss))  
+
+            if os.path.isfile(os.path.join("outputs", prev_grad)):
+                os.remove(os.path.join("outputs", prev_grad))           
 
             # make note of last created temp files
             temp_ind = i   
@@ -931,7 +943,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
 
         prefix="\t" 
-        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
+        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Grad {grad_vals[i]:.2e} ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
         
     print(" ", flush=True, file=sys.stdout)
@@ -953,13 +965,16 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     temp_weights=f"__TEMP{temp_ind}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
     temp_mismatch=f"__TEMP{temp_ind}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
     temp_loss=f"__TEMP{temp_ind}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
+    temp_grad=f"__TEMP{temp_ind}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"
 
     if os.path.isfile(os.path.join("outputs", temp_weights)):
             os.remove(os.path.join("outputs", temp_weights))
     if os.path.isfile(os.path.join("outputs", temp_mismatch)):
             os.remove(os.path.join("outputs", temp_mismatch))
     if os.path.isfile(os.path.join("outputs", temp_loss)):
-            os.remove(os.path.join("outputs", temp_loss))               
+            os.remove(os.path.join("outputs", temp_loss)) 
+    if os.path.isfile(os.path.join("outputs", temp_grad)):
+            os.remove(os.path.join("outputs", temp_grad))                        
 
     # save outputs 
     with no_grad():
@@ -968,6 +983,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
     np.save(os.path.join("outputs", f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),generated_weights)
     np.save(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),mismatch_vals)
     np.save(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),loss_vals)
+    np.save(os.path.join("outputs", f"grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}"),grad_vals)
     
 
     return 0 
@@ -1084,8 +1100,9 @@ def check_duplicates(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce
     check_mismatch = os.path.isfile(os.path.join("outputs", f"mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_weights = os.path.isfile(os.path.join("outputs", f"loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     check_loss = os.path.isfile(os.path.join("outputs", f"weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
+    check_grad = os.path.isfile(os.path.join("outputs", f"grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy"))
     
-    return check_mismatch & check_weights & check_loss
+    return check_mismatch & check_weights & check_loss & check_grad
 
 def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train_superpos, real, repeat_params,WILL_p, WILL_q):   
     """
@@ -1118,6 +1135,7 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
     check_mismatch=False 
     check_weights=False 
     check_loss=False
+    check_grad=False
 
     for k in np.arange(100,epochs, step=100):
         if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_weights_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
@@ -1125,9 +1143,11 @@ def check_temp(n,m,L,epochs,func_str,loss_str,meta,nint,mint, phase_reduce,train
         if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_loss_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
             check_mismatch=True 
         if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_mismatch_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
-            check_loss=True         
+            check_loss=True   
+        if os.path.isfile(os.path.join("outputs", f"__TEMP{k}_grad_{n}{nis}_{m}{mis}_{L}_{epochs}_{func_str}_{loss_str}_{meta}.npy")):
+            check_grad=True            
     
-    return check_mismatch & check_weights & check_loss
+    return check_mismatch & check_weights & check_loss & check_grad
 
 def check_plots(n,m,L,epochs,func_str, loss_str, meta, log, mint, nint, phase_reduce,train_superpos, real, repeat_params, WILL_p, WILL_q):    
     """

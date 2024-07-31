@@ -231,31 +231,26 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \begin{frame}
 \frametitle{Investigating Phase Extraction}
 \begin{itemize}
-\item Consider a general unitary operator $\tilde{Q}$ as well as its adjoint $\tilde{Q}^\dagger$ each acting on a computational basis state:
-\begin{align}
-\tilde{Q} \ket{k} &= \sum_j \alpha_{kj} \ket{j}, \\
-\tilde{Q}^\dagger \ket{k} &= \sum_j \beta_{kj} \ket{j}
-\end{align}
-\item Unitarity imposes
+\item The operator $\hat{Q}$ is defined via 
 \begin{equation}
-\ket{k} = \tilde{Q}^\dagger \tilde{Q} \ket{k} = \tilde{Q}^\dagger \left( \sum_j \alpha_{kj} \ket{j} \right) = \sum_{m} \left(\sum_j \alpha_{kj} \beta_{jm} \right)  \ket{m}
+\hat{Q} \ket{j} \ket{0} = \ket{j} \ket{\Psi(j)}
 \end{equation}
-\item This implies 
+\item This leaves its action on more general input states $\ket{j}\ket{k}$ (with $\ket{k} \neq \ket{0}$) \alert{undetermined} 
+\item Thus, there is a \alert{family} $\mathcal{Q}$ of valid implementations of $\hat{Q}$ with $|\mathcal{Q}|=(n+m)^2 -n$ 
+\item We can represent a flawed implementation, $\tilde{Q}$, of $\hat{Q}$ via $\tilde{Q} = \hat{Q} + \lambda \hat{P}$ so that 
 \begin{equation}
-\delta_{km}= \sum_j \alpha_{kj} \beta_{jm}
+\tilde{Q}\hat{R} \tilde{Q} = \hat{Q}^\dagger \hat{R} \hat{Q} + \lambda \left[ \hat{Q}^\dagger  \hat{R} \hat{P} + \hat{P}^\dagger \hat{R} \hat{Q}\right] + \lambda^2 \left[ \hat{P}^\dagger \hat{R} \hat{P} \right]
 \end{equation}
+\item Beyond these very general observations \alert{no analytical insight into the problem was gained}
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-$\hat{Q}$ is defined via $\hat{Q}\ket{j}\ket{0} =\ket{j}\ket{\Psi_j}$ which \alert{underdetermines the operator}! Behaviour $\hat{Q} \ket{j} \ket{k}$ for arbitrary $k$ not specified: really, there is a family of $\hat{Q}$ operators!!! A general unitary acting on $n+m$ qubits has $(n+m)^2$ free parameters; we specify the behaviour for precisely $n$ of those cases, so that there are 
-\begin{equation}
+\section{Mitigating Barren Plateaus}
 
-\end{equation}
- 
- 
-THINK THIS THROUGH PROPERLY AND THEN DO BARREN PLATEAUS!! 
- 
+\begin{frame}
+\frametitle{Mitigating Barren Plateaus}
+most important seems to be `smart initialisation' or `warm-start'
+
 \end{frame}
 
 \section{Next Steps}
