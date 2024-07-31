@@ -221,7 +221,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \item The design of the \emph{qiskit machine learning} library \alert{constrains the customisability} of loss functions, in particular relating to phases 
 \item Thus, \alert{loss functions based directly on the extracted phase} factors are (apparently) \alert{impossible} 
 \item Within the limits of these constraints the \alert{best} possible loss function seems to be \alert{SAM} 
-\item Beyond the unsuccessful attempts of WIM and WILL no further  \emph{ansatze} for loss functions come to mind 
+\item Beyond the unsuccessful attempts of WIM and WILL no further  \emph{ans\"atze} for loss functions come to mind 
 \item For the time being, the search for an improved loss function will be \alert{put on hold}
 \end{itemize}
 \end{frame}

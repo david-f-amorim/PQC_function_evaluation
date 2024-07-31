@@ -558,13 +558,12 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             initial_weights=np.load(recovered_weights)
         else:
             if train_superpos: 
-                initial_weights =np.zeros(len(qc.parameters))  #algorithm_globals.random.random(len(qc.parameters))
+                initial_weights =np.zeros(len(qc.parameters))  
             else:    
-                initial_weights =np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters[n:]))    
-    
+                initial_weights =np.zeros(len(qc.parameters)[n:]) #algorithm_globals.random.random(len(qc.parameters[n:]))    
     else:
         if train_superpos: 
-            initial_weights =np.zeros(len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))
+            initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) #np.zeros(len(qc.parameters)) CHANGE BACK AFTER TESTING!!
         else:    
             initial_weights = np.zeros(len(qc.parameters[n:])) #algorithm_globals.random.random(len(qc.parameters[n:]))
     
