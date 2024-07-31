@@ -19,15 +19,34 @@ from torch.autograd import Variable
 import sys, time, os 
 import torch 
 import warnings
-from binary_tools import bin_to_dec, dec_to_bin 
+from binary_tools import bin_to_dec, dec_to_bin  # type: ignore
 
 def N_gate(params, real=False):
-    """
-    Construct the two-qubit N gate (as defined in Vatan 2004)
-    in terms of three parameters, stored in list or tuple 'params'
-    """
+    r"""
+    Constructs the two-qubit three-parameter $\mathcal{N}$ gate, defined as 
+    $$\mathcal{N}(\alpha, \beta, \gamma) = \exp \left( i \left[ \alpha X \otimes X + \beta Y \otimes Y + \gamma Z \otimes Z \right] \right),$$
+    where $X$, $Y$, $Z$ are the Pauli operators. 
 
-    circuit = QuantumCircuit(2, name="N Gate")
+    This is implemented via three CX gates, three Rz gates and two Ry gates, as shown in [Vatan 2004](https://arxiv.org/pdf/quant-ph/0308006).  
+
+    Arguments:
+    ----
+    - **params** : *array_like*
+
+        Array-like object containing the gate parameters, corresponding to the qubit rotation angles. 
+
+    - **real** : *boolean*
+       
+        If True, a two-parameter version of the $\mathcal{N}$ gate is implemented instead, with one of CX gatess and all of the 
+        Rz gates removed. This ensures real amplitudes. Default is False.   
+             
+    Returns:
+    ----
+    - **circuit** : *QuantumCircuit*
+
+        Implementation of the $\mathcal{N}$ gate as a qiskit `QuantumCircuit`. 
+
+    """
 
     if real:
         circuit = QuantumCircuit(2, name="RN Gate")
@@ -36,6 +55,7 @@ def N_gate(params, real=False):
         circuit.ry(params[1], 1)
         circuit.cx(0, 1)
     else:    
+        circuit = QuantumCircuit(2, name="N Gate")
         circuit.rz(-np.pi / 2, 1)
         circuit.cx(1, 0)
         circuit.rz(params[0], 0)
@@ -48,10 +68,59 @@ def N_gate(params, real=False):
     return circuit 
 
 def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False, shift=0): 
-    """
-    Construct an input layer consisting of controlled single-qubit rotations
-    with the n input qubits acting as controls and the m target qubits
-    acting as targets. 
+    r"""
+
+    Implement a QCNN input layer as a parametrised quantum circuit. 
+
+    The layer consists of a sequence of controlled arbitrary single-qubit operations (CU3 operations)
+    applied to the target register with the input qubits acting a controls. This feeds information 
+    about the input register state into the target register. 
+    
+    Arguments:
+    ----
+    - **n** : *int*
+
+        Number of qubits in the input register. 
+
+    - **m** : *int* 
+
+        Number of qubits in the target register. 
+
+    - **par_label** : *str*
+
+        Label to assign to the parameter vector. 
+
+    - **ctrl_state** : *int* 
+
+        Control state of the controlled gates. If equal to 0, the controlled operation is applied 
+        when the control qubit is in state $\ket{0}$. If equal to 1, the controlled operation is 
+        applied when the control qubit is in state $\ket{1}$. Default is 0. 
+
+    - **real** : *boolean*
+
+        If True, controlled Ry rotations are applied instead of CU3 operations. This ensures real 
+        amplitudes. Default is False.     
+
+    - **params** : *array_like*, *optional*
+
+        Directly assign values, stored in `params`, to the circuit parameters instead of creating a `ParameterVector`.      
+
+    - **AA** : *boolean* 
+
+        If True, each input qubit controls an operation on each target qubit, corresponding to an "all-to-all" layer topology. 
+        Default is False. 
+
+    - **shift** : *int* 
+
+        If `AA` is False, the $j$th input qubit controls an operation applied on the $(j+s)$th target qubit with wrap-around 
+        for `n > m`. Default is 0.     
+
+    Returns:
+    ---
+    - **circuit** : *QuantumCircuit* 
+
+        The qiskit `QuantumCircuit` implementation of the input layer. 
+    
     """
 
     # set up circuit 
@@ -96,7 +165,6 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
                 qc.append(cu3, [qubits[i], qubits[j+n]])
                 param_index += num_par
         
-
     # package as instruction
     qc_inst = qc.to_instruction()
     circuit = QuantumCircuit(n+m)
@@ -106,9 +174,37 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
 
 def conv_layer_NN(m, par_label, real=False, params=None):
     """
-    Construct a linear (neighbour-to-neighbour) convolutional layer
-    via the cascaded application of the N gate to the m-qubit target 
-    register.   
+
+    Implement a QCNN all-to-all convolutional layer as a parametrised quantum circuit. 
+
+    The layer consists of the cascaded application of the two-qubit $\mathcal{N}$ gate on
+    the target register. $\mathcal{N}$ is applied to all combinations of target qubits ("all-to-all" topology),
+    resulting in a gate cost quadratic in the size of the target register. 
+    
+    Arguments:
+    ----
+    - **m** : *int* 
+
+        Number of qubits in the target register. 
+
+    - **par_label** : *str*
+
+        Label to assign to the parameter vector. 
+
+    - **real** : *boolean*
+
+        If True, the real version of the $\mathcal{N}$ gate is used (which only involves CX and Ry operations). This ensures real 
+        amplitudes. Default is False.     
+
+    - **params** : *array_like*, *optional*
+
+        Directly assign values, stored in `params`, to the circuit parameters instead of creating a `ParameterVector`.      
+  
+    Returns:
+    ---
+    - **circuit** : *QuantumCircuit* 
+
+        The qiskit `QuantumCircuit` implementation of the input layer.
     """
 
     # set up circuit 
@@ -133,9 +229,6 @@ def conv_layer_NN(m, par_label, real=False, params=None):
 
     for j in np.arange(num_gates):
         qc.compose(N_gate(params[int(param_index) : int(param_index + num_par)], real=real),pairs[int(j)],inplace=True)
-        if j != num_gates -1:
-            #qc.barrier()
-            s=" "
         param_index += num_par 
     
     # package as instruction
