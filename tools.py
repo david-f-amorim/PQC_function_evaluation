@@ -770,7 +770,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
 
         # save loss and grad for plotting 
         loss_vals[i]=loss.item()
-        grad_vals[i]=torch.mean(model.weight.grad).numpy()
+        grad_vals[i]=np.sum(model.weight.grad.numpy()**2)
         
         # set up circuit with calculated weights
         if train_superpos:
