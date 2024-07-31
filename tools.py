@@ -1,3 +1,7 @@
+"""
+Collection of useful functions for a variety of purposes.
+"""
+
 import numpy as np 
 from qiskit import QuantumCircuit, QuantumRegister, Aer, execute 
 from qiskit.circuit import ParameterVector
@@ -15,139 +19,33 @@ from torch.autograd import Variable
 import sys, time, os 
 import torch 
 import warnings
+from binary_tools import bin_to_dec, dec_to_bin 
 
-def dec_to_bin(digits,n,encoding,nint=None, overflow_error=True):
+def N_gate(params, real=False):
     """
-    Encode a float `digits` in base-10 to a binary string `bits`. 
-     
-    Binary encoding must be specified as  `'unsigned mag'`, `'signed mag'`, 
-    or `'twos comp'` for unsigned magnitude, signed magnitude, and two's
-    complement representations, respectively. The fractional part is rounded to 
-    the available precision: unless otherwise specified via `nint`, all bits (apart 
-    from the sign bit) are assumed to be integer bits. Little endian convention is used.
-    
+    Construct the two-qubit N gate (as defined in Vatan 2004)
+    in terms of three parameters, stored in list or tuple 'params'
     """
 
-    # set number of integer bits
-    if nint==None:
-        nint=n 
+    circuit = QuantumCircuit(2, name="N Gate")
 
-    # at least one bit is reserved to store the sign 
-    if nint==n and (encoding=='signed mag' or encoding=='twos comp'):
-        nint-= 1 
+    if real:
+        circuit = QuantumCircuit(2, name="RN Gate")
+        circuit.cx(1, 0)
+        circuit.ry(params[0], 0)
+        circuit.ry(params[1], 1)
+        circuit.cx(0, 1)
+    else:    
+        circuit.rz(-np.pi / 2, 1)
+        circuit.cx(1, 0)
+        circuit.rz(params[0], 0)
+        circuit.ry(params[1], 1)
+        circuit.cx(0, 1)
+        circuit.ry(params[2], 1)
+        circuit.cx(1, 0)
+        circuit.rz(np.pi / 2, 0)
 
-    # determine number of precision bits 
-    if encoding=='signed mag' or encoding=='twos comp': 
-        p = n - nint - 1
-    elif encoding=='unsigned mag':
-        p = n - nint 
-    else: 
-        raise ValueError("Unrecognised type of binary encoding. Should be 'unsigned mag', 'signed mag', or 'twos comp'.")
-
-    # raise overflow error if float is out of range for given encoding
-    if overflow_error:
-
-        if encoding=='unsigned mag':
-            min_val = 0
-            max_val = (2.**nint) - (2.**(-p)) 
-        elif encoding=='signed mag':
-            min_val = - (2.**nint - 2.**(-p))
-            max_val = + (2.**nint - 2.**(-p))     
-        elif encoding=='twos comp':
-            min_val = - (2.**nint)
-            max_val = + (2.**nint - 2.**(-p)) 
-
-        if (digits>max_val and nint != 0) or digits<min_val:
-            raise ValueError(f"Float {digits} out of available range [{min_val},{max_val}].")   
-
-    
-    # take absolute value and separate integer and fractional part:
-    digits_int = np.modf(np.abs(digits))[1]
-    digits_frac = np.modf(np.abs(digits))[0] 
-
-    # add fractional parts
-    bits_frac=''
-    for i in range(p):
-        bits_frac +=str(int(np.modf(digits_frac * 2)[1])) 
-        digits_frac =np.modf(digits_frac * 2)[0]
-
-    # add integer parts
-    bits_int=''
-    for i in range(nint):
-        bits_int +=str(int(digits_int % 2))
-        digits_int = digits_int // 2 
-
-    bits_int= bits_int[::-1]    
-
-    if encoding=="unsigned mag":
-        bits = bits_int + bits_frac 
-    if encoding=="signed mag":
-        if digits >= 0:
-            bits = '0' +  bits_int + bits_frac
-        else:
-            bits = '1' +  bits_int + bits_frac  
-    if encoding=="twos comp":
-        if digits >=0:
-            bits = '0' +  bits_int + bits_frac
-        elif digits== min_val:
-            bits = '1' +  bits_int + bits_frac   
-        else:
-            bits = twos_complement('0' +  bits_int + bits_frac)                         
-
-    return bits
-
-def bin_to_dec(bits,encoding,nint=None):
-    """
-    Decode a binary string `bits` to a float `digits` in base-10. 
-    
-    Binary encoding must be specified as 
-    `'unsigned mag'`, `'signed mag'`, or `'twos comp'` for unsigned magnitude, signed magnitude, and two's
-    complement representations, respectively. Unless the number of integer bits is specified using `nint`,
-    all bits (apart from the sign bit) are assumed to be integer bits. Little endian convention is used.
-    """
-
-    n = len(bits)
-    if nint==None:
-        nint=n
-
-    bits=bits[::-1]
-          
-    bit_arr = np.array(list(bits)).astype('int')
-
-    if encoding=="unsigned mag":
-        p = n - nint 
-        digits = np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n)])
-    elif encoding=="signed mag":
-        if nint==n: 
-            nint -= 1
-        p = n - nint -1
-        digits = ((-1.)**bit_arr[-1] ) * np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n-1)])
-    elif encoding=="twos comp":
-        if nint==n: 
-            nint -= 1
-        p = n - nint -1
-        digits = (-1.)*bit_arr[-1]*2**nint + np.sum([bit_arr[i] * (2.**(i-p)) for i in range(n-1)])
-    else: 
-        raise ValueError("Unrecognised type of binary encoding. Should be 'unsigned mag', 'signed mag', or 'twos comp'.") 
-
-    return digits 
-
-def twos_complement(binary):
-    """
-    For a bit string `binary` calculate the two's complement binary string `compl`. 
-    
-    Little endian convention is used. An all-zero bit string is its own complement.
-    """   
-    binary_to_array = np.array(list(binary)).astype(int)
-   
-    if np.sum(binary_to_array)==0:
-        return binary 
-   
-    inverted_bits = ''.join((np.logical_not(binary_to_array).astype(int)).astype(str))
-
-    compl = dec_to_bin(bin_to_dec(inverted_bits, encoding='unsigned mag')+ 1,len(binary),encoding='unsigned mag', round=False) 
-    
-    return compl
+    return circuit 
 
 def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False, shift=0): 
     """
@@ -204,32 +102,6 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
     circuit = QuantumCircuit(n+m)
     circuit.append(qc_inst, qubits)
     
-    return circuit 
-
-def N_gate(params, real=False):
-    """
-    Construct the two-qubit N gate (as defined in Vatan 2004)
-    in terms of three parameters, stored in list or tuple 'params'
-    """
-
-    circuit = QuantumCircuit(2, name="N Gate")
-
-    if real:
-        circuit = QuantumCircuit(2, name="RN Gate")
-        circuit.cx(1, 0)
-        circuit.ry(params[0], 0)
-        circuit.ry(params[1], 1)
-        circuit.cx(0, 1)
-    else:    
-        circuit.rz(-np.pi / 2, 1)
-        circuit.cx(1, 0)
-        circuit.rz(params[0], 0)
-        circuit.ry(params[1], 1)
-        circuit.cx(0, 1)
-        circuit.ry(params[2], 1)
-        circuit.cx(1, 0)
-        circuit.rz(np.pi / 2, 0)
-
     return circuit 
 
 def conv_layer_NN(m, par_label, real=False, params=None):
@@ -442,6 +314,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
             circuit=circuit.inverse()   
 
     return circuit 
+
+#---------------------------------------------------------------------------------------------------
 
 def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, tau_1, tau_2, tau_3, repeat_params, WILL_p, WILL_q):
     """
@@ -958,7 +832,7 @@ def train_QNN(n,m,L, seed, shots, lr, b1, b2, epochs, func,func_str,loss_str,met
             time_str = f"{int(hours):02}:{int(mins):02}:{sec:05.2f}"
 
         prefix="\t" 
-        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Var(Grad) {var_grad_vals[i]:.2e} ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
+        print(f"{prefix}[{u'█'*a}{('.'*(20-a))}] {100.*((i+1)/epochs):.2f}% ; Loss {loss_vals[i]:.2e} ; Mismatch {mismatch:.2e} ; ETA {time_str}", end='\r', file=sys.stdout, flush=True)
         
         
     print(" ", flush=True, file=sys.stdout)
