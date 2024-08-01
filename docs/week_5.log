@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  31 JUL 2024 10:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  1 AUG 2024 11:17
 entering extended mode
 **./week_5.tex
 (week_5.tex
@@ -1071,59 +1071,58 @@ File: uesint.fd
 )
 [3
 
-] [4
+] (week_5.toc) [4
 
-] (week_5.toc) [5
-
-] [6
+] [5
 
 ]
-<im/SAM_WIM_WILL_F_new.pdf, id=263, 715.47299pt x 715.47299pt>
+<im/SAM_WIM_WILL_F_new.pdf, id=237, 715.47299pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F_new.pdf  used on input line 117.
+Package pdftex.def Info: im/SAM_WIM_WILL_F_new.pdf  used on input line 110.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-Overfull \vbox (2.06783pt too high) detected at line 117
+Overfull \vbox (2.06783pt too high) detected at line 110
  []
 
-[7
+[6
 
  <./im/SAM_WIM_WILL_F_new.pdf>]
-<im/SAM_WIM_WILL_F2_new.pdf, id=314, 731.54634pt x 715.47299pt>
+<im/SAM_WIM_WILL_F2_new.pdf, id=287, 731.54634pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F2_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F2_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 143.
+Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 136.
 (pdftex.def)             Requested size: 171.14764pt x 167.38289pt.
- [8
+ [7
 
  <./im/SAM_WIM_WILL_F2_new.pdf>]
-<im/SAM_WIM_WILL_H_new.pdf, id=355, 742.67374pt x 715.47299pt>
+<im/SAM_WIM_WILL_H_new.pdf, id=329, 742.67374pt x 715.47299pt>
 File: im/SAM_WIM_WILL_H_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_H_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 169.
+Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 162.
 (pdftex.def)             Requested size: 171.14764pt x 164.87192pt.
- [9
+ [8
 
- <./im/SAM_WIM_WILL_H_new.pdf>] [10
+ <./im/SAM_WIM_WILL_H_new.pdf>] [9
+
+] [10
 
 ] [11
 
 ] [12
 
-] [13
+] (week_5.toc) [13
 
-] (week_5.toc) [14
+] [14
 
-] [15
+] (week_5.toc)
+[15
 
-] (week_5.toc) [16
+] [16
 
-] [17
+] (week_5.toc) [17
 
-] (week_5.toc) [18
-
-] [19
+] [18
 
 ]
 \tf@nav=\write6
@@ -1140,10 +1139,10 @@ Package rerunfilecheck Info: File `week_5.out' has not changed.
 (rerunfilecheck)             Checksum: 2F2665866A1119FF39B9CCB59A31181B;769.
  ) 
 Here is how much of TeX's memory you used:
- 24069 strings out of 478864
- 455226 string characters out of 2848660
+ 24065 strings out of 478864
+ 455191 string characters out of 2848660
  762247 words of memory out of 3000000
- 41399 multiletter control sequences out of 15000+600000
+ 41397 multiletter control sequences out of 15000+600000
  413553 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,793s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1166,9 +1165,9 @@ X/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/david/AppData/Loc
 al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week_5.pdf (19 pages, 423118 bytes).
+Output written on week_5.pdf (18 pages, 417674 bytes).
 PDF statistics:
- 748 PDF objects out of 1000 (max. 8388607)
- 44 named destinations out of 1000 (max. 500000)
+ 720 PDF objects out of 1000 (max. 8388607)
+ 42 named destinations out of 1000 (max. 500000)
  242 words of extra memory for PDF output out of 10000 (max. 10000000)
 

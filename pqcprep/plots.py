@@ -1,6 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
-from tools import check_plots
+from .tools import check_plots
 from matplotlib import rcParams
 import os, argparse 
 

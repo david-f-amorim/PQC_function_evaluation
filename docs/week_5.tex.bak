@@ -59,13 +59,6 @@ Work on strategies to mitigate barren plateaus, e.g. implement layer-by-layer tr
 \end{alertblock}
 \end{frame}
 
-\begin{frame}
-THIS WEEK INCLUDE EXAMPLES WITH HIGH $m$ !!
-
-KEEP WORKING ON CHIL!! MAYBE RENAME TO QRQ??v DOES NOT WORK !!! LLLL
-
-\end{frame}
-
 \section{Improving the Loss Function}
 
 \begin{frame}
@@ -248,19 +241,27 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \section{Mitigating Barren Plateaus}
 
 \begin{frame}
+\frametitle{Mitigating Barren Plateaus}
+\begin{itemize}
+\item The most important strategy to mitigate barren plateaus seems to be a so-called \alert{warm start}, also known as \alert{smart initialisation}
+\item 
+\end{itemize}
+
 GENERATE A FEW PLOTS FOR GRAD AND VAR GRAD FOR DIFFERENT n and m...: diagonose problem: plot var(grad) and |grad| as function of epoch for different n+m (maybe go down with n  as well)...
 
 
-\frametitle{Mitigating Barren Plateaus}
-most important seems to be `smart initialisation' or `warm-start'
+
 
 \end{frame}
+
+
 
 \section{Next Steps}
 
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
+\item Keep re-writing code for easier implementation of barren plateau mitigation techniques
 \item ...
 \end{itemize}
 \end{frame}

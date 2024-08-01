@@ -1,7 +1,9 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from matplotlib import rcParams
-from tools import psi, bin_to_dec, dec_to_bin, full_encode, get_com  
+from tools import full_encode
+from binary_tools import bin_to_dec, dec_to_bin
+from psi_tools import psi #type: ignore
 
 # config 
 L_phase = 6
@@ -107,9 +109,6 @@ phase *= (amplitude > 1e-15).astype(float)
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
-# get commutator 
-com= np.abs(np.mean(get_com(m,L_phase, real_p, repeat_params, weights_phase)))
-
 # print info
 bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
@@ -125,7 +124,6 @@ print("Chi: ",f"{chi:.3e}")
 print("Mu: ",f"{mu:.3e}") 
 print("Sigma: ",f"{sigma:.3e}") 
 print("Omega: ",f"{omega:.3f}")
-#print("Com: ", f"{com:.3e}") 
 print("-----------------------------------")
 
 #------------------------------------------------------------------------------
@@ -432,9 +430,8 @@ if phase_loss_comp==True:
         eps = 1 - norm 
         chi = np.mean(np.abs(phase - phase_rounded))
         omega= 1/(mu+sigma+eps+chi)
-        #com= np.abs(np.mean(get_com(m,L_phase, real_p, repeat_params, str(weights_arr[i]))))
 
-        print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}") #; com: {com:.3e}  ")
+        print(f"[{loss_arr[i]}] norm: {norm:.5f}; epsilon: {eps:.3e}; chi: {chi:.3e}; mu: {mu:.3e}; sigma: {sigma:.3e}; omega: {omega:.3f}") 
 
     if delta_round:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following

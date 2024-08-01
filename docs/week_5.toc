@@ -1,6 +1,6 @@
 \babel@toc {UKenglish}{}
 \beamer@sectionintoc {1}{Preliminaries}{2}{0}{1}
-\beamer@sectionintoc {2}{Improving the Loss Function}{5}{0}{2}
-\beamer@sectionintoc {3}{Investigating Phase Extraction}{14}{0}{3}
-\beamer@sectionintoc {4}{Mitigating Barren Plateaus}{16}{0}{4}
-\beamer@sectionintoc {5}{Next Steps}{18}{0}{5}
+\beamer@sectionintoc {2}{Improving the Loss Function}{4}{0}{2}
+\beamer@sectionintoc {3}{Investigating Phase Extraction}{13}{0}{3}
+\beamer@sectionintoc {4}{Mitigating Barren Plateaus}{15}{0}{4}
+\beamer@sectionintoc {5}{Next Steps}{17}{0}{5}
