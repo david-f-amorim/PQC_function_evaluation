@@ -7,7 +7,7 @@ parser.add_argument('-n','--n', help="Number of input qubits.", default=2, type=
 parser.add_argument('-m','--m', help="Number of target qubits.", default=2, type=int)
 parser.add_argument('-L','--L', help="Number of network layers. If multiple values given will execute sequentially.", default=[6],type=int, nargs="+")
 parser.add_argument('-f','--f', help="Phase function to evaluate.", default=None ,choices=["psi", "linear", "quadratic", "sine"])
-parser.add_argument('-l','--loss', help="Loss function.", default="MM", choices=["CE", "MSE", "L1", "KLD", "MM", "WIM", "WILL", "QRQ"])
+parser.add_argument('-l','--loss', help="Loss function.", default="SAM", choices=["CE", "MSE", "L1", "KLD", "SAM", "WIM", "WILL"])
 parser.add_argument('-e','--epochs', help="Number of epochs.", default=600,type=int)
 parser.add_argument('-M','--meta', help="String with meta data.", default="")
 

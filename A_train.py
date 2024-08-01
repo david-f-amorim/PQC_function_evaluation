@@ -5,7 +5,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
     parser.add_argument('-n','--n', help="Number of input qubits.", default=6, type=int)
     parser.add_argument('-L','--L', help="Number of network layers. If multiple values given will execute sequentially.", default=[3],type=int, nargs="+")
-    parser.add_argument('-l','--loss', help="Loss function.", default="MM", choices=["CE", "MSE", "L1", "KLD", "MM"])
+    parser.add_argument('-l','--loss', help="Loss function.", default="SAM", choices=["CE", "MSE", "L1", "KLD", "SAM"])
     parser.add_argument('-f','--f', help="Function to evaluate (variable: x).", default=None)
     parser.add_argument('-fs','--f_str', help="String describing function.")
     parser.add_argument('-e','--epochs', help="Number of epochs.", default=600,type=int)
