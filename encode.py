@@ -1,38 +1,41 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from matplotlib import rcParams
-from .phase_tools import full_encode
-from .binary_tools import bin_to_dec, dec_to_bin
-from .psi_tools import psi 
+from pqcprep.phase_tools import full_encode
+from pqcprep.binary_tools import bin_to_dec, dec_to_bin
+from pqcprep.psi_tools import psi 
 
 # config 
 L_phase = 6
 real_p = True 
-m = 5
-weights_phase ="outputs/weights_6_5(0)_6_600_psi_MM_(S)(PR)(r).npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+m = 3
+weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_quadratic_SAM_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="psi"
+psi_mode="quadratic"
 
-Q_only=False
+operators="QRQ"
+no_UA=True
 
 n = 6
-weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
-ampl_vec = np.load("ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.npy")
+weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
+ampl_vec = np.load("pqcprep/ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.npy")
 L_ampl =3
 
 # plot settings
 comp = True # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_p = False # don't produce full phase plot
 no_full_A = False # don't produce full amplitude plot
+
+comp_full = True
 
 # additional plots 
 A_L_comp = False 
@@ -88,8 +91,8 @@ wave_real_target_rounded = np.real(h_target_rounded)
 wave_im_target_rounded = np.imag(h_target_rounded)
 
 # load amplitude-only statevector (for QCNN, QGAN, GR)
-ampl_vec_QGAN = np.abs(np.load("ampl_outputs/amp_state_QGAN.npy"))
-ampl_vec_GR = np.abs(np.load("ampl_outputs/amp_state_GR.npy")) 
+ampl_vec_QGAN = np.abs(np.load("pqcprep/ampl_outputs/amp_state_QGAN.npy"))
+ampl_vec_GR = np.abs(np.load("pqcprep/ampl_outputs/amp_state_GR.npy")) 
 
 # load LPF phase [POST-PROCESSING TAKEN FROM HAYES 2023!]
 psi_LPF = np.load("full_encode/psi_LPF.npy")
@@ -104,7 +107,7 @@ h_QGAN = np.load("full_encode/full_state_QGAN.npy")
 h_GR = np.load("full_encode/full_state_GR.npy")
 
 # calculate state vector from QCNNs 
-state_vec, state_vec_full = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params,Q_only=Q_only full_state_vec=True)
+state_vec, state_vec_full = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params,full_state_vec=True, no_UA=no_UA, operators=operators)
 
 amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
@@ -115,7 +118,7 @@ real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
-bar =np.array(list(np.load("outputs/bar"+weights_phase[15:],allow_pickle='TRUE').item().values()))
+bar =np.array(list(np.load("pqcprep/outputs/bar"+weights_phase[23:],allow_pickle='TRUE').item().values()))
 mu = np.mean(bar) 
 sigma = np.std(bar)
 norm = np.sum(amplitude**2)
@@ -262,23 +265,85 @@ if no_full_A==False:
     """
     PLOT STATEVECTOR AMPLITUDES FOR VARIOUS TARGET REGISTER STATES
     """
-    plt.figure(figsize=figsize)
-    cmap = plt.get_cmap('jet', N)
-    plt.ylabel("Mismatch", fontsize=fontsize)
-    plt.xlabel(r"$f$ (Hz)", fontsize=fontsize)
-    plt.tick_params(axis="both", labelsize=ticksize)
+    fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [2**m, 1]})
+    ax[0].scatter(x_arr,phase,label="QCNN", color="red")
 
+    ax[0].set_ylabel(r"$[k]_m$", fontsize=fontsize)
+    ax[0].tick_params(axis="both", labelsize=ticksize)
+    im=ax[0].pcolormesh(x_arr,np.arange(2**m), np.abs(state_vec_full))
+    im.set_clim(np.min(np.abs(state_vec_full)),np.max(np.abs(state_vec_full)))
+    locs = ax[0].get_yticks() 
+    ax[0].set_yticks(locs[1:-1], [dec_to_bin(i,m) for i in np.arange(len(locs)-2)])
+    ax[0].set_xticks([]) if comp_full else ax[0].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
+    if comp_full:
+        ax[1].tick_params(axis="both", labelsize=ticksize)
+        ax[1].set_yticks([])
+        ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+
+        tar_arr = ampl_target if no_UA==False else np.ones(len(x_arr)) / np.sqrt(2**n)
+        
+        im2 =ax[1].pcolormesh(x_arr,np.arange(2**m)[0:2],tar_arr*np.ones((2,len(x_arr))))
+        im2.set_clim(np.min(np.abs(state_vec_full)),np.max(np.abs(state_vec_full))) 
+    else:
+        ax[1].set_visible(False)    
+        
+    cb=fig.colorbar(im,ax=ax.ravel().tolist(), location='top', orientation='horizontal', pad=0.05)
+    cb.ax.tick_params(labelsize=ticksize)
+
+    if show:
+        plt.show()
+    
+    fig.savefig(f"full_encode/{operators}_amp_{psi_mode}_{'H' if no_UA else 'UA'}{pdf_str}", bbox_inches='tight', dpi=500)
+
+if no_full_p==False:
+    """
+    PLOT STATEVECTOR PHASES FOR VARIOUS TARGET REGISTER STATES
+    """
+    full_phase = np.angle(state_vec_full) + 2* np.pi * (np.angle(state_vec_full) < -np.pi).astype(int)
+    full_phase *= (np.abs(state_vec_full) > 1e-15).astype(float) 
+
+    fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [2**m, 1]})
+    ax[0].scatter(x_arr,phase,label="QCNN", color="red")
+
+    ax[0].set_ylabel(r"$[k]_m$", fontsize=fontsize)
+    ax[0].tick_params(axis="both", labelsize=ticksize)
+    im=ax[0].pcolormesh(x_arr,np.arange(2**m), full_phase, cmap="twilight_shifted")
+    im.set_clim(-np.pi, np.pi)
+    locs = ax[0].get_yticks() 
+    ax[0].set_yticks(locs[1:-1], [dec_to_bin(i,m) for i in np.arange(len(locs)-2)])
+    ax[0].set_xticks([]) if comp_full else ax[0].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+
+    if comp_full:
+        ax[1].tick_params(axis="both", labelsize=ticksize)
+        ax[1].set_yticks([])
+        ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+
+        tar_arr = phase_rounded
+        
+        im2 =ax[1].pcolormesh(x_arr,np.arange(2**m)[0:2],tar_arr*np.ones((2,len(x_arr))), cmap="twilight_shifted")
+        im2.set_clim(-np.pi, np.pi) 
+    else:
+        ax[1].set_visible(False)    
+    
+    cb=fig.colorbar(im,ax=ax.ravel().tolist(), location='top', orientation='horizontal', pad=0.05)
+    cb.ax.tick_params(labelsize=ticksize)
+
+    if show:
+        plt.show()
+    
+    fig.savefig(f"full_encode/{operators}_phase_{psi_mode}_{'H' if no_UA else 'UA'}{pdf_str}", bbox_inches='tight', dpi=500)
+    
 
 #------------------------------------------------------------------------------------------------------
 
 if A_L_comp:
 
-    arr_1 = np.load("ampl_outputs/mismatch_6_1_600_x76_MM_40_168_.npy")
-    arr_2 = np.load("ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
-    arr_3 = np.load("ampl_outputs/mismatch_6_6_600_x76_MM_40_168_.npy")
-    arr_4 = np.load("ampl_outputs/mismatch_6_9_600_x76_MM_40_168_.npy")
-    arr_5 = np.load("ampl_outputs/mismatch_6_11_300_x76_MM_40_168_.npy")
+    arr_1 = np.load("pqcprep/ampl_outputs/mismatch_6_1_600_x76_MM_40_168_.npy")
+    arr_2 = np.load("pqcprep/ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
+    arr_3 = np.load("pqcprep/ampl_outputs/mismatch_6_6_600_x76_MM_40_168_.npy")
+    arr_4 = np.load("pqcprep/ampl_outputs/mismatch_6_9_600_x76_MM_40_168_.npy")
+    arr_5 = np.load("pqcprep/ampl_outputs/mismatch_6_11_300_x76_MM_40_168_.npy")
 
     M = np.array([arr_1,arr_2,arr_3,arr_4,arr_5], dtype="object")
     L = np.array([1,3,6,9,11])
@@ -302,9 +367,9 @@ if A_L_comp:
 
 if QGAN_comp:
 
-    arr_1 = np.load("ampl_outputs/mismatch_QGAN_12.npy")
-    arr_2 = np.load("ampl_outputs/mismatch_QGAN_20.npy")
-    arr_3 = np.load("ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
+    arr_1 = np.load("pqcprep/ampl_outputs/mismatch_QGAN_12.npy")
+    arr_2 = np.load("pqcprep/ampl_outputs/mismatch_QGAN_20.npy")
+    arr_3 = np.load("pqcprep/ampl_outputs/mismatch_6_3_600_x76_MM_40_168_.npy")
     
     M = np.array([arr_1,arr_2,arr_3], dtype="object")
     labels = [r"QGAN ($L=12$)",r"QGAN ($L=20$)",r"QCNN ($L=3$)"]
@@ -364,10 +429,10 @@ if phase_L_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT L
     """
     L_arr = np.array([3,6,9, 12])
-    arr_1 = "outputs/weights_6_4(0)_3_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 = "outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_3 = "outputs/weights_6_4(0)_9_600_psi_MM_(S)(PR)(r).npy"
-    arr_4 = "outputs/weights_6_4(0)_12_600_psi_MM_(S)(PR)(r).npy"
+    arr_1 = "pqcprep/outputs/weights_6_4(0)_3_600_psi_MM_(S)(PR)(r).npy"
+    arr_2 = "pqcprep/outputs/weights_6_4(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_3 = "pqcprep/outputs/weights_6_4(0)_9_600_psi_MM_(S)(PR)(r).npy"
+    arr_4 = "pqcprep/outputs/weights_6_4(0)_12_600_psi_MM_(S)(PR)(r).npy"
 
     weights_arr =np.array([arr_1, arr_2, arr_3, arr_4])
     colours = ["green", "blue", "red", "purple"]
@@ -422,9 +487,9 @@ if phase_loss_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
     loss_arr =np.array(["SAM","WIM", "WILL"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
-    arr_3 ="outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_2-1.npy"
+    arr_1 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_2 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
+    arr_3 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_2-1.npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3])
     colours = ["red", "blue", "green"]
@@ -488,8 +553,8 @@ if phase_shift_comp==True:
     PLOT QCNN PHASE VERSUS TARGET FOR IL SHIFT OR NOT
     """
     loss_arr =np.array(["shifts", "no shifts"])
-    arr_1 ="outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_3(0)_6_600_psi_MM_noshift(S)(PR)(r).npy"#"OLD/outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"  #
+    arr_1 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
+    arr_2 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_MM_noshift(S)(PR)(r).npy"#"OLD/outputs/weights_6_3(0)_6_600_psi_MM_linear(S)(PR)(r).npy"  #
     
     weights_arr =np.array([arr_1, arr_2])
     colours = ["red", "blue"]
@@ -555,10 +620,10 @@ if phase_RP_comp==True:
     """
     RP_arr =np.array([None,"CL","IL", "both"])
     label_arr =np.array(["none","CL","IL", "both"])
-    arr_1 ="outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r).npy"
-    arr_2 ="outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(CL).npy"
-    arr_3 ="outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(IL).npy"
-    arr_4 ="outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(both).npy"
+    arr_1 ="pqcprep/outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r).npy"
+    arr_2 ="pqcprep/outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(CL).npy"
+    arr_3 ="pqcprep/outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(IL).npy"
+    arr_4 ="pqcprep/outputs/weights_6_4(0)_6_600_psi_MM_quadratic(S)(PR)(r)(both).npy"
     
     weights_arr =np.array([arr_1, arr_2, arr_3, arr_4])
     colours = ["red", "blue", "green", "purple"]

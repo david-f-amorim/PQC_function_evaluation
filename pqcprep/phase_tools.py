@@ -44,7 +44,7 @@ def extract_phase(n):
 
     return circuit 
 
-def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params=None, state_vec_file=None, save=False, full_state_vec=False, Q_only=False):
+def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params=None, state_vec_file=None, save=False, full_state_vec=False, no_UA=False,operators="QRQ"):
     """
     
     Execute the quantum state preparation protocol using pre-trained QCNN weights. 
@@ -95,10 +95,14 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
 
         If True, the full statevector is additionally returned, including non-cleared ancilla states. Default is False. 
 
-    - **Q_only** : *boolean* 
+    - **no_UA** : *boolean* 
 
-        If True, only apply the function evaluation operator and leave out the phase extraction. Default is False    
+        If True, do not apply the amplitude encoding gate $\hat{U}_A$ and instead apply a Hadamard transform on the input register. Default is False.         
 
+    - **operators** : *str* 
+
+        Which operators to apply to the registers. Options are `'QRQ'` for full phase extraction, `'RQ'` for partial phase extraction, and `'Q'` for function 
+        evaluation only. Default is `'QRQ'`.  
 
     Returns:
     ---
@@ -125,9 +129,12 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     else:    
         weights_p = np.load(weights_p_str)
     
-    # encode amplitudes 
-    circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
-    circuit = circuit.assign_parameters(weights_A)
+    if no_UA:
+        circuit.h(input_register)
+    else:    
+        # encode amplitudes 
+        circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
+        circuit = circuit.assign_parameters(weights_A)
 
     # evaluate function
     qc = generate_network(n,m, L_p, real=real_p,repeat_params=repeat_params)
@@ -135,10 +142,13 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     inv_qc = qc.inverse()
     circuit.compose(qc, [*input_register,*target_register], inplace=True) 
     
-    if not Q_only:
+    if operators=="QRQ" or operators=="RQ":
         # extract phases 
         circuit.compose(extract_phase(m),target_register, inplace=True) 
+    elif operators != "Q":
+        raise ValueError("Unexpected value for 'operators'. Should be 'QRQ', 'QR', or 'Q'.")    
 
+    if operators=="QRQ":
         # clear ancilla register 
         circuit.compose(inv_qc, [*input_register,*target_register], inplace=True) 
  

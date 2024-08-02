@@ -105,7 +105,7 @@ def psi(x, mode="psi"):
         
 
     """
-    if mode=="sin":
+    if mode=="sine":
         out = psi_sine(x)
     elif mode=="quadratic":    
         out = psi_quadratic(x)

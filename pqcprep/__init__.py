@@ -1,23 +1,19 @@
 """
 ### pqcprep is a python package....
 
-waffle waffle blah blah 
+Lorem ipsum ...
 
-# Big test 
+# Heading 1
 
-sss
+Lorem ipsum ...
 
-Lorem Ipsum 
----
-fdfd
+## Heading 2
 
-## Test 2 
+..
 
-fff
+## Another Heading
 
-## Test 3
-
-fefe
+..
 
 """
 

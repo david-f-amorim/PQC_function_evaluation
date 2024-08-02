@@ -14,6 +14,7 @@
 \usepackage{array}
 \usepackage{subcaption}
 \usepackage{hyperref}
+\usepackage{xcolor}
 \hypersetup{colorlinks=false, bookmarks=true}
 
 \usetheme{Madrid}
@@ -51,7 +52,7 @@ Work on an improved version of WILL. Incorporate some phase extraction metrics (
 \end{alertblock}
 
 \begin{alertblock}{Investigate Phase Extraction}
-Study the relationship between mismatch and the extracted phase, i.e. study the operator $\tilde{Q}^\dagger (\hat{I} \otimes\hat{R}) \tilde{Q}$. 
+Study the relationship between mismatch and the extracted phase, i.e. study the operator $\tilde{Q}^\dagger\hat{R}\tilde{Q}$. 
 \end{alertblock}
 
 \begin{alertblock}{Mitigate Barren Plateaus}
@@ -238,20 +239,154 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Visualising the Phase Extraction Problem}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_linear_H}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_linear_H}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Visualising the Phase Extraction Problem}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_quadratic_H}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_quadratic_H}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Visualising the Phase Extraction Problem}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_sine_H}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_sine_H}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Effect of $\hat{U}_A$} 
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_linear_UA}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_linear_UA}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Effect of $\hat{U}_A$}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_quadratic_UA}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_quadratic_UA}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).Target state added for reference. }
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Effect of $\hat{U}_A$}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_amp_sine_UA}
+\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_amp_sine_UA}
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference.}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparing $\hat{R} \tilde{Q}$ and $\tilde{Q}^\dagger \hat{R} \tilde{Q}$}
+
+PRODUCE THESE PLOTS (FOR PHASE!)
+\end{frame}
+
+\begin{frame}
+\frametitle{Phase Extraction: Conclusion}
+\begin{itemize}
+\item .... 
+\item Clearly, effect of $\hat{U}_A$ is to make things a bit worse as amplitudes get lower so signal to noise ratio increases? 
+\item Regarding phases: careful! phases meaningless for very small amplitudes !!
+\item think about better ways of presenting the information... 
+\item COLOURED 3D PLOT WITH AMPL ON Z-AXIS AND COLOUR PHASE??
+\end{itemize}
+
+\end{frame}
+
 \section{Mitigating Barren Plateaus}
 
 \begin{frame}
 \frametitle{Mitigating Barren Plateaus}
 \begin{itemize}
 \item The most important strategy to mitigate barren plateaus seems to be a so-called \alert{warm start}, also known as \alert{smart initialisation}
-\item 
+\item Common approaches include layerwise training\footnote{\url{https://arxiv.org/pdf/2006.14904}}, training via identity blocks\footnote{\url{https://arxiv.org/pdf/1903.05076}} and training using a fast-and-slow approach\footnote{\url{https://arxiv.org/pdf/2203.02464}}
+\item Implementing these strategies requires signifcant adaptation of the existing code base 
+\item Thus, must first \alert{spend some time restructuring} (and \href{http://localhost:8080/pqcprep.html}{\textcolor{purple}{re-documenting}}) the code  
 \end{itemize}
-
-GENERATE A FEW PLOTS FOR GRAD AND VAR GRAD FOR DIFFERENT n and m...: diagonose problem: plot var(grad) and |grad| as function of epoch for different n+m (maybe go down with n  as well)...
-
-
-
-
 \end{frame}
 
 
