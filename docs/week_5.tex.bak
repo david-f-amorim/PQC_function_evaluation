@@ -372,7 +372,7 @@ PRODUCE THESE PLOTS (FOR PHASE!)
 \item Clearly, effect of $\hat{U}_A$ is to make things a bit worse as amplitudes get lower so signal to noise ratio increases? 
 \item Regarding phases: careful! phases meaningless for very small amplitudes !!
 \item think about better ways of presenting the information... 
-\item COLOURED 3D PLOT??
+\item COLOURED 3D PLOT WITH AMPL ON Z-AXIS AND COLOUR PHASE??
 \end{itemize}
 
 \end{frame}
