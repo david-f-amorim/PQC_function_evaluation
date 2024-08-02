@@ -106,14 +106,16 @@ def vars_to_name_str(arg_dict):
         arg_dict["mis"]=f'({arg_dict["mint"]})' 
 
     # add to meta string
-    if arg_dict["train_superpos"]:
+    if arg_dict["train_superpos"] and '(S)' not in arg_dict["meta"]:
         arg_dict["meta"]+='(S)'
-    if arg_dict["phase_reduce"]:
+    if arg_dict["phase_reduce"] and '(PR)' not in arg_dict["meta"]:
         arg_dict["mis"]="(0)"
         arg_dict["meta"]+='(PR)' 
-    if arg_dict["real"]:
+    if arg_dict["phase_reduce"]:
+        arg_dict["mis"]="(0)"    
+    if arg_dict["real"] and '(r)' not in arg_dict["meta"]:
         arg_dict["meta"]+='(r)' 
-    if arg_dict["repeat_params"] != None:
+    if arg_dict["repeat_params"] != None and f'({arg_dict["repeat_params"]})' not in arg_dict["meta"]:
         arg_dict["meta"]+=f'({arg_dict["repeat_params"]})' 
 
     # set WILL information     
@@ -150,7 +152,7 @@ def vars_to_name_str_ampl(arg_dict):
         arg_dict["nis"]=f'({arg_dict["nint"]})'
      
     # add to meta string
-    if  arg_dict["repeat_params"]:
+    if  arg_dict["repeat_params"] and '(RP)' not in arg_dict["meta"]:
         arg_dict["meta"]+='(RP)' 
 
     # set name string 

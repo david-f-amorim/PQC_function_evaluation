@@ -3,7 +3,6 @@ Collection of useful functions for a variety of purposes.
 """
 
 import numpy as np 
-from qiskit import Aer, execute 
 from qiskit_machine_learning.neural_networks import SamplerQNN
 from qiskit_machine_learning.connectors import TorchConnector
 from qiskit.utils import algorithm_globals
@@ -14,21 +13,12 @@ import sys, time, os
 import torch 
 import warnings
 from .binary_tools import bin_to_dec, dec_to_bin  
-from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network  
+from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
 
+from .__init__ import DIR 
+
 #---------------------------------------------------------------------------------------------------
-
-def get_state_vec(circuit):
-    """
-    Get statevector...
-    """
-    backend = Aer.get_backend('statevector_simulator')
-    job = execute(circuit, backend)
-    result = job.result()
-    state_vector = result.get_statevector()
-
-    return np.asarray(state_vector)
 
 def set_loss_func(loss_str, arg_dict, ampl=False):
     r"""
@@ -220,7 +210,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         recover_paths={}
         for k in np.arange(100,epochs, step=100):
             for e in np.arange(len(recover_labels)):
-                file=os.path.join("outputs", f"__TEMP{k}_{recover_labels[e]}{vars_to_name_str(args)}.npy")
+                file=os.path.join(DIR,"outputs", f"__TEMP{k}_{recover_labels[e]}{vars_to_name_str(args)}.npy")
                 recover_paths[recover_labels[e]]= (file if os.path.isfile(file) else None)
 
                 if recover_labels[e]=="weights" and os.path.isfile(file):
@@ -232,13 +222,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) if train_superpos else rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
     else:
         initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) if train_superpos else rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:]))
-            #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters))   #[LECUN NORMAL] 
-            # -1/np.sqrt(n+m) +(2/np.sqrt(n+m)) *rng.random(len(qc.parameters)) #[LECUN UNIFORM]
-            # -a*np.pi +(2*a*np.pi) *rng.random(len(qc.parameters)) #[A-UNIFORM] (0 < a < 1)
-            # -np.pi +(2*np.pi) *rng.random(len(qc.parameters)) #[UNIFORM]
-            #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters))   #[LECUN NORMAL] 
-            #np.zeros(len(qc.parameters)) #[ZERO INIT] CHANGE BACK AFTER TESTING!!
-       
+           
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
 
@@ -389,11 +373,11 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
 
             for e in np.arange(len(temp_labels)):
                 # save temp file 
-                file=os.path.join("outputs",f"__TEMP{i}_{temp_labels[e]}{vars_to_name_str(args)}")
+                file=os.path.join(DIR,"outputs",f"__TEMP{i}_{temp_labels[e]}{vars_to_name_str(args)}")
                 np.save(file,temp_arrs[e])
 
                 # delete previous temp file 
-                old_file=os.path.join("outputs",f"__TEMP{i-100}_{temp_labels[e]}{vars_to_name_str(args)}")
+                old_file=os.path.join(DIR,"outputs",f"__TEMP{i-100}_{temp_labels[e]}{vars_to_name_str(args)}.npy")
                 os.remove(old_file) if os.path.isfile(old_file) else None
 
             # make note of last created temp files
@@ -436,7 +420,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     # delete temp files
     temp_labels=["weights", "mismatch", "loss", "grad", "vargrad"]  
     for i in np.arange(len(temp_labels)):
-        file=os.path.join("outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str(args)}.npy")
+        file=os.path.join(DIR,"outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str(args)}.npy")
         os.remove(file) if os.path.isfile(file) else None
                             
     # save outputs 
@@ -445,7 +429,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     outputs= [generated_weights, mismatch_vals, loss_vals, grad_vals, var_grad_vals]
     output_labels=["weights", "mismatch", "loss", "grad", "vargrad"]  
     for i in np.arange(len(outputs)):
-        np.save(os.path.join("outputs", f"{output_labels[i]}{vars_to_name_str(args)}"), outputs[i])      
+        np.save(os.path.join(DIR,"outputs", f"{output_labels[i]}{vars_to_name_str(args)}"), outputs[i])      
 
     return 0 
 
@@ -458,7 +442,7 @@ def test_QNN(n,m,L,seed,epochs, func, func_str,loss_str,meta,nint,mint,phase_red
     name_str=vars_to_name_str(args)                    
 
     # load weights 
-    weights = np.load(os.path.join("outputs",f"weights{name_str}.npy"))
+    weights = np.load(os.path.join(DIR,"outputs",f"weights{name_str}.npy"))
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
@@ -497,7 +481,7 @@ def test_QNN(n,m,L,seed,epochs, func, func_str,loss_str,meta,nint,mint,phase_red
         
         # save as dictionary 
         dic = dict(zip(x_arr, mismatch)) 
-        np.save(os.path.join("outputs",f"bar{name_str}.npy"), dic)
+        np.save(os.path.join(DIR,"outputs",f"bar{name_str}.npy"), dic)
     
     if verbose:
         print("Mismatch by input state:")
@@ -542,7 +526,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs, func,func_str,loss_str,meta, re
 
         for k in np.arange(100,epochs, step=100):
             for e in np.arange(len(recover_labels)):
-                file=os.path.join("ampl_outputs", f"__TEMP{k}_{recover_labels[e]}{vars_to_name_str_ampl(args)}.npy")
+                file=os.path.join(DIR,"ampl_outputs", f"__TEMP{k}_{recover_labels[e]}{vars_to_name_str_ampl(args)}.npy")
                 recover_paths[recover_labels[e]]= (file if os.path.isfile(file) else None)
 
                 if recover_labels[e]=="weights" and os.path.isfile(file):
@@ -639,11 +623,11 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs, func,func_str,loss_str,meta, re
 
             for e in np.arange(len(temp_labels)):
                 # save temp file 
-                file=os.path.join("ampl_outputs",f"__TEMP{i}_{temp_labels[e]}{vars_to_name_str_ampl(args)}")
+                file=os.path.join(DIR,"ampl_outputs",f"__TEMP{i}_{temp_labels[e]}{vars_to_name_str_ampl(args)}")
                 np.save(file,temp_arrs[e])
 
                 # delete previous temp file 
-                old_file=os.path.join("ampl_outputs",f"__TEMP{i-100}_{temp_labels[e]}{vars_to_name_str_ampl(args)}")
+                old_file=os.path.join(DIR,"ampl_outputs",f"__TEMP{i-100}_{temp_labels[e]}{vars_to_name_str_ampl(args)}.npy")
                 os.remove(old_file) if os.path.isfile(old_file) else None
 
             # make note of last created temp files
@@ -686,7 +670,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs, func,func_str,loss_str,meta, re
     # delete temp files
     temp_labels=["weights", "mismatch", "loss"]  
     for i in np.arange(len(temp_labels)):
-        file=os.path.join("outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str_ampl(args)}.npy")
+        file=os.path.join(DIR,"outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str_ampl(args)}.npy")
         os.remove(file) if os.path.isfile(file) else None             
 
     # save outputs 
@@ -695,6 +679,6 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs, func,func_str,loss_str,meta, re
     outputs= [generated_weights, mismatch_vals, loss_vals, np.real(state_vector)]
     output_labels=["weights", "mismatch", "loss", "statevec"]  
     for i in np.arange(len(outputs)):
-        np.save(os.path.join("outputs", f"{output_labels[i]}{vars_to_name_str_ampl(args)}"), outputs[i])         
+        np.save(os.path.join(DIR,"outputs", f"{output_labels[i]}{vars_to_name_str_ampl(args)}"), outputs[i])         
 
     return 0

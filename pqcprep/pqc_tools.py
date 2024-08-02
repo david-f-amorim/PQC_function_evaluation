@@ -2,7 +2,7 @@
 Collection of functions relating to setting up a QCNN.
 """
 import numpy as np
-from qiskit import QuantumCircuit, QuantumRegister
+from qiskit import QuantumCircuit, QuantumRegister, Aer, execute
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import U3Gate
 from itertools import combinations
@@ -596,3 +596,30 @@ def A_generate_network(n,L, repeat_params=False):
             circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True, params=NN_CL_params), register, inplace=True)
          
     return circuit 
+
+def get_state_vec(circuit):
+    """
+    Get statevector produced by a quantum circuit. 
+
+    Uses the `qiskit.Aer` backend. 
+
+    Arguments:
+    ----
+    - **circuit** : *QuantumCircuit* 
+
+        The circuit to be evaluated. 
+
+    Returns:
+    ----
+    - **state_vector** : *array_like* 
+
+        Array storing the complex amplitudes of the system to be in each of the 
+        `2**circuit.num_qubits` basis states.     
+
+    """
+    backend = Aer.get_backend('statevector_simulator')
+    job = execute(circuit, backend)
+    result = job.result()
+    state_vector = result.get_statevector()
+
+    return np.asarray(state_vector)

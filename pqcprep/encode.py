@@ -1,9 +1,9 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from matplotlib import rcParams
-from tools import full_encode
-from binary_tools import bin_to_dec, dec_to_bin
-from psi_tools import psi #type: ignore
+from .phase_tools import full_encode
+from .binary_tools import bin_to_dec, dec_to_bin
+from .psi_tools import psi 
 
 # config 
 L_phase = 6
@@ -13,6 +13,8 @@ weights_phase ="outputs/weights_6_5(0)_6_600_psi_MM_(S)(PR)(r).npy" #"outputs/we
 
 repeat_params=None
 psi_mode="psi"
+
+Q_only=False
 
 n = 6
 weights_ampl = "ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -28,6 +30,9 @@ delta_round =True #calculate difference from rounded version
 no_A = True # don't produce amplitude plot 
 no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
+
+no_full_p = False # don't produce full phase plot
+no_full_A = False # don't produce full amplitude plot
 
 # additional plots 
 A_L_comp = False 
@@ -99,7 +104,7 @@ h_QGAN = np.load("full_encode/full_state_QGAN.npy")
 h_GR = np.load("full_encode/full_state_GR.npy")
 
 # calculate state vector from QCNNs 
-state_vec = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params)
+state_vec, state_vec_full = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params,Q_only=Q_only full_state_vec=True)
 
 amplitude = np.abs(state_vec)
 phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
@@ -252,6 +257,18 @@ if no_h==False:
 
     if show:
         plt.show()
+
+if no_full_A==False:
+    """
+    PLOT STATEVECTOR AMPLITUDES FOR VARIOUS TARGET REGISTER STATES
+    """
+    plt.figure(figsize=figsize)
+    cmap = plt.get_cmap('jet', N)
+    plt.ylabel("Mismatch", fontsize=fontsize)
+    plt.xlabel(r"$f$ (Hz)", fontsize=fontsize)
+    plt.tick_params(axis="both", labelsize=ticksize)
+
+
 
 #------------------------------------------------------------------------------------------------------
 
