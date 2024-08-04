@@ -240,7 +240,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \end{frame}
 
 \begin{frame}
-\frametitle{Visualising the Phase Extraction Problem}
+\frametitle{Visualising Phase Extraction: Amplitudes}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -260,7 +260,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \end{frame}
 
 \begin{frame}
-\frametitle{Visualising the Phase Extraction Problem}
+\frametitle{Visualising Phase Extraction: Amplitudes}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -274,26 +274,6 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \centering 
 \includegraphics[width=\textwidth]{im/QRQ_amp_quadratic_H}
 \caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Visualising the Phase Extraction Problem}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/Q_amp_sine_H}
-\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
-\end{figure}
-\end{column}
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\centering 
-\includegraphics[width=\textwidth]{im/QRQ_amp_sine_H}
-\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
 \end{figure}
 \end{column}
 \end{columns}
@@ -340,40 +320,83 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \end{frame}
 
 \begin{frame}
-\frametitle{The Effect of $\hat{U}_A$}
+\frametitle{Visualising Phase Extraction: Phases}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/Q_amp_sine_UA}
-\caption{Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\includegraphics[width=\textwidth]{im/Q_phase_linear_UA}
+\caption{Phases after applying $\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/QRQ_amp_sine_UA}
-\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim \sin f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference.}
+\includegraphics[width=\textwidth]{im/RQ_phase_linear_UA}
+\caption{Phases after applying $\hat{R}\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
 \end{figure}
 \end{column}
 \end{columns}
 \end{frame}
 
 \begin{frame}
-\frametitle{Comparing $\hat{R} \tilde{Q}$ and $\tilde{Q}^\dagger \hat{R} \tilde{Q}$}
+\frametitle{Visualising Phase Extraction: Phases}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_phase_linear_UA}
+\caption{Phases after applying $\tilde{Q}^\dagger\hat{R}\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_3D_linear_UA}
+\caption{Phases (colour) and amplitudes (vertical axis) after applying $\tilde{Q}^\dagger \hat{R}\tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
 
-PRODUCE THESE PLOTS (FOR PHASE!)
+\begin{frame}
+\frametitle{Visualising Phase Extraction: Phases}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/Q_phase_quadratic_UA}
+\caption{Phases after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/RQ_phase_quadratic_UA}
+\caption{Phases after applying $\hat{R}\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
 
-REDO AMPL PLOTS WITH BETTER AXIS LABELLING
-
-...seems like minus signs might be part of the problem?
-==>> minus sign seems to be the problem??!! 
-==>> can the R operator be modified to add a phase of pi when phase of pi??
-
-GET RID OF SINE PLOTS 
-
-ALL PLOTS CREATED...THINK ABOUT WHICH TO PRODUCE....
-
+\begin{frame}
+\frametitle{Visualising Phase Extraction: Phases}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_phase_quadratic_UA}
+\caption{Phases after applying $\tilde{Q}^\dagger\hat{R}\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering 
+\includegraphics[width=\textwidth]{im/QRQ_3D_quadratic_UA}
+\caption{Phases (colour) and amplitudes (vertical axis) after applying $\tilde{Q}^\dagger \hat{R}\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{U}_A \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs).}
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -382,10 +405,15 @@ ALL PLOTS CREATED...THINK ABOUT WHICH TO PRODUCE....
 \item .... 
 \item Clearly, effect of $\hat{U}_A$ is to make things a bit worse as amplitudes get lower so signal to noise ratio increases? 
 \item Regarding phases: careful! phases meaningless for very small amplitudes !!
-\item think about better ways of presenting the information... 
-\item COLOURED 3D PLOT WITH AMPL ON Z-AXIS AND COLOUR PHASE?? DONE -- HAVE LIVE DEMONSTRATION...
-\end{itemize}
 
+
+...seems like minus signs might be part of the problem?
+==>> minus sign seems to be the problem??!! 
+==>> can the R operator be modified to add a phase of pi when phase of pi??
+
+...INTERPRET THIS!!!!...
+
+\end{itemize}
 \end{frame}
 
 \section{Mitigating Barren Plateaus}
@@ -407,8 +435,10 @@ ALL PLOTS CREATED...THINK ABOUT WHICH TO PRODUCE....
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
+\item Try to remove or account for the $\pm \pi$ phase shifts due to $\tilde{Q}$
 \item Keep re-writing code for easier implementation of barren plateau mitigation techniques
-\item ...
+\item Implement barren plateau mitigation 
+\item ...?
 \end{itemize}
 \end{frame}
 
