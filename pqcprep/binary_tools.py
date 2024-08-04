@@ -113,7 +113,7 @@ def dec_to_bin(digits,n,encoding='unsigned mag',nint=None, overflow_error: bool=
 
     return bits
 
-def bin_to_dec(bits,encoding='unsigned int',nint=None):
+def bin_to_dec(bits,encoding='unsigned mag',nint=None):
     """
     Decode a binary string to a float in base-10.
     
