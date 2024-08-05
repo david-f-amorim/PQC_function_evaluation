@@ -42,7 +42,6 @@
 
 \frame{\titlepage}
 
-\section{Preliminaries}
 \begin{frame}
 \frametitle{Aims for the Week}
 The following aims were set at the last meeting (29/07/2024):
@@ -92,7 +91,7 @@ $\Psi_{\text{H23}}$ & 0.75 & 2  \\
 \begin{tabular}{c || c| c| c }
 & SAM & WIM & WILL \\ \hline \hline 
 $\mu$ &  \textbf{3.4e-2} & 6.0e-2 & 4.5e-1 \\
-$\sigma$ &  1.4e-1 &1.1e-1 & 4.7e-1 \\
+$\sigma$ &  1.4e-1 &\textbf{1.1e-1} & 4.7e-1 \\
 $\epsilon$  &  \textbf{1.9e-2} & 9.2e-2 & 2.6e-1  \\
 $\chi$ & \textbf{ 3.2e-2} & 5.1e-2  & 3.7e-1  \\ \hline 
 $\Omega$ &  \textbf{4.46} & 3.19 & 0.76
@@ -204,7 +203,7 @@ for $A(k), A(k') \neq 0$
 \mathbb{E}(\phi)= \sum_{k,k'} 1 =2^{2n}
 \end{equation}
 so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mathbb{E}(\tilde{\phi}) / 2^{2n}|$
-\item \alert{This is highly speculative} and computationally very expensive even for simple PQCs due to the way custom operators are handed in qiskit
+\item \alert{This is highly speculative} and computationally very expensive even for simple PQCs due to the way custom operators are handled in qiskit
 \item Thus, \alert{estimator-based PQCs cannot feasibly replace the sampler-based QCNN}
 \end{itemize}
 \end{frame}
@@ -253,7 +252,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/QRQ_amp_linear_H}
-\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference.}
 \end{figure}
 \end{column}
 \end{columns}
@@ -273,7 +272,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \begin{figure}
 \centering 
 \includegraphics[width=\textwidth]{im/QRQ_amp_quadratic_H}
-\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). }
+\caption{Amplitudes after applying $\tilde{Q}^\dagger \hat{R} \tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs). Target state added for reference.}
 \end{figure}
 \end{column}
 \end{columns}
@@ -402,17 +401,10 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \begin{frame}
 \frametitle{Phase Extraction: Conclusion}
 \begin{itemize}
-\item .... 
-\item Clearly, effect of $\hat{U}_A$ is to make things a bit worse as amplitudes get lower so signal to noise ratio increases? 
-\item Regarding phases: careful! phases meaningless for very small amplitudes !!
-
-
-...seems like minus signs might be part of the problem?
-==>> minus sign seems to be the problem??!! 
-==>> can the R operator be modified to add a phase of pi when phase of pi??
-
-...INTERPRET THIS!!!!...
-
+\item As expected, the flawed implementation of $\hat{Q}$ results in $\hat{R}$ not producing an eigenstate  and hence $\hat{Q}^\dagger$ in \alert{not clearing the target register} 
+\item Applying \alert{$\hat{U}_A$} to the input register, thus reducing the amplitudes of some input states, can exacerbate this issue due to a \alert{decreased `signal-to-noise ratio'} 
+\item Interestingly, $\tilde{Q}$ induces \alert{$\pi$-phase shifts} on some input states which interfere with the phases extracted by $\hat{R}$
+\item Unclear to which extent the extracted phase function is affected by these phase shifts 
 \end{itemize}
 \end{frame}
 
@@ -435,7 +427,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
-\item Try to remove or account for the $\pm \pi$ phase shifts due to $\tilde{Q}$
+\item Try to remove or account for the $\pi$ phase shifts due to $\tilde{Q}$
 \item Keep re-writing code for easier implementation of barren plateau mitigation techniques
 \item Implement barren plateau mitigation 
 \item ...?

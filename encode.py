@@ -9,13 +9,13 @@ from pqcprep.psi_tools import psi
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_quadratic_SAM_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_linear_SAM_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="quadratic"
+psi_mode="linear"
 
-operators="Q"
-no_UA=True
+operators="QRQ"
+no_UA=False
 
 n = 6
 weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -32,11 +32,11 @@ no_A = True # don't produce amplitude plot
 no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
-no_full_A = False # don't produce full amplitude plot
+no_full_A = True # don't produce full amplitude plot
 no_full_p = False # don't produce full phase plot
 no_full_3D= False # don't produce full 3D plot
 
-comp_full = False
+comp_full = True
 
 # additional plots 
 A_L_comp = False 
@@ -274,7 +274,7 @@ if no_full_A==False:
     im=ax[0].pcolormesh(x_arr,np.arange(2**m), np.abs(state_vec_full))
     im.set_clim(np.min(np.abs(state_vec_full)),np.max(np.abs(state_vec_full)))
     locs = ax[0].get_yticks() 
-    ax[0].set_yticks(locs[1:-1], [bin_to_dec(dec_to_bin(i,m),nint=0) for i in np.arange(len(locs)-2)])
+    ax[0].set_yticks(locs[1:-1], [np.round(bin_to_dec(dec_to_bin(i,m),nint=0)*2*np.pi,2) for i in np.arange(len(locs)-2)])
     ax[0].set_xticks([]) if comp_full else ax[0].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
     if comp_full:
@@ -302,7 +302,7 @@ if no_full_p==False:
     PLOT STATEVECTOR PHASES FOR VARIOUS TARGET REGISTER STATES
     """
     
-    full_phase = np.angle(state_vec_full) + 2* np.pi * (np.angle(state_vec_full) < -np.pi).astype(int)
+    full_phase = np.angle(state_vec_full) + 2* np.pi * (np.angle(state_vec_full) < 0).astype(int)
     full_phase *= (np.abs(state_vec_full) > 1e-15).astype(float) 
     
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [2**m, 1]},constrained_layout=True)
@@ -311,9 +311,9 @@ if no_full_p==False:
     ax[0].set_ylabel(r"$\tilde{\Psi}(f)$", fontsize=fontsize)
     ax[0].tick_params(axis="both", labelsize=ticksize)
     im=ax[0].pcolormesh(x_arr,np.arange(2**m), full_phase, cmap="hsv")
-    im.set_clim(-np.pi, np.pi)
+    im.set_clim(0, 2*np.pi)
     locs = ax[0].get_yticks() 
-    ax[0].set_yticks(locs[1:-1], [bin_to_dec(dec_to_bin(i,m),nint=0) for i in np.arange(len(locs)-2)])
+    ax[0].set_yticks(locs[1:-1], [np.round(bin_to_dec(dec_to_bin(i,m),nint=0)*2*np.pi,2) for i in np.arange(len(locs)-2)])
     ax[0].set_xticks([]) if comp_full else ax[0].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
 
     if comp_full:
@@ -324,7 +324,7 @@ if no_full_p==False:
         tar_arr = phase_rounded
         
         im2 =ax[1].pcolormesh(x_arr,np.arange(2**m)[0:2],tar_arr*np.ones((2,len(x_arr))), cmap="hsv")
-        im2.set_clim(-np.pi, np.pi) 
+        im2.set_clim(0, 2*np.pi) 
     else:
         ax[1].set_visible(False)    
     
@@ -342,7 +342,7 @@ if no_full_3D==False:
     """    
     from matplotlib import cm 
     
-    full_phase = np.angle(state_vec_full) + 2* np.pi * (np.angle(state_vec_full) < -np.pi).astype(int)
+    full_phase = np.angle(state_vec_full) + 2* np.pi * (np.angle(state_vec_full) < 0).astype(int)
     full_phase *= (np.abs(state_vec_full) > 1e-15).astype(float) 
    
     X = x_arr
@@ -350,7 +350,7 @@ if no_full_3D==False:
     X, Y = np.meshgrid(X, Y)
     Z = np.abs(state_vec_full)
     P = full_phase
-    P_norm = (full_phase + np.pi) / (2* np.pi)  # normalise to value in [0,1]
+    P_norm = (full_phase) / (2* np.pi)  # normalise to value in [0,1]
 
     # Plot the surface
     fig, ax = plt.subplots(figsize=(10,10), subplot_kw={"projection": "3d"}, constrained_layout=False)
@@ -358,13 +358,13 @@ if no_full_3D==False:
     ax.set_xlabel(r"$f$ (Hz)", fontsize=fontsize, labelpad=20)
     ax.set_ylabel(r"$\tilde{\Psi}(f)$", fontsize=fontsize, labelpad=20)
     locs = ax.get_yticks() 
-    ax.set_yticks(locs[1:-1], [bin_to_dec(dec_to_bin(i,m),nint=0) for i in np.arange(len(locs)-2)])
+    ax.set_yticks(locs[1:-1], [np.round(bin_to_dec(dec_to_bin(i,m),nint=0)*2*np.pi,2) for i in np.arange(len(locs)-2)])
     ax.tick_params(axis="both", labelsize=ticksize)
 
     cb=fig.colorbar(cm.ScalarMappable(cmap=cm.hsv, norm=surf.norm), ax = ax , shrink = 0.6, aspect = 5)
     cb.ax.tick_params(labelsize=ticksize)
     locs = cb.ax.get_yticks()
-    cb.ax.set_yticks( [0, 0.25,0.5,0.75,1], [r'$-\pi$',r'$-\frac{\pi}{2}$', '0',r'$+\frac{\pi}{2}$' , r'$+\pi$'])
+    cb.ax.set_yticks( [0, 0.25,0.5,0.75,1], [r'$0$',r'$\frac{\pi}{2}$', r'$\pi$',r'$\frac{3\pi}{2}$' , r'$2\pi$'])
     
     if show:
         plt.show()

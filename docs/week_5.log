@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  4 AUG 2024 19:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  5 AUG 2024 08:31
 entering extended mode
 **./week_5.tex
 (week_5.tex
@@ -1048,188 +1048,186 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  (week_5.nav) [1
 
-{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (week_5.toc) [2
-
-]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 61.
+{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 60.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 61.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 60.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+esint on input line 6
-1.
+0.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/esint\uesint.fd
 File: uesint.fd 
 )
-[3
+[2
 
-] (week_5.toc) [4
+] (week_5.toc) [3
 
-] [5
+] [4
 
 ]
-<im/SAM_WIM_WILL_F_new.pdf, id=237, 715.47299pt x 715.47299pt>
+<im/SAM_WIM_WILL_F_new.pdf, id=201, 715.47299pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F_new.pdf  used on input line 111.
+Package pdftex.def Info: im/SAM_WIM_WILL_F_new.pdf  used on input line 110.
 (pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-Overfull \vbox (2.06783pt too high) detected at line 111
+Overfull \vbox (2.06783pt too high) detected at line 110
  []
 
-[6
+[5
 
  <./im/SAM_WIM_WILL_F_new.pdf>]
-<im/SAM_WIM_WILL_F2_new.pdf, id=287, 731.54634pt x 715.47299pt>
+<im/SAM_WIM_WILL_F2_new.pdf, id=251, 731.54634pt x 715.47299pt>
 File: im/SAM_WIM_WILL_F2_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_F2_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 137.
+Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 136.
 (pdftex.def)             Requested size: 171.14764pt x 167.38289pt.
- [7
+ [6
 
  <./im/SAM_WIM_WILL_F2_new.pdf>]
-<im/SAM_WIM_WILL_H_new.pdf, id=329, 742.67374pt x 715.47299pt>
+<im/SAM_WIM_WILL_H_new.pdf, id=292, 742.67374pt x 715.47299pt>
 File: im/SAM_WIM_WILL_H_new.pdf Graphic file (type pdf)
 <use im/SAM_WIM_WILL_H_new.pdf>
-Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 163.
+Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 162.
 (pdftex.def)             Requested size: 171.14764pt x 164.87192pt.
- [8
+ [7
 
- <./im/SAM_WIM_WILL_H_new.pdf>] [9
+ <./im/SAM_WIM_WILL_H_new.pdf>] [8
+
+] [9
 
 ] [10
 
 ] [11
 
-] [12
+] (week_5.toc) [12
 
-] (week_5.toc) [13
-
-] [14
+] [13
 
 ]
-<im/Q_amp_linear_H.pdf, id=536, 731.13103pt x 535.79193pt>
+<im/Q_amp_linear_H.pdf, id=499, 731.13103pt x 535.84647pt>
 File: im/Q_amp_linear_H.pdf Graphic file (type pdf)
 <use im/Q_amp_linear_H.pdf>
-Package pdftex.def Info: im/Q_amp_linear_H.pdf  used on input line 260.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
-<im/QRQ_amp_linear_H.pdf, id=537, 731.13103pt x 589.48895pt>
+Package pdftex.def Info: im/Q_amp_linear_H.pdf  used on input line 259.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/QRQ_amp_linear_H.pdf, id=500, 731.13103pt x 589.49017pt>
 File: im/QRQ_amp_linear_H.pdf Graphic file (type pdf)
 <use im/QRQ_amp_linear_H.pdf>
-Package pdftex.def Info: im/QRQ_amp_linear_H.pdf  used on input line 260.
-(pdftex.def)             Requested size: 171.14764pt x 137.99023pt.
- [15
+Package pdftex.def Info: im/QRQ_amp_linear_H.pdf  used on input line 259.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+ [14
 
  <./im/Q_amp_linear_H.pdf> <./im/QRQ_amp_linear_H.pdf>]
-<im/Q_amp_quadratic_H.pdf, id=585, 731.13103pt x 535.75566pt>
+<im/Q_amp_quadratic_H.pdf, id=548, 731.13103pt x 535.81117pt>
 File: im/Q_amp_quadratic_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_H.pdf>
-Package pdftex.def Info: im/Q_amp_quadratic_H.pdf  used on input line 280.
-(pdftex.def)             Requested size: 171.14764pt x 125.4121pt.
-<im/QRQ_amp_quadratic_H.pdf, id=586, 731.13103pt x 589.4882pt>
+Package pdftex.def Info: im/Q_amp_quadratic_H.pdf  used on input line 279.
+(pdftex.def)             Requested size: 171.14764pt x 125.4251pt.
+<im/QRQ_amp_quadratic_H.pdf, id=549, 731.13103pt x 589.4895pt>
 File: im/QRQ_amp_quadratic_H.pdf Graphic file (type pdf)
 <use im/QRQ_amp_quadratic_H.pdf>
-Package pdftex.def Info: im/QRQ_amp_quadratic_H.pdf  used on input line 280.
-(pdftex.def)             Requested size: 171.14764pt x 137.99005pt.
- [16
+Package pdftex.def Info: im/QRQ_amp_quadratic_H.pdf  used on input line 279.
+(pdftex.def)             Requested size: 171.14764pt x 137.99036pt.
+ [15
 
  <./im/Q_amp_quadratic_H.pdf> <./im/QRQ_amp_quadratic_H.pdf>]
-<im/Q_amp_linear_UA.pdf, id=633, 731.13103pt x 535.79193pt>
+<im/Q_amp_linear_UA.pdf, id=596, 731.13103pt x 535.84647pt>
 File: im/Q_amp_linear_UA.pdf Graphic file (type pdf)
 <use im/Q_amp_linear_UA.pdf>
-Package pdftex.def Info: im/Q_amp_linear_UA.pdf  used on input line 300.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
-<im/QRQ_amp_linear_UA.pdf, id=634, 731.13103pt x 589.48895pt>
+Package pdftex.def Info: im/Q_amp_linear_UA.pdf  used on input line 299.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/QRQ_amp_linear_UA.pdf, id=597, 731.13103pt x 589.49017pt>
 File: im/QRQ_amp_linear_UA.pdf Graphic file (type pdf)
 <use im/QRQ_amp_linear_UA.pdf>
-Package pdftex.def Info: im/QRQ_amp_linear_UA.pdf  used on input line 300.
-(pdftex.def)             Requested size: 171.14764pt x 137.99023pt.
- [17
+Package pdftex.def Info: im/QRQ_amp_linear_UA.pdf  used on input line 299.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+ [16
 
  <./im/Q_amp_linear_UA.pdf> <./im/QRQ_amp_linear_UA.pdf>]
-<im/Q_amp_quadratic_UA.pdf, id=684, 731.13103pt x 535.70029pt>
+<im/Q_amp_quadratic_UA.pdf, id=647, 731.13103pt x 535.75487pt>
 File: im/Q_amp_quadratic_UA.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_UA.pdf>
-Package pdftex.def Info: im/Q_amp_quadratic_UA.pdf  used on input line 320.
-(pdftex.def)             Requested size: 171.14764pt x 125.39912pt.
-<im/QRQ_amp_quadratic_UA.pdf, id=685, 731.13103pt x 589.48619pt>
+Package pdftex.def Info: im/Q_amp_quadratic_UA.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 125.41191pt.
+<im/QRQ_amp_quadratic_UA.pdf, id=648, 731.13103pt x 589.48747pt>
 File: im/QRQ_amp_quadratic_UA.pdf Graphic file (type pdf)
 <use im/QRQ_amp_quadratic_UA.pdf>
-Package pdftex.def Info: im/QRQ_amp_quadratic_UA.pdf  used on input line 320.
-(pdftex.def)             Requested size: 171.14764pt x 137.98958pt.
- [18
+Package pdftex.def Info: im/QRQ_amp_quadratic_UA.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 137.98988pt.
+ [17
 
  <./im/Q_amp_quadratic_UA.pdf> <./im/QRQ_amp_quadratic_UA.pdf>]
-<im/Q_phase_linear_UA.pdf, id=732, 731.13103pt x 535.79193pt>
+<im/Q_phase_linear_UA.pdf, id=695, 731.13103pt x 535.84647pt>
 File: im/Q_phase_linear_UA.pdf Graphic file (type pdf)
 <use im/Q_phase_linear_UA.pdf>
-Package pdftex.def Info: im/Q_phase_linear_UA.pdf  used on input line 340.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
-<im/RQ_phase_linear_UA.pdf, id=733, 731.13103pt x 535.79193pt>
+Package pdftex.def Info: im/Q_phase_linear_UA.pdf  used on input line 339.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/RQ_phase_linear_UA.pdf, id=696, 731.13103pt x 535.84647pt>
 File: im/RQ_phase_linear_UA.pdf Graphic file (type pdf)
 <use im/RQ_phase_linear_UA.pdf>
-Package pdftex.def Info: im/RQ_phase_linear_UA.pdf  used on input line 340.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
- [19
+Package pdftex.def Info: im/RQ_phase_linear_UA.pdf  used on input line 339.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+[18
 
  <./im/Q_phase_linear_UA.pdf> <./im/RQ_phase_linear_UA.pdf>]
-<im/QRQ_phase_linear_UA.pdf, id=787, 731.13103pt x 589.48895pt>
+<im/QRQ_phase_linear_UA.pdf, id=743, 731.13103pt x 589.49017pt>
 File: im/QRQ_phase_linear_UA.pdf Graphic file (type pdf)
 <use im/QRQ_phase_linear_UA.pdf>
-Package pdftex.def Info: im/QRQ_phase_linear_UA.pdf  used on input line 360.
-(pdftex.def)             Requested size: 171.14764pt x 137.99023pt.
-<im/QRQ_3D_linear_UA.pdf, id=788, 580.68555pt x 462.52798pt>
+Package pdftex.def Info: im/QRQ_phase_linear_UA.pdf  used on input line 359.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+<im/QRQ_3D_linear_UA.pdf, id=744, 573.66402pt x 462.52798pt>
 File: im/QRQ_3D_linear_UA.pdf Graphic file (type pdf)
 <use im/QRQ_3D_linear_UA.pdf>
-Package pdftex.def Info: im/QRQ_3D_linear_UA.pdf  used on input line 360.
-(pdftex.def)             Requested size: 171.14764pt x 136.32458pt.
- [20
+Package pdftex.def Info: im/QRQ_3D_linear_UA.pdf  used on input line 359.
+(pdftex.def)             Requested size: 171.14764pt x 137.99017pt.
+ [19
 
  <./im/QRQ_phase_linear_UA.pdf> <./im/QRQ_3D_linear_UA.pdf>]
-<im/Q_phase_quadratic_UA.pdf, id=845, 731.13103pt x 535.79193pt>
+<im/Q_phase_quadratic_UA.pdf, id=796, 731.13103pt x 535.84647pt>
 File: im/Q_phase_quadratic_UA.pdf Graphic file (type pdf)
 <use im/Q_phase_quadratic_UA.pdf>
-Package pdftex.def Info: im/Q_phase_quadratic_UA.pdf  used on input line 380.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
-<im/RQ_phase_quadratic_UA.pdf, id=846, 731.13103pt x 535.79193pt>
+Package pdftex.def Info: im/Q_phase_quadratic_UA.pdf  used on input line 379.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/RQ_phase_quadratic_UA.pdf, id=797, 731.13103pt x 535.84647pt>
 File: im/RQ_phase_quadratic_UA.pdf Graphic file (type pdf)
 <use im/RQ_phase_quadratic_UA.pdf>
-Package pdftex.def Info: im/RQ_phase_quadratic_UA.pdf  used on input line 380.
-(pdftex.def)             Requested size: 171.14764pt x 125.42058pt.
- [21
+Package pdftex.def Info: im/RQ_phase_quadratic_UA.pdf  used on input line 379.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+ [20
 
  <./im/Q_phase_quadratic_UA.pdf> <./im/RQ_phase_quadratic_UA.pdf>]
-<im/QRQ_phase_quadratic_UA.pdf, id=899, 731.13103pt x 589.48895pt>
+<im/QRQ_phase_quadratic_UA.pdf, id=844, 731.13103pt x 589.49017pt>
 File: im/QRQ_phase_quadratic_UA.pdf Graphic file (type pdf)
 <use im/QRQ_phase_quadratic_UA.pdf>
-Package pdftex.def Info: im/QRQ_phase_quadratic_UA.pdf  used on input line 400.
+Package pdftex.def Info: im/QRQ_phase_quadratic_UA.pdf  used on input line 399.
 
-(pdftex.def)             Requested size: 171.14764pt x 137.99023pt.
-<im/QRQ_3D_quadratic_UA.pdf, id=900, 580.68555pt x 462.52798pt>
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+<im/QRQ_3D_quadratic_UA.pdf, id=845, 573.66402pt x 462.52798pt>
 File: im/QRQ_3D_quadratic_UA.pdf Graphic file (type pdf)
 <use im/QRQ_3D_quadratic_UA.pdf>
-Package pdftex.def Info: im/QRQ_3D_quadratic_UA.pdf  used on input line 400.
-(pdftex.def)             Requested size: 171.14764pt x 136.32458pt.
- [22
+Package pdftex.def Info: im/QRQ_3D_quadratic_UA.pdf  used on input line 399.
+(pdftex.def)             Requested size: 171.14764pt x 137.99017pt.
+ [21
 
- <./im/QRQ_phase_quadratic_UA.pdf> <./im/QRQ_3D_quadratic_UA.pdf>] [23
+ <./im/QRQ_phase_quadratic_UA.pdf> <./im/QRQ_3D_quadratic_UA.pdf>] [22
 
-] (week_5.toc) [24
+] (week_5.toc) [23
 
-] [25
+] [24
 
 ] (week_5.toc)
-[26
+[25
 
-] [27
+] [26
 
 ]
 \tf@nav=\write6
@@ -1243,13 +1241,13 @@ Package pdftex.def Info: im/QRQ_3D_quadratic_UA.pdf  used on input line 400.
 
  (week_5.aux)
 Package rerunfilecheck Info: File `week_5.out' has not changed.
-(rerunfilecheck)             Checksum: 2F2665866A1119FF39B9CCB59A31181B;769.
+(rerunfilecheck)             Checksum: 7EC70B4E9C5032AA8349C35BD7209B55;661.
  ) 
 Here is how much of TeX's memory you used:
- 24292 strings out of 478864
- 460847 string characters out of 2848660
+ 24281 strings out of 478864
+ 460687 string characters out of 2848660
  762247 words of memory out of 3000000
- 41582 multiletter control sequences out of 15000+600000
+ 41576 multiletter control sequences out of 15000+600000
  417250 words of font info for 86 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,793s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1277,9 +1275,9 @@ avid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:
 .pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
 cm/cmtt9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
 msfonts/symbols/msbm10.pfb>
-Output written on week_5.pdf (27 pages, 939037 bytes).
+Output written on week_5.pdf (26 pages, 914449 bytes).
 PDF statistics:
- 1191 PDF objects out of 1200 (max. 8388607)
- 60 named destinations out of 1000 (max. 500000)
- 322 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1128 PDF objects out of 1200 (max. 8388607)
+ 57 named destinations out of 1000 (max. 500000)
+ 314 words of extra memory for PDF output out of 10000 (max. 10000000)
 
