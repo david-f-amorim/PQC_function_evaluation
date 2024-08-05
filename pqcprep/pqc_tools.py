@@ -2,8 +2,8 @@
 Collection of functions relating to setting up a QCNN.
 """
 import numpy as np
-from qiskit import QuantumCircuit, QuantumRegister, Aer, execute
-from qiskit_machine_learning.circuit.library import RawFeatureVector
+from qiskit import QuantumCircuit, QuantumRegister, transpile
+from qiskit_aer import StatevectorSimulator
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import U3Gate
 from itertools import combinations
@@ -388,7 +388,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_RFV=False, real=False, inverse=False, repeat_params=None):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_Ry=False, real=False, inverse=False, repeat_params=None):
     r"""
     Set up a QCNN consisting of input and convolutional layers acting on two distinct registers, the 'input register' and the 'target register'. 
 
@@ -435,9 +435,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
         If True, add an input layer at the beginning of the circuit. Default is True. 
 
-    - **input_RFV** : *boolean*
+    - **input_Ry** : *boolean*
 
-        If True, initially apply a qiskit machine learning `RawFeatureVector` circuit to the input register. Default is False. 
+        If True, initially apply a sequence of parametrised Ry rotations to the input register. Default is False. 
 
     - **real** : *boolean*
 
@@ -490,13 +490,16 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
     if encode:
         circuit.compose(digital_encoding(n), input_register, inplace=True)
 
+    if input_Ry:
+        input_Ry_params = ParameterVector("\u03B8_input_Ry",n)
+
+        for i in np.arange(n):
+            circuit.ry(input_Ry_params[i], input_register[i])
+
     if initial_IL: 
         # apply input layer 
         circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params), circuit.qubits, inplace=True)
         
-    if input_RFV:
-        circuit.compose(RawFeatureVector(2**n), input_register, inplace=True)    
-
     # apply convolutional layers (alternating between AA and NN)
     # if toggle_IL is True, additional input layers are added after each NN
     for i in np.arange(L):
@@ -618,9 +621,13 @@ def get_state_vec(circuit):
         `2**circuit.num_qubits` basis states.     
 
     """
-    backend = Aer.get_backend('statevector_simulator')
-    job = execute(circuit, backend)
-    result = job.result()
-    state_vector = result.get_statevector()
+    
+    # Transpile for simulator
+    simulator = StatevectorSimulator()
+    circuit = transpile(circuit, simulator)
+
+    # Run and get counts
+    result = simulator.run(circuit).result()
+    state_vector= result.get_statevector(circuit)
 
     return np.asarray(state_vector)

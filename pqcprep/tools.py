@@ -4,8 +4,9 @@ Collection of useful functions for a variety of purposes.
 
 import numpy as np 
 from qiskit_machine_learning.neural_networks import SamplerQNN
+from qiskit_machine_learning.circuit.library import QNNCircuit
 from qiskit_machine_learning.connectors import TorchConnector
-from qiskit.utils import algorithm_globals
+from qiskit_algorithms.utils import algorithm_globals 
 from qiskit.primitives import Sampler
 from torch.optim import Adam
 from torch import Tensor, no_grad
@@ -194,15 +195,16 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_RFV=train_superpos, real=real,repeat_params=repeat_params)
-    qnn = SamplerQNN(
-                circuit=qc.decompose(),           
-                sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
-                input_params=qc.parameters[:2**n] if train_superpos else qc.parameters[:n],   
-                weight_params=qc.parameters[2**n:] if train_superpos else qc.parameters[n:], 
-                input_gradients=not train_superpos
-            )        
+    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params)
 
+    qnn = SamplerQNN(
+                    circuit=qc.decompose(),           
+                    sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
+                    input_params=qc.parameters[:n],   
+                    weight_params=qc.parameters[n:], 
+                    input_gradients=True
+                )
+              
     # choose initial weights
     recovered_k =0
     if recover_temp:    
@@ -219,9 +221,9 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         if not None in list(recover_paths.values):
             initial_weights=np.load(recover_paths["weights"])
         else:
-            initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) if train_superpos else rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
+            initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
     else:
-        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) if train_superpos else rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:]))
+        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:]))
            
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -307,18 +309,17 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[index]=1 
             target=Tensor(target_arr)
         else:
-            # generate random coefficients and normalise 
-            coeffs = np.array( 1/np.sqrt(2**n) *(1- delta) +  2 *delta *rng.random(size=2**n) * 1/np.sqrt(2**n))
-            coeffs /= np.sqrt(np.sum(coeffs**2))
-
+            # generate random coefficients 
+            coeffs = np.array(np.pi / 2 * (1+delta *(2 *np.random.default_rng().random()-1)))
+            
             # get input data 
             input=Tensor(coeffs)
 
             # get target data 
-            for j in np.arange(2**n):
-                for k in np.arange(2**m):
-                    ind=int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
-                    target_arr[ind] *= coeffs[j] 
+            # for j in np.arange(n):
+             #   for k in np.arange(2**m):
+              #      ind=int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
+               #     target_arr[ind] *= coeffs[j] 
             target=Tensor(target_arr)
 
         # train model  
@@ -342,7 +343,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         var_grad_vals[i]=np.std(model.weight.grad.numpy())**2
         
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_RFV=train_superpos, real=real,repeat_params=repeat_params)
+        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params)
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
