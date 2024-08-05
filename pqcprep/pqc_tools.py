@@ -3,6 +3,7 @@ Collection of functions relating to setting up a QCNN.
 """
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, Aer, execute
+from qiskit_machine_learning.circuit.library import RawFeatureVector
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import U3Gate
 from itertools import combinations
@@ -387,7 +388,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_H=False, real=False, inverse=False, repeat_params=None):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_RFV=False, real=False, inverse=False, repeat_params=None):
     r"""
     Set up a QCNN consisting of input and convolutional layers acting on two distinct registers, the 'input register' and the 'target register'. 
 
@@ -434,9 +435,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
         If True, add an input layer at the beginning of the circuit. Default is True. 
 
-    - **input_H** : *boolean*
+    - **input_RFV** : *boolean*
 
-        If True, initially apply a Hadamard transform to the input register. Default is False. 
+        If True, initially apply a qiskit machine learning `RawFeatureVector` circuit to the input register. Default is False. 
 
     - **real** : *boolean*
 
@@ -493,8 +494,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         # apply input layer 
         circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params), circuit.qubits, inplace=True)
         
-    if input_H:
-        circuit.h(input_register)    
+    if input_RFV:
+        circuit.compose(RawFeatureVector(2**n), input_register, inplace=True)    
 
     # apply convolutional layers (alternating between AA and NN)
     # if toggle_IL is True, additional input layers are added after each NN

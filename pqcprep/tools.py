@@ -176,9 +176,9 @@ def set_WIM_weights(generated_weights, arg_dict):
 
     return WIM_weights_arr
 
-def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
+def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta):
     """
-    Initialise circuit as QNN for training purposes.
+    Initialise circuit as QNN for training purposes....
     """
     
     # compress arguments into dictionary 
@@ -194,12 +194,12 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_H=train_superpos, real=real,repeat_params=repeat_params)
+    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,initial_RFV=train_superpos, real=real,repeat_params=repeat_params)
     qnn = SamplerQNN(
                 circuit=qc.decompose(),           
                 sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
-                input_params=[] if train_superpos else qc.parameters[:n],   
-                weight_params=qc.parameters if train_superpos else qc.parameters[n:], 
+                input_params=qc.parameters[:2**n] if train_superpos else qc.parameters[:n],   
+                weight_params=qc.parameters[2**n:] if train_superpos else qc.parameters[n:], 
                 input_gradients=not train_superpos
             )        
 
@@ -268,16 +268,11 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         target_bin = [fx_arr_bin[i]+x_arr_bin[i] for i in x_arr]
         target_ind = [bin_to_dec(i, encoding='unsigned mag') for i in target_bin]
 
-        # prepare target array and normalise 
+        # prepare target array 
         target_arr = np.zeros(2**(n+m))
         for k in target_ind:
             target_arr[int(k)]=1 
-        target_arr = target_arr / (2.**n) 
-
-        # define input and target tensors 
-        input = Tensor([]) 
-        target=Tensor(target_arr)
-
+        
     else:        
         x_min = 0
         x_max = 2.**nint - 2.**(-pn) 
@@ -311,22 +306,33 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             index = int(dec_to_bin(fx_arr[i],m,'unsigned mag',nint=mint)+dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint),2)
             target_arr[index]=1 
             target=Tensor(target_arr)
+        else:
+            # generate random coefficients and normalise 
+            coeffs = np.array( 1/np.sqrt(2**n) *(1- delta) +  2 *delta *rng.random(size=2**n) * 1/np.sqrt(2**n))
+            coeffs /= np.sqrt(np.sum(coeffs**2))
+
+            # get input data 
+            input=Tensor(coeffs)
+
+            # get target data 
+            for j in np.arange(2**n):
+                for k in np.arange(2**m):
+                    ind=int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
+                    target_arr[ind] *= coeffs[j] 
+            target=Tensor(target_arr)
 
         # train model  
         optimizer.zero_grad()
 
-        sign_tensor=Tensor(np.ones(2**(n+m))) if i==recovered_k else Tensor(sign_arr) 
-         
-        if real:
-            if loss_str=="WIM":
-                WIM_weights_arr=np.ones(2**(n+m)) if i==recovered_k else WIM_weights_arr
-                WIM_weights_tensor=Tensor(WIM_weights_arr)
-                loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt !
-            else:
-                loss =criterion(torch.mul(torch.sqrt(torch.abs(model(input))+1e-10), sign_tensor), torch.sqrt(target))    # add small number in sqrt !
+        # apply loss function          
+        if loss_str=="WIM":
+            WIM_weights_arr=np.ones(2**(n+m)) if i==recovered_k else WIM_weights_arr
+            WIM_weights_tensor=Tensor(WIM_weights_arr)
+            loss =criterion(torch.sqrt(torch.abs(model(input))+1e-10), torch.sqrt(target), WIM_weights_tensor)    # add small number in sqrt to avoid zero grad !
         else: 
-            loss = criterion(torch.sqrt(torch.abs(model(input))+1e-10), torch.sqrt(target))
+            loss = criterion(torch.sqrt(torch.abs(model(input))+1e-10), torch.sqrt(target))                       # add small number in sqrt to avoid zero grad !
 
+        # propagate gradients and recompute weights
         loss.backward()
         optimizer.step()
 
@@ -336,11 +342,12 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         var_grad_vals[i]=np.std(model.weight.grad.numpy())**2
         
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_H=train_superpos, real=real,repeat_params=repeat_params)
+        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_RFV=train_superpos, real=real,repeat_params=repeat_params)
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
-            params=generated_weights
+            input_params = coeffs
+            params=np.concatenate((input_params, generated_weights))   
         else:
             input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
             params = np.concatenate((input_params, generated_weights))   
@@ -348,9 +355,6 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
 
         # get statevector 
         state_vector = get_state_vec(circ)
-
-        # extract signs of state vector 
-        sign_arr= np.sign(np.real(state_vector)) 
 
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
@@ -433,12 +437,12 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
 
     return 0 
 
-def test_QNN(n,m,L,seed,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,verbose=True):   
+def test_QNN(n,m,L,seed,epochs, func, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,delta,verbose=True):   
     """
     Test performance of trained QNN for the various input states
     """
     # compress arguments into dictionary 
-    args =compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q)
+    args =compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta)
     name_str=vars_to_name_str(args)                    
 
     # load weights 

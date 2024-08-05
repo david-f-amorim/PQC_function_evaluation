@@ -10,7 +10,7 @@ parser.add_argument('-f','--f', help="Phase function to evaluate.", default=None
 parser.add_argument('-l','--loss', help="Loss function.", default="SAM", choices=["CE", "MSE", "L1", "KLD", "SAM", "WIM", "WILL"])
 parser.add_argument('-e','--epochs', help="Number of epochs.", default=600,type=int)
 parser.add_argument('-M','--meta', help="String with meta data.", default="")
-
+parser.add_argument('-d','-delta', help="Value of delta parameter.", default=0, type=float)
 
 parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
 parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
@@ -58,6 +58,9 @@ if opt.hayes:
     opt.phase_reduce=True 
     opt.train_superpos=True 
     opt.real=True 
+
+if opt.delta < 0 or opt.delta > 1:
+    raise ValueError("Delta parameter must be between 0 and 1.")    
          
 # check for duplicates
 from pqcprep.tools import train_QNN, test_QNN
@@ -67,15 +70,15 @@ for j in range(len(opt.WILL_p)):
 
         for i in range(len(opt.L)):
 
-            args=compress_args(n=opt.n,m=opt.m,L=opt.L[i],seed=int(opt.seed),epochs=opt.epochs,func_str=f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])
+            args=compress_args(n=opt.n,m=opt.m,L=opt.L[i],seed=int(opt.seed),epochs=opt.epochs,func_str=f_str,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k], delta=opt.delta)
             
             dupl_files = check_duplicates(args, ampl=False)
 
             if dupl_files and opt.ignore_duplicates==False:
                 print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
             else: 
-                train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func=opt.f, func_str=f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, repeat_params=opt.repeat_params,WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])
-                test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),seed=int(opt.seed),epochs=int(opt.epochs), func=opt.f, func_str=f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k])    
+                train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func=opt.f, func_str=f_str, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, repeat_params=opt.repeat_params,WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k],delta=opt.delta)
+                test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),seed=int(opt.seed),epochs=int(opt.epochs), func=opt.f, func_str=f_str, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k], delta=opt.delta)    
 
 
 

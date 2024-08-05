@@ -5,7 +5,7 @@ Collection of functions regarding file handling.
 import os 
 from fractions import Fraction
 
-def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q):
+def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta):
     """
     Compress a set of variable values used in network training into a dictionary . 
 
@@ -40,6 +40,7 @@ def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_r
     arg_dict["repeat_params"]=repeat_params
     arg_dict["WILL_p"]=WILL_q
     arg_dict["WILL_q"]=WILL_p
+    arg_dict["delta"]=delta
 
     return arg_dict
 
@@ -123,7 +124,7 @@ def vars_to_name_str(arg_dict):
             arg_dict["meta"] +=f'_{Fraction(arg_dict["WILL_p"]).numerator}-{Fraction(arg_dict["WILL_p"]).denominator}_{Fraction(arg_dict["WILL_q"]).numerator}-{Fraction(arg_dict["WILL_q"]).denominator}'
 
     # set name string 
-    name_str = f'_{arg_dict["n"]}{arg_dict["nis"]}_{arg_dict["m"]}{arg_dict["mis"]}_{arg_dict["L"]}_{arg_dict["epochs"]}_{arg_dict["func_str"]}_{arg_dict["loss_str"]}_{arg_dict["meta"]}_{arg_dict["seed"]}' 
+    name_str = f'_{arg_dict["n"]}{arg_dict["nis"]}_{arg_dict["m"]}{arg_dict["mis"]}_{arg_dict["L"]}_{arg_dict["epochs"]}_{arg_dict["func_str"]}_{arg_dict["loss_str"]}_{arg_dict["delta"]}_{arg_dict["meta"]}_{arg_dict["seed"]}' 
 
     return name_str       
 

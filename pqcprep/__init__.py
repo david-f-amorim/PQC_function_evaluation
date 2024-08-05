@@ -66,10 +66,11 @@ There are two ways to train the QCNN on input data:
 
 1.  Training on individual states: one of the $2^n$ input states, $\ket{j},$ is randomly chosen each epoch. 
     The network is thus taught to transform $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi'(j)} $ for each of the states individually.
-2.  Training in superposition: the same input state is chosen each epoch. The network is taught to transform 
+2.  Training in superposition: the network is taught to transform 
 $$
-\\left(\\frac{1}{\\sqrt{2^n}} \\sum^{2^n-1}_{j=0} \\ket{j} \\right) \\ket{0} \\mapsto \\frac{1}{\\sqrt{2^n}} \\sum^{2^n -1}_{j=0} \\ket{j}\\ket{\\Psi'(j)}.
+\\left(\\sum^{2^n-1}_{j=0} c_j \\ket{j} \\right) \\ket{0} \\mapsto  \\sum^{2^n -1}_{j=0} c_j \\ket{j}\\ket{\\Psi'(j)},
 $$
+    where the coefficients $c_j \\sim \\frac{1}{\\sqrt{2^n}}$ are randomly sampled each epoch.  
     By linearity, this teaches the network to transform $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi'(j)} $ for each $\ket{j}$. 
 
 
