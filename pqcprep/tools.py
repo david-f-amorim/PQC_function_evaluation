@@ -194,7 +194,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,initial_RFV=train_superpos, real=real,repeat_params=repeat_params)
+    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_RFV=train_superpos, real=real,repeat_params=repeat_params)
     qnn = SamplerQNN(
                 circuit=qc.decompose(),           
                 sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
