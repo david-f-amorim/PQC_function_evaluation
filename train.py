@@ -10,7 +10,7 @@ parser.add_argument('-f','--f', help="Phase function to evaluate.", default=None
 parser.add_argument('-l','--loss', help="Loss function.", default="SAM", choices=["CE", "MSE", "L1", "KLD", "SAM", "WIM", "WILL"])
 parser.add_argument('-e','--epochs', help="Number of epochs.", default=600,type=int)
 parser.add_argument('-M','--meta', help="String with meta data.", default="")
-parser.add_argument('-d','-delta', help="Value of delta parameter.", default=0, type=float)
+parser.add_argument('-d','--delta', help="Value of delta parameter.", default=0., type=float)
 
 parser.add_argument('-ni','--nint', help="Number of integer input qubits.", default=None, type=int)
 parser.add_argument('-mi','--mint', help="Number of integer target qubits.", default=None, type=int)
