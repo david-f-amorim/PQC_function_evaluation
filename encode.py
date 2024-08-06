@@ -14,8 +14,8 @@ weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_psi_SAM_0.0_test(S)(PR)(r)_
 repeat_params=None
 psi_mode="psi"
 
-operators="Q"
-no_UA=True
+operators="QRQ"
+no_UA=False
 
 n = 6
 weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -29,14 +29,14 @@ pdf = False # save outputs as pdf
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_A = False # don't produce full amplitude plot
 no_full_p = False # don't produce full phase plot
 no_full_3D= False # don't produce full 3D plot
 
-comp_full = False
+comp_full = True
 
 # additional plots 
 A_L_comp = False 

@@ -200,9 +200,9 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     qnn = SamplerQNN(
                     circuit=qc.decompose(),           
                     sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
-                    input_params=[], #qc.parameters[:n],   ## UNDO LATER !!
-                    weight_params=qc.parameters, #qc.parameters[n:],  ## UNDO LATER !!
-                    input_gradients=False #True
+                    input_params=qc.parameters[:n], 
+                    weight_params=qc.parameters[n:],
+                    input_gradients=True
                 )
               
     # choose initial weights
@@ -223,7 +223,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         else:
             initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
     else:
-        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) ## REDO LATER !!!
+        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) 
            
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -276,8 +276,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[int(k)]=1
 
         ## DELETE THIS LATER !!!
-        target_arr = target_arr / (2.**n) 
-        input = Tensor([]) 
+        target_arr = target_arr / (2.**n)  
         target=Tensor(target_arr)
         
     else:        
@@ -314,7 +313,9 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[index]=1 
             target=Tensor(target_arr)
         else:
-            note = "UNDO THIS LATER!!"
+            coeffs=np.pi / 2 * np.ones(n)
+            input=Tensor(coeffs)
+
             """
             # generate random coefficients 
             coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
@@ -365,10 +366,8 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
-            # DELETE LATER 
-            #input_params = coeffs
-            #params=np.concatenate((input_params, generated_weights))  
-            params=generated_weights 
+            input_params = coeffs
+            params=np.concatenate((input_params, generated_weights))  
         else:
             input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
             params = np.concatenate((input_params, generated_weights))   
