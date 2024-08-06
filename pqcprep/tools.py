@@ -195,14 +195,14 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params, wrap=False)
-
+    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=False, real=real,repeat_params=repeat_params, wrap=False)
+                                                                                            # undo later !!
     qnn = SamplerQNN(
                     circuit=qc.decompose(),           
                     sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
-                    input_params=qc.parameters[:n],   
-                    weight_params=qc.parameters[n:], 
-                    input_gradients=True
+                    input_params=[] #qc.parameters[:n],   ## UNDO LATER !!
+                    weight_params=qc.parameters[:] #qc.parameters[n:],  ## UNDO LATER !!
+                    input_gradients=False #True
                 )
               
     # choose initial weights
@@ -223,7 +223,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         else:
             initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
     else:
-        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:]))
+        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[:])) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) ## REDO LATER !!!
            
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -360,7 +360,8 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         var_grad_vals[i]=np.std(model.weight.grad.numpy())**2
         
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params, wrap=False)
+        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=False, real=real,repeat_params=repeat_params, wrap=False)
+                                                                                                  # undo later !!!
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
