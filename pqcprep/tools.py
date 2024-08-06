@@ -275,10 +275,6 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         for k in target_ind:
             target_arr[int(k)]=1
 
-        ## DELETE THIS LATER !!!
-        target_arr = target_arr / (2.**n)  
-        target=Tensor(target_arr)
-        
     else:        
         x_min = 0
         x_max = 2.**nint - 2.**(-pn) 
@@ -313,17 +309,21 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[index]=1 
             target=Tensor(target_arr)
         else:
-            coeffs=0 * np.ones(n)
-            input=Tensor(coeffs)
 
-            """
             # generate random coefficients 
-            coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
+            coeffs = np.zeros(n) # DELETE THIS LATER 
+            #coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
             
             # get input data 
             input=Tensor(coeffs)
 
             # get target data 
+            
+            ## DELETE THIS LATER !!!
+            target_arr = target_arr / (2.**n)  
+            target=Tensor(target_arr)
+            target_ampl = np.sqrt(target_arr) 
+            """
             target_ampl = np.empty(2**(n+m))
 
             for j in np.arange(2**n):
@@ -377,10 +377,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         state_vector = get_state_vec(circ)
 
         # calculate fidelity and mismatch
-
-        target_state =target_arr # DELETE LATER!!
-
-        #target_state = target_ampl**2 if train_superpos else target_arr 
+        target_state = target_ampl**2 if train_superpos else target_arr 
         fidelity = np.abs(np.dot(np.sqrt(target_state),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
         mismatch_vals[i]=mismatch
