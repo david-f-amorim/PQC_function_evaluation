@@ -536,8 +536,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         input_Ry_params = ParameterVector("\u03B8_input_Ry",n)
 
         for i in np.arange(n):
-            circuit.ry(-input_Ry_params[i], input_register[i])
-            circuit.z(input_register[i]) # DELETE THIS AND MINUS SIGN
+            circuit.ry(input_Ry_params[i], input_register[i])
 
     if initial_IL: 
         # apply input layer 
