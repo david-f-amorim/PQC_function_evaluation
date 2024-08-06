@@ -313,7 +313,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[index]=1 
             target=Tensor(target_arr)
         else:
-            coeffs=np.pi / 2 * np.ones(n)
+            coeffs=0 * np.ones(n)
             input=Tensor(coeffs)
 
             """

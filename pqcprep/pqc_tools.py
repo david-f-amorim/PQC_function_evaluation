@@ -530,8 +530,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         circuit.compose(digital_encoding(n), input_register, inplace=True)
 
     if input_Ry:
+        circuit.h(input_register) ## DELETE THIS LATER
         input_Ry_params = ParameterVector("\u03B8_input_Ry",n)
-
         for i in np.arange(n):
             circuit.ry(input_Ry_params[i], input_register[i])
          
