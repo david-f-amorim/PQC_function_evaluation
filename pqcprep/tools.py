@@ -201,7 +201,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
                     circuit=qc.decompose(),           
                     sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
                     input_params=[] #qc.parameters[:n],   ## UNDO LATER !!
-                    weight_params=qc.parameters[:] #qc.parameters[n:],  ## UNDO LATER !!
+                    weight_params=qc.parameters #qc.parameters[n:],  ## UNDO LATER !!
                     input_gradients=False #True
                 )
               
@@ -223,7 +223,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         else:
             initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
     else:
-        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[:])) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) ## REDO LATER !!!
+        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters)) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) ## REDO LATER !!!
            
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
