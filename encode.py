@@ -9,10 +9,10 @@ from pqcprep.psi_tools import psi
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_quadratic_SAM_nosign(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_psi_SAM_0.0_test(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="quadratic"
+psi_mode="psi"
 
 operators="Q"
 no_UA=True
