@@ -54,7 +54,7 @@ def N_gate(params, real=False):
 
     return circuit 
 
-def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False, shift=0, positive=False): 
+def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False, shift=0, wrap=False): 
     r"""
 
     Implement a QCNN input layer as a parametrised quantum circuit. 
@@ -102,9 +102,9 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
         If `AA` is False, the $j$th input qubit controls an operation applied on the $(j+s)$th target qubit with wrap-around 
         for `n > m`. Default is 0.    
 
-    - **positive**: *boolean* 
+    - **wrap**: *boolean* 
 
-        If True, map rotation angles to the interval $[0, \frac{\pi}{2}]$. Default is False.     
+        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.     
 
     Returns:
     ---
@@ -131,8 +131,8 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
 
     # define weight re-mapping function:
     def wrap_angle(theta):
-        if positive:
-            return np.arctan(theta) + np.pi /2  
+        if wrap:
+            return map_angle(theta)  
         else:
             return theta 
 
@@ -170,7 +170,7 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
     
     return circuit 
 
-def conv_layer_NN(m, par_label, real=False, params=None, positive=False):
+def conv_layer_NN(m, par_label, real=False, params=None, wrap=False):
     """
 
     Implement a QCNN neighbour-to-neighbour convolutional layer as a parametrised quantum circuit. 
@@ -198,9 +198,9 @@ def conv_layer_NN(m, par_label, real=False, params=None, positive=False):
 
         Directly assign values, stored in `params`, to the circuit parameters instead of creating a `ParameterVector`. 
 
-    - **positive**: *boolean* 
+    - **wrap**: *boolean* 
 
-        If True, map rotation angles to the interval $[0, \frac{\pi}{2}]$. Default is False.         
+        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.         
   
     Returns:
     ---
@@ -221,8 +221,8 @@ def conv_layer_NN(m, par_label, real=False, params=None, positive=False):
 
     # define weight re-mapping function:
     def wrap_angle(theta):
-        if positive:
-            return np.arctan(theta) + np.pi /2  
+        if wrap:
+            return map_angle(theta)  
         else:
             return theta
 
@@ -248,7 +248,7 @@ def conv_layer_NN(m, par_label, real=False, params=None, positive=False):
     
     return circuit 
 
-def conv_layer_AA(m, par_label, real=False, params=None, positive=False): 
+def conv_layer_AA(m, par_label, real=False, params=None, wrap=False): 
     """
 
     Implement a QCNN all-to-all convolutional layer as a parametrised quantum circuit. 
@@ -276,9 +276,9 @@ def conv_layer_AA(m, par_label, real=False, params=None, positive=False):
 
         Directly assign values, stored in `params`, to the circuit parameters instead of creating a `ParameterVector`.   
 
-    - **positive**: *boolean* 
+    - **wrap**: *boolean* 
 
-        If True, map rotation angles to the interval $[0, \frac{\pi}{2}]$. Default is False.        
+        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.        
   
     Returns:
     ---
@@ -299,8 +299,8 @@ def conv_layer_AA(m, par_label, real=False, params=None, positive=False):
 
     # define weight re-mapping function:
     def wrap_angle(theta):
-        if positive:
-            return np.arctan(theta) + np.pi /2  
+        if wrap:
+            return map_angle(theta)  
         else:
             return theta
 
@@ -423,7 +423,7 @@ def binary_to_encode_param(binary):
 
     return params 
 
-def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_Ry=False, real=False, inverse=False, repeat_params=None, positive=False):
+def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input_Ry=False, real=False, inverse=False, repeat_params=None, wrap=False):
     r"""
     Set up a QCNN consisting of input and convolutional layers acting on two distinct registers, the 'input register' and the 'target register'. 
 
@@ -489,9 +489,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         Options are `CL` (keep parameters fixed for convolutional layers), `IL` (keep parameters fixed for input layers), `both` 
         (keep parameters fixed for both convolutional and input layers). 
 
-    - **positive**: *boolean* 
+    - **wrap**: *boolean* 
 
-        If True, map rotation angles to the interval $[0, \frac{\pi}{2}]$. Default is False.     
+        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.     
 
         
     Returns:
@@ -537,7 +537,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     if initial_IL: 
         # apply input layer 
-        circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params, positive=positive), circuit.qubits, inplace=True)
+        circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params, wrap=wrap), circuit.qubits, inplace=True)
         
     # apply convolutional layers (alternating between AA and NN)
     # if toggle_IL is True, additional input layers are added after each NN
@@ -546,9 +546,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         if toggle_IL==False:
 
             if i % 2 ==0:
-                circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 2), real=real, params=AA_CL_params,positive=positive), target_register, inplace=True)
+                circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 2), real=real, params=AA_CL_params,wrap=wrap), target_register, inplace=True)
             elif i % 2 ==1:
-                circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 2),real=real, params=NN_CL_params, positive=positive), target_register, inplace=True)
+                circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 2),real=real, params=NN_CL_params, wrap=wrap), target_register, inplace=True)
         
         if toggle_IL==True:
 
@@ -557,29 +557,29 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
             if del_IL <= 0:
                 if i % 3 ==0:
-                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params, positive=positive), target_register, inplace=True)
+                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params, wrap=wrap), target_register, inplace=True)
                 elif i % 3 ==1:
-                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params, positive=positive), target_register, inplace=True)
+                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params, wrap=wrap), target_register, inplace=True)
                 elif i % 3 ==2:
-                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3 +1),shift=(i//3)+1, ctrl_state=(i % 2),real=real,params=IL_params, positive=positive), circuit.qubits, inplace=True) 
+                    circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(i // 3 +1),shift=(i//3)+1, ctrl_state=(i % 2),real=real,params=IL_params, wrap=wrap), circuit.qubits, inplace=True) 
             else: 
                 if i % 3 ==0:
-                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params, positive=positive), target_register, inplace=True)
+                    circuit.compose(conv_layer_AA(m, u"\u03B8_CL_AA_{0}".format(i // 3),real=real,params=AA_CL_params, wrap=wrap), target_register, inplace=True)
                 elif i % 3 ==1:
-                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params, positive=positive), target_register, inplace=True)
+                    circuit.compose(conv_layer_NN(m, u"\u03B8_CL_NN_{0}".format(i // 3),real=real,params=NN_CL_params, wrap=wrap), target_register, inplace=True)
                 elif i % 3 ==2:
                     # padd with additional input layers
                     for j in np.arange(del_IL // (L //3) +2):
                         shift = (i // 3) +int(initial_IL) + j * (L //3)
                         if shift <= m-1:
-                            circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(shift),shift=shift, ctrl_state=((shift-int(initial_IL)) % 2),real=real,params=IL_params, positive=positive), circuit.qubits, inplace=True) 
+                            circuit.compose(input_layer(n,m, u"\u03B8_IL_{0}".format(shift),shift=shift, ctrl_state=((shift-int(initial_IL)) % 2),real=real,params=IL_params, wrap=wrap), circuit.qubits, inplace=True) 
 
         if inverse:
             circuit=circuit.inverse()   
 
     return circuit
 
-def A_generate_network(n,L, repeat_params=False, positive=False):
+def A_generate_network(n,L, repeat_params=False, wrap=False):
     r"""
     Set up a network consisting of real convolutional layers acting on a single qubit register. 
 
@@ -606,9 +606,9 @@ def A_generate_network(n,L, repeat_params=False, positive=False):
 
         If True, use the same parameter values for each layer type. Default is False. 
 
-    - **positive**: *boolean* 
+    - **wrap**: *boolean* 
 
-        If True, map rotation angles to the interval $[0, \frac{\pi}{2}]$. Default is False.      
+        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.      
 
     Returns:
     ---
@@ -638,9 +638,9 @@ def A_generate_network(n,L, repeat_params=False, positive=False):
     for i in np.arange(L):
 
         if i % 2 ==0:
-            circuit.compose(conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2), real=True, params=AA_CL_params,positive=positive), register, inplace=True)
+            circuit.compose(conv_layer_AA(n, u"\u03B8_R_AA_{0}".format(i // 2), real=True, params=AA_CL_params,wrap=wrap), register, inplace=True)
         elif i % 2 ==1:
-            circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True, params=NN_CL_params,positive=positive), register, inplace=True)
+            circuit.compose(conv_layer_NN(n, u"\u03B8_R_NN_{0}".format(i // 2), real=True, params=NN_CL_params,wrap=wrap), register, inplace=True)
          
     return circuit 
 
@@ -674,3 +674,25 @@ def get_state_vec(circuit):
     state_vector= result.get_statevector(circuit)
 
     return np.asarray(state_vector)
+
+def map_angle(theta):
+    r"""
+    Map a rotation angle to the interval $(0, \frac{\pi}{2})$.
+
+    An inverse tan function is used for the mapping. 
+
+    Arguments:
+    ----
+    - **theta** : *float* 
+
+        Rotation angle. 
+
+    Returns:
+    ---
+    - **theta_mapped** : *float* 
+
+        Rotation angle mapped to the given interval.     
+
+    """
+
+    return np.arctan(theta) + np.pi /2  
