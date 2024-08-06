@@ -316,10 +316,17 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             input=Tensor(coeffs)
 
             # get target data 
-            # for j in np.arange(n):
-             #   for k in np.arange(2**m):
-              #      ind=int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
-               #     target_arr[ind] *= coeffs[j] 
+            for j in np.arange(2**n):
+                for k in np.arange(2**m):
+                    ind =int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
+                    bin_n = dec_to_bin(j,n)[:: -1] # reverse bit order !
+                    val=1 
+
+                    for l in np.arange(n):
+                        val *= np.cos(coeffs[l]/2) if bin_n[l]=='0' else np.sin(coeffs[l]/2)
+
+                    target_arr[ind] *= val 
+
             target=Tensor(target_arr)
 
         # train model  
