@@ -320,9 +320,10 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             # get target data 
             
             ## DELETE THIS LATER !!!
-            target_arr = target_arr / (2.**n)  
-            target=Tensor(target_arr)
-            target_ampl = np.sqrt(target_arr) 
+            if i==recovered_k:
+                target_arr = target_arr / (2.**n)  
+                target=Tensor(target_arr)
+                target_ampl = np.sqrt(target_arr) 
             """
             target_ampl = np.empty(2**(n+m))
 
