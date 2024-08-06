@@ -16,6 +16,7 @@ import warnings
 from .binary_tools import bin_to_dec, dec_to_bin  
 from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
+from .psi_tools import psi 
 
 from .__init__ import DIR 
 
@@ -102,7 +103,7 @@ def set_loss_func(loss_str, arg_dict, ampl=False):
     elif loss_str=="WILL":  
         if arg_dict["train_superpos"]==False:
              raise ValueError(f"The loss function {loss_str} requires training in superposition, i.e. 'train_superpos==True'.")
-        fx_arr = [arg_dict["func"](i) for i in np.arange(0, 2**arg_dict["n"])]
+        fx_arr = [psi(i, mode=arg_dict["func"]) for i in np.arange(0, 2**arg_dict["n"])]
         if arg_dict["phase_reduce"]:
             fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
         

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  5 AUG 2024 17:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  6 AUG 2024 14:19
 entering extended mode
 **./week_6.tex
 (week_6.tex
@@ -916,8 +916,7 @@ tex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count342
 \l__pdf_internal_box=\box80
-)
-No file week_6.aux.
+) (week_6.aux)
 \openout1 = `week_6.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
@@ -938,6 +937,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1015,6 +1015,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 41.
 LaTeX Info: Redefining \pageref on input line 41.
 LaTeX Info: Redefining \nameref on input line 41.
+ (week_6.out) (week_6.out)
 \@outlinefile=\write5
 \openout5 = `week_6.out'.
 
@@ -1045,11 +1046,11 @@ Dictionary: translator-theorem-dictionary, Language: English
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
+ (week_6.nav) [1
 
-No file week_6.nav.
-[1
+{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2
 
-{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+]
 \tf@nav=\write6
 \openout6 = `week_6.nav'.
 
@@ -1060,20 +1061,14 @@ No file week_6.nav.
 \openout8 = `week_6.snm'.
 
  (week_6.aux)
-
-Package rerunfilecheck Warning: File `week_6.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `week_6.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+Package rerunfilecheck Info: File `week_6.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 23668 strings out of 478864
- 446461 string characters out of 2848660
- 759086 words of memory out of 3000000
- 41087 multiletter control sequences out of 15000+600000
+ 23685 strings out of 478864
+ 446843 string characters out of 2848660
+ 759240 words of memory out of 3000000
+ 41094 multiletter control sequences out of 15000+600000
  405242 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,569s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1081,9 +1076,9 @@ Here is how much of TeX's memory you used:
 cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmss8.pfb>
-Output written on week_6.pdf (1 page, 45709 bytes).
+Output written on week_6.pdf (2 pages, 51988 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
- 3 named destinations out of 1000 (max. 500000)
+ 96 PDF objects out of 1000 (max. 8388607)
+ 5 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 

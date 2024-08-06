@@ -9,13 +9,12 @@ from pqcprep.psi_tools import psi
 L_phase = 6
 real_p = True 
 m = 3
-weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_psi_SAM_0.0_test2(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+psi_mode="quadratic"
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.5_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-psi_mode="psi"
-
-operators="QRQ"
-no_UA=False
+operators="Q"
+no_UA=True
 
 n = 6
 weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
@@ -23,7 +22,7 @@ ampl_vec = np.load("pqcprep/ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.np
 L_ampl =3
 
 # plot settings
-comp = True # compare to Hayes 2023  
+comp = False # compare to Hayes 2023  
 show = True # show plots
 pdf = False # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
