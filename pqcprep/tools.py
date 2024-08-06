@@ -366,8 +366,9 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         # get statevector 
         state_vector = get_state_vec(circ)
 
-        # calculate fidelity and mismatch 
-        fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
+        # calculate fidelity and mismatch
+        target_state = target_ampl if train_superpos else target_arr 
+        fidelity = np.abs(np.dot(np.sqrt(target_state),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
         mismatch_vals[i]=mismatch
 
