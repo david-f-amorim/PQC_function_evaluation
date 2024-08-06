@@ -146,7 +146,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
         # extract phases 
         circuit.compose(extract_phase(m),target_register, inplace=True) 
     elif operators != "Q":
-        raise ValueError("Unexpected value for 'operators'. Should be 'QRQ', 'QR', or 'Q'.")    
+        raise ValueError("Unexpected value for 'operators'. Should be 'QRQ', 'RQ', or 'Q'.")    
 
     if operators=="QRQ":
         # clear ancilla register 
