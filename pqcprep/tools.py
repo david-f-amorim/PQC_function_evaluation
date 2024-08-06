@@ -329,7 +329,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
 
                     target_ampl[ind] = val * target_arr[ind] 
 
-            target=Tensor(target_ampl)
+            target=Tensor(target_ampl**2)
 
         # train model  
         optimizer.zero_grad()
@@ -367,7 +367,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         state_vector = get_state_vec(circ)
 
         # calculate fidelity and mismatch
-        target_state = target_ampl if train_superpos else target_arr 
+        target_state = target_ampl**2 if train_superpos else target_arr 
         fidelity = np.abs(np.dot(np.sqrt(target_state),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
         mismatch_vals[i]=mismatch
