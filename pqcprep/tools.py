@@ -195,7 +195,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
     rng = np.random.default_rng(seed=seed)
 
     # generate circuit and set up as QNN 
-    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params)
+    qc = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params, positive=True)
 
     qnn = SamplerQNN(
                     circuit=qc.decompose(),           
@@ -352,7 +352,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         var_grad_vals[i]=np.std(model.weight.grad.numpy())**2
         
         # set up circuit with calculated weights
-        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params)
+        circ = generate_network(n,m,L, encode=not train_superpos, toggle_IL=True, initial_IL=True,input_Ry=train_superpos, real=real,repeat_params=repeat_params, positive=True)
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
