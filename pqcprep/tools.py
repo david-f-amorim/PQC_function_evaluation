@@ -316,6 +316,8 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             input=Tensor(coeffs)
 
             # get target data 
+            target_ampl = np.empty(2**(n+m))
+
             for j in np.arange(2**n):
                 for k in np.arange(2**m):
                     ind =int(dec_to_bin(k,m)+dec_to_bin(j,n),2) 
@@ -325,9 +327,9 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
                     for l in np.arange(n):
                         val *= np.cos(coeffs[l]/2) if bin_n[l]=='0' else np.sin(coeffs[l]/2)
 
-                    target_arr[ind] *= val 
+                    target_ampl[ind] = val * target_arr[ind] 
 
-            target=Tensor(target_arr)
+            target=Tensor(target_ampl)
 
         # train model  
         optimizer.zero_grad()
