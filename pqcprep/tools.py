@@ -201,7 +201,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
                     circuit=qc.decompose(),           
                     sampler=Sampler(options={"shots": 10000, "seed": algorithm_globals.random_seed}),
                     input_params=[], #qc.parameters[:n],   ## UNDO LATER !!
-                    weight_params=qc.parameters #qc.parameters[n:],  ## UNDO LATER !!
+                    weight_params=qc.parameters, #qc.parameters[n:],  ## UNDO LATER !!
                     input_gradients=False #True
                 )
               
