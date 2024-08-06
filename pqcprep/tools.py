@@ -310,7 +310,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target=Tensor(target_arr)
         else:
             # generate random coefficients 
-            coeffs = np.array(np.pi / 2 * (1+delta *(2 *np.random.default_rng().random()-1)))
+            coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
             
             # get input data 
             input=Tensor(coeffs)
