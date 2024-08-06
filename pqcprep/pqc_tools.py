@@ -38,10 +38,10 @@ def N_gate(params, real=False):
     if real:
         circuit = QuantumCircuit(2, name="RN Gate")
         circuit.cx(1, 0)
-        circuit.z(0) # DELETE THIS 
-        circuit.z(1) # DELETE THIS
         circuit.ry(-params[0], 0)
         circuit.ry(-params[1], 1)
+        circuit.z(0) # DELETE THIS AND MINUS SIGNS 
+        circuit.z(1) # DELETE THIS AND MINUS SIGNS 
         circuit.cx(0, 1)
     else:    
         circuit = QuantumCircuit(2, name="N Gate")
@@ -158,8 +158,8 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
                 j -=int(np.modf(j/m)[1] * m)
 
             if real:
-                qc.z(qubits[j+n]) # DELETE THIS!!
                 qc.cry(-wrap_angle(params[i]), qubits[i], qubits[j+n])
+                qc.z(qubits[j+n]) # DELETE THIS AND MINUS SIGN
             else:
                 par = params[int(param_index) : int(param_index + num_par)] 
                 cu3 = U3Gate(wrap_angle(par[0]),wrap_angle(par[1]),wrap_angle(par[2])).control(1, ctrl_state=ctrl_state)
@@ -536,8 +536,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         input_Ry_params = ParameterVector("\u03B8_input_Ry",n)
 
         for i in np.arange(n):
-            circuit.z(input_register[i]) # DELETE THIS
             circuit.ry(-input_Ry_params[i], input_register[i])
+            circuit.z(input_register[i]) # DELETE THIS AND MINUS SIGN
 
     if initial_IL: 
         # apply input layer 
