@@ -311,21 +311,13 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         else:
 
             # generate random coefficients 
-            coeffs =np.pi / 2 * np.ones(n) # DELETE THIS LATER 
-            #coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
+            coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
             
             # get input data 
             input=Tensor(coeffs)
 
             # get target data 
             
-            ## DELETE THIS LATER !!!
-            if i==recovered_k:
-                target_arr = target_arr / (2.**n)  
-                target=Tensor(target_arr)
-            
-            target_ampl = np.sqrt(target_arr) 
-            """
             target_ampl = np.empty(2**(n+m))
 
             for j in np.arange(2**n):
@@ -340,7 +332,6 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
                     target_ampl[ind] = val * target_arr[ind] 
 
             target=Tensor(target_ampl**2)
-            """
 
         # train model  
         optimizer.zero_grad()
