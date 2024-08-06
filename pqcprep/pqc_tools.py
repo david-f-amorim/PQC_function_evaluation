@@ -535,6 +535,8 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
         for i in np.arange(n):
             circuit.ry(input_Ry_params[i], input_register[i])
 
+    circuit.h(input_register)        ## DELETE THIS LATER 
+
     if initial_IL: 
         # apply input layer 
         circuit.compose(input_layer(n,m, u"\u03B8_IL_0", real=real, params=IL_params, wrap=wrap), circuit.qubits, inplace=True)
