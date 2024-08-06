@@ -273,7 +273,12 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         # prepare target array 
         target_arr = np.zeros(2**(n+m))
         for k in target_ind:
-            target_arr[int(k)]=1 
+            target_arr[int(k)]=1
+
+        ## DELETE THIS LATER !!!
+        target_arr = target_arr / (2.**n) 
+        input = Tensor([]) 
+        target=Tensor(target_arr)
         
     else:        
         x_min = 0
@@ -309,6 +314,8 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
             target_arr[index]=1 
             target=Tensor(target_arr)
         else:
+            note = "UNDO THIS LATER!!"
+            """
             # generate random coefficients 
             coeffs = np.array(np.pi / 2 * (1+delta *(2 *rng.random(size=n)-1)))
             
@@ -330,6 +337,7 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
                     target_ampl[ind] = val * target_arr[ind] 
 
             target=Tensor(target_ampl**2)
+            """
 
         # train model  
         optimizer.zero_grad()
@@ -356,8 +364,10 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         with no_grad():
             generated_weights = model.weight.detach().numpy()   
         if train_superpos:
-            input_params = coeffs
-            params=np.concatenate((input_params, generated_weights))   
+            # DELETE LATER 
+            #input_params = coeffs
+            #params=np.concatenate((input_params, generated_weights))  
+            params=generated_weights 
         else:
             input_params = binary_to_encode_param(dec_to_bin(x_arr[i],n,'unsigned mag',nint=nint))
             params = np.concatenate((input_params, generated_weights))   
@@ -367,12 +377,13 @@ def train_QNN(n,m,L, seed, epochs, func,func_str,loss_str,meta, recover_temp, ni
         state_vector = get_state_vec(circ)
 
         # calculate fidelity and mismatch
-        target_state = target_ampl**2 if train_superpos else target_arr 
+
+        target_state =target_arr # DELETE LATER!!
+
+        #target_state = target_ampl**2 if train_superpos else target_arr 
         fidelity = np.abs(np.dot(np.sqrt(target_state),np.conjugate(state_vector)))**2
         mismatch = 1. - np.sqrt(fidelity)
         mismatch_vals[i]=mismatch
-
-        print(1. - np.sqrt(np.abs(np.dot(np.sqrt(target_state),np.abs(state_vector)))**2))
 
         # set loss func weights for WIM
         if loss_str=="WIM" and (i % 10 ==0) and (i >=1): WIM_weights_arr= set_WIM_weights(generated_weights, args)

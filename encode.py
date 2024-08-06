@@ -14,7 +14,7 @@ weights_phase ="pqcprep/outputs/weights_6_3(0)_6_600_quadratic_SAM_nosign(S)(PR)
 repeat_params=None
 psi_mode="quadratic"
 
-operators="QRQ"
+operators="Q"
 no_UA=True
 
 n = 6
@@ -36,7 +36,7 @@ no_full_A = False # don't produce full amplitude plot
 no_full_p = False # don't produce full phase plot
 no_full_3D= False # don't produce full 3D plot
 
-comp_full = True
+comp_full = False
 
 # additional plots 
 A_L_comp = False 
