@@ -120,8 +120,8 @@ def vars_to_name_str(arg_dict):
         arg_dict["meta"]+=f'({arg_dict["repeat_params"]})' 
 
     # set WILL information     
-    if arg_dict["loss_str"]=="WILL":
-            arg_dict["meta"] +=f'_{Fraction(arg_dict["WILL_p"]).numerator}-{Fraction(arg_dict["WILL_p"]).denominator}_{Fraction(arg_dict["WILL_q"]).numerator}-{Fraction(arg_dict["WILL_q"]).denominator}'
+    if arg_dict["loss_str"]=="WILL" and '--' not in arg_dict["meta"]:
+            arg_dict["meta"] +=f'_{Fraction(arg_dict["WILL_p"]).numerator}--{Fraction(arg_dict["WILL_p"]).denominator}_{Fraction(arg_dict["WILL_q"]).numerator}--{Fraction(arg_dict["WILL_q"]).denominator}'
 
     # set name string 
     name_str = f'_{arg_dict["n"]}{arg_dict["nis"]}_{arg_dict["m"]}{arg_dict["mis"]}_{arg_dict["L"]}_{arg_dict["epochs"]}_{arg_dict["func_str"]}_{arg_dict["loss_str"]}_{arg_dict["delta"]}_{arg_dict["meta"]}_{arg_dict["seed"]}' 

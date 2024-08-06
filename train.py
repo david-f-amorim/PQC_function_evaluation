@@ -59,6 +59,9 @@ if opt.hayes:
     opt.train_superpos=True 
     opt.real=True 
 
+if '--' in opt.meta:
+    raise ValueError("The sequennce '--' is reserved and may not appear in the meta string.")    
+
 for l in range(len(opt.delta)):
     if opt.delta[l] < 0 or opt.delta[l] > 1:
         raise ValueError("Delta parameter must be between 0 and 1.")    

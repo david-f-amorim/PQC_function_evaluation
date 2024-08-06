@@ -103,7 +103,7 @@ def set_loss_func(loss_str, arg_dict, ampl=False):
     elif loss_str=="WILL":  
         if arg_dict["train_superpos"]==False:
              raise ValueError(f"The loss function {loss_str} requires training in superposition, i.e. 'train_superpos==True'.")
-        fx_arr = [psi(i, mode=arg_dict["func"]) for i in np.arange(0, 2**arg_dict["n"])]
+        fx_arr = [psi(i, mode=arg_dict["func_str"]) for i in np.arange(0, 2**arg_dict["n"])]
         if arg_dict["phase_reduce"]:
             fx_arr = [np.modf(i/ (2* np.pi))[0] for i in fx_arr]
         
@@ -119,8 +119,8 @@ def set_loss_func(loss_str, arg_dict, ampl=False):
         distance=Tensor(distance_arr)   
         
         def criterion(output, target):
-            loss =torch.pow(torch.abs(output-target),arg_dict["p"]) + torch.mul(torch.abs(output),torch.pow(distance,arg_dict["q"])) 
-            return torch.sum(loss)**(1/arg_dict["p"]) / torch.numel(loss)
+            loss =torch.pow(torch.abs(output-target),arg_dict["WILL_p"]) + torch.mul(torch.abs(output),torch.pow(distance,arg_dict["WILL_q"])) 
+            return torch.sum(loss)**(1/arg_dict["WILL_p"]) / torch.numel(loss)
     
     return criterion 
 
