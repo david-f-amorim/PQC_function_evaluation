@@ -49,7 +49,7 @@ def set_loss_func(loss_str, arg_dict, ampl=False):
             network output and desired output, respectively, and $x_k$, $y_k$ are the coefficients w.r.t the two-register computational basis states.  `criterion` takes 
             two pytorch `Tensors` as inputs, corresponding to the network output and the desired output.       
 
-        - `'WIM'` : weighted mismatch. Defined analogously to SAM but with additional weights: $$\text{WIM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k w_k x_k y_k \right\vert .$$
+        - `'WIM'` : weighted mismatch. Defined analogously to SAM but with additional weights: $$\text{WIM}(\ket{x}, \ket{y}) =1 - \sum_k w_k |x_k||y_k|.$$
            `criterion` takes three pytorch `Tensors` as inputs, corresponding to the network output, the desired output and the weights. See `set_WIM_weights()`
            for information on how the weights are calculated. This loss function is not an option if `ampl` is True. 
 
@@ -458,7 +458,12 @@ def test_QNN(n,m,L,seed,epochs, func, func_str,loss_str,meta,nint,mint,phase_red
     """
     # compress arguments into dictionary 
     args =compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta)
-    name_str=vars_to_name_str(args)                    
+    name_str=vars_to_name_str(args)  
+
+    # set precision strings 
+    if nint==None: nint=n
+    if mint==None: mint=m  
+    if phase_reduce: mint=0                  
 
     # load weights 
     weights = np.load(os.path.join(DIR,"outputs",f"weights{name_str}.npy"))

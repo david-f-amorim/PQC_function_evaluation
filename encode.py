@@ -6,14 +6,14 @@ from pqcprep.binary_tools import bin_to_dec, dec_to_bin
 from pqcprep.psi_tools import psi 
 
 # config 
-L_phase = 6
+L_phase = 9
 real_p = True 
 m = 3
-psi_mode="quadratic"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_WILL_0.0_(S)(PR)(r)_1--1_1--1_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+psi_mode="linear"
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.4_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-operators="Q"
+operators="QRQ"
 no_UA=True
 
 n = 6

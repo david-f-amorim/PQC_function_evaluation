@@ -218,7 +218,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \item \alert{Heuristically}: train in superposition with real circuits ($\mathcal{N}_\mathbb{R}$ and $\text{CR}_\text{y}$) of depth $L =6$ using 600 epochs and \alert{focus} on optimising the \alert{loss function}
 \item Best results achieved with \emph{cross entropy} (\alert{CE}) and \emph{sign-adjusted mismatch} (\alert{SAM}):
 \begin{equation}
-\mathsf{SAM}(x,y) = \left\vert 1 - \sum_j x_j y_j \right \vert 
+\mathsf{SAM}(x,y) = 1 - \sum_j |x_j| | y_j|
 \end{equation}
 \item SAM is tailored to reduce mismatch and enforce positive amplitudes
 \end{itemize}
@@ -260,7 +260,7 @@ $n=m=2$, $\Psi(x)=x$) do not extrapolate well to more general cases
 \item QCNN performance not much improved by increasing $L$ or number of epochs\footnote{Based on just a few tests} (\alert{no brute force solution})
 \item Instead implement a \alert{weighted loss function}, taking into account the features of $\Psi$: define \emph{weighted mismatch} (\alert{WIM}) as 
 \begin{equation}
-\mathsf{WIM}(x,y) =  \left\vert 1 - \sum_j w_j x_j y_j \right \vert, 
+\mathsf{WIM}(x,y) =  1 - \sum_j w_j | x_j | | y_j |, 
 \end{equation}
 where the weights $w_j \in \mathbb{R}_{+}$ may be recomputed between epochs
 \item The $w_j$ are based on the mismatch between $\hat{Q}_\Psi \ket{j} \ket{0}$ and $\ket{j}\ket{\Psi'(j)}$

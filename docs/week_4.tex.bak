@@ -345,7 +345,7 @@ y_k = \begin{cases}
 \begin{itemize}
 \item Recall the definition of \alert{SAM}:
 \begin{equation}
-\text{SAM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k x_k y_k \right\vert 
+\text{SAM}(\ket{x}, \ket{y}) = 1 - \sum_k |x_k| | y_k |  
 \end{equation}
 \item By construction, this is closely related to the \alert{mismatch} 
 \begin{equation}
@@ -365,7 +365,7 @@ y_k = \begin{cases}
 \item To improve performance, the loss function should punish a non-zero $x_a$ more than a non-zero $x_b$ which is not the case for SAM
 \item This could be achieved via a \alert{weighted mismatch (WIM)}, 
 \begin{equation}
-\text{WIM}(\ket{x}, \ket{y}) = \left\vert 1 - \sum_k \tilde{w}_k x_k y_k \right\vert, 
+\text{WIM}(\ket{x}, \ket{y}) =  1 - \sum_k \tilde{w}_k |x_k| |y_k |, 
 \end{equation}
 where $\tilde{w}_k \in \mathbb{R}_+$ are appropriate weights
 \end{itemize}
