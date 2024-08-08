@@ -6,11 +6,11 @@ from pqcprep.binary_tools import bin_to_dec, dec_to_bin
 from pqcprep.psi_tools import psi 
 
 # config 
-L_phase = 9
+L_phase = 6
 real_p = True 
 m = 3
-psi_mode="linear"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.4_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+psi_mode="quadratic"
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_zeros(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
 operators="QRQ"
@@ -28,12 +28,12 @@ pdf = False # save outputs as pdf
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_A = False # don't produce full amplitude plot
 no_full_p = False # don't produce full phase plot
-no_full_3D= False # don't produce full 3D plot
+no_full_3D= True # don't produce full 3D plot
 
 comp_full = True
 

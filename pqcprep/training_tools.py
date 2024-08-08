@@ -243,9 +243,9 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
         if not None in list(recover_paths.values):
             initial_weights=np.load(recover_paths["weights"])
         else:
-            initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #np.zeros(len(qc.parameters))  
+            initial_weights =np.zeros(len(qc.parameters[n:])) # initialise parameters to zero   
     else:
-        initial_weights =rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) #rng.normal(0,1/np.sqrt(n+m),len(qc.parameters[n:])) 
+        initial_weights =np.zeros(len(qc.parameters[n:])) # initialise parameters to zero   
            
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
@@ -580,10 +580,10 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
         if not None in list(recover_paths.values):
             initial_weights=np.load(recover_paths["weights"])
         else:
-            initial_weights =rng.normal(0,1/np.sqrt(n),len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))    
+            initial_weights =np.zeros(len(qc.parameters)) # initialise parameters to zero   
     
     else:
-        initial_weights = rng.normal(0,1/np.sqrt(n),len(qc.parameters)) #algorithm_globals.random.random(len(qc.parameters))
+        initial_weights = np.zeros(len(qc.parameters)) # initialise parameters to zero   
     
     # initialise TorchConnector
     model = TorchConnector(qnn, initial_weights)
