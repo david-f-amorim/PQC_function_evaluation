@@ -1,5 +1,5 @@
 import argparse 
-from pqcprep.file_tools import check_duplicates, compress_args, check_duplicates_ampl, compress_args_ampl
+from pqcprep.file_tools import check_duplicates, compress_args, compress_args_ampl
 
 parser = argparse.ArgumentParser(usage='', description="Train and test the QCNN.")   
 parser.add_argument('-n','--n', help="Number of input qubits.", default=6, type=int)

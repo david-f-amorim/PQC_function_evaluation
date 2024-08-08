@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  7 AUG 2024 12:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  8 AUG 2024 09:42
 entering extended mode
-**./weeks_1-3.tex
-(weeks_1-3.tex
+**./week_5.tex
+(week_5.tex
 LaTeX2e <2021-06-01>
 L3 programming layer <2021-06-01>
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamer.cls
@@ -758,20 +758,49 @@ default.sty
 )
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beameroutertheme
 default.sty)))
-(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/mathtools\mathtools.sty
+Package: mathtools 2024/03/11 v1.30 mathematical typesetting tools
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count330
+\calc@Bcount=\count331
+\calc@Adimen=\dimen292
+\calc@Bdimen=\dimen293
+\calc@Askip=\skip64
+\calc@Bskip=\skip65
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count332
+\calc@Cskip=\skip66
+)
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/mathtools\mhsetup.sty
+Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
+)
+\g_MT_multlinerow_int=\count333
+\l_MT_multwidth_dim=\dimen294
+\origjot=\skip67
+\l_MT_shortvdotswithinadjustabove_dim=\dimen295
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen296
+\l_MT_above_intertext_sep=\dimen297
+\l_MT_below_intertext_sep=\dimen298
+\l_MT_above_shortintertext_sep=\dimen299
+\l_MT_below_shortintertext_sep=\dimen300
+\xmathstrut@box=\box75
+\xmathstrut@dim=\dimen301
+) (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
 Package: babel 2021/06/02 3.60 The Babel package
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.def
 File: babel.def 2021/06/02 3.60 Babel common definitions
-\babel@savecnt=\count330
-\U@D=\dimen292
+\babel@savecnt=\count334
+\U@D=\dimen302
 \l@unhyphenated=\language79
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
 \bbl@readstream=\read3
 )
 LaTeX Info: Redefining \textlatin on input line 718.
-\bbl@dirlevel=\count331
+\bbl@dirlevel=\count335
 
 *************************************
 * Local config file bblopts.cfg used
@@ -800,11 +829,32 @@ Package: esint
 )
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count332
+\c@float@type=\count336
 \float@exts=\toks45
-\float@box=\box75
+\float@box=\box76
 \@float@everytoks=\toks46
-\@floatcapt=\box76
+\@floatcapt=\box77
+)
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+
+(C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+Package: array 2021/04/20 v2.5e Tabular extension package (FMi)
+\col@sep=\dimen303
+\ar@mcellbox=\box78
+\extrarowheight=\dimen304
+\NC@list=\toks47
+\extratabsurround=\skip68
+\backup@length=\skip69
+\ar@cellbox=\box79
+)
+\TX@col@width=\dimen305
+\TX@old@table=\dimen306
+\TX@old@col=\dimen307
+\TX@target=\dimen308
+\TX@delta=\dimen309
+\TX@cols=\count337
+\TX@ftn=\toks48
 )
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
 Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
@@ -814,13 +864,13 @@ Package: caption 2020/10/26 v3.5g Customizing captions (AR)
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
-\captionmargin=\dimen293
-\captionmargin@=\dimen294
-\captionwidth=\dimen295
-\caption@tempdima=\dimen296
-\caption@indent=\dimen297
-\caption@parindent=\dimen298
-\caption@hangindent=\dimen299
+\captionmargin=\dimen310
+\captionmargin@=\dimen311
+\captionwidth=\dimen312
+\caption@tempdima=\dimen313
+\caption@indent=\dimen314
+\caption@parindent=\dimen315
+\caption@hangindent=\dimen316
 Package caption Info: beamer document class detected.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption-beamer.
@@ -828,21 +878,21 @@ sto
 File: caption-beamer.sto 2020/08/22 v2.0 Adaption of the caption package to the
  beamer document classes (AR)
 ))
-\c@caption@flags=\count333
-\c@continuedfloat=\count334
+\c@caption@flags=\count338
+\c@continuedfloat=\count339
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: Hyperref support is turned off
 (caption)             because hyperref has stopped early.
 )
-\c@subfigure=\count335
-\c@subtable=\count336
+\c@subfigure=\count340
+\c@subtable=\count341
 )
-Package hyperref Info: Option `colorlinks' set `false' on input line 14.
+Package hyperref Info: Option `colorlinks' set `false' on input line 18.
 
 
 Package hyperref Warning: Option `bookmarks' has already been used,
-(hyperref)                setting the option has no effect on input line 14.
+(hyperref)                setting the option has no effect on input line 18.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/beamer\beamerthemeMadri
@@ -864,29 +914,29 @@ circles.sty)
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count337
-\l__pdf_internal_box=\box77
-) (weeks_1-3.aux)
-\openout1 = `weeks_1-3.aux'.
+\l__color_backend_stack_int=\count342
+\l__pdf_internal_box=\box80
+) (week_5.aux)
+\openout1 = `week_5.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -926,17 +976,17 @@ LaTeX Font Info:    ... okay on input line 37.
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count338
-\scratchdimen=\dimen300
-\scratchbox=\box78
-\nofMPsegments=\count339
-\nofMParguments=\count340
-\everyMPshowfont=\toks47
-\MPscratchCnt=\count341
-\MPscratchDim=\dimen301
-\MPnumerator=\count342
-\makeMPintoPDFobject=\count343
-\everyMPtoPDFconversion=\toks48
+\scratchcounter=\count343
+\scratchdimen=\dimen317
+\scratchbox=\box81
+\nofMPsegments=\count344
+\nofMParguments=\count345
+\everyMPshowfont=\toks49
+\MPscratchCnt=\count346
+\MPscratchDim=\dimen318
+\MPnumerator=\count347
+\makeMPintoPDFobject=\count348
+\everyMPtoPDFconversion=\toks50
 )
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -948,7 +998,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 37.
+Package hyperref Info: Link coloring OFF on input line 41.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -960,14 +1010,14 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 lestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count344
+\c@section@level=\count349
 )
-LaTeX Info: Redefining \ref on input line 37.
-LaTeX Info: Redefining \pageref on input line 37.
-LaTeX Info: Redefining \nameref on input line 37.
- (weeks_1-3.out) (weeks_1-3.out)
+LaTeX Info: Redefining \ref on input line 41.
+LaTeX Info: Redefining \pageref on input line 41.
+LaTeX Info: Redefining \nameref on input line 41.
+ (week_5.out) (week_5.out)
 \@outlinefile=\write5
-\openout5 = `weeks_1-3.out'.
+\openout5 = `week_5.out'.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/translator\translator-b
@@ -996,189 +1046,238 @@ Dictionary: translator-theorem-dictionary, Language: English
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
- (weeks_1-3.nav) [1
+ (week_5.nav) [1
 
-{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (weeks_1-3.toc)
- [2
-
-]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 63.
+{C:/Users/david/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 60.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 63.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 60.
 
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+esint on input line 6
-3.
+0.
 
 (C:\Users\david\AppData\Local\Programs\MiKTeX\tex/latex/esint\uesint.fd
 File: uesint.fd 
 )
-[3
+[2
+
+] (week_5.toc) [3
 
 ] [4
 
-] [5
+]
+<im/SAM_WIM_WILL_F_new.pdf, id=201, 715.47299pt x 715.47299pt>
+File: im/SAM_WIM_WILL_F_new.pdf Graphic file (type pdf)
+<use im/SAM_WIM_WILL_F_new.pdf>
+Package pdftex.def Info: im/SAM_WIM_WILL_F_new.pdf  used on input line 110.
+(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
 
-] (weeks_1-3.toc) [6
+Overfull \vbox (2.06783pt too high) detected at line 110
+ []
 
-] [7
+[5
 
-] [8
+ <./im/SAM_WIM_WILL_F_new.pdf>]
+<im/SAM_WIM_WILL_F2_new.pdf, id=251, 731.54634pt x 715.47299pt>
+File: im/SAM_WIM_WILL_F2_new.pdf Graphic file (type pdf)
+<use im/SAM_WIM_WILL_F2_new.pdf>
+Package pdftex.def Info: im/SAM_WIM_WILL_F2_new.pdf  used on input line 136.
+(pdftex.def)             Requested size: 171.14764pt x 167.38289pt.
+ [6
+
+ <./im/SAM_WIM_WILL_F2_new.pdf>]
+<im/SAM_WIM_WILL_H_new.pdf, id=292, 742.67374pt x 715.47299pt>
+File: im/SAM_WIM_WILL_H_new.pdf Graphic file (type pdf)
+<use im/SAM_WIM_WILL_H_new.pdf>
+Package pdftex.def Info: im/SAM_WIM_WILL_H_new.pdf  used on input line 162.
+(pdftex.def)             Requested size: 171.14764pt x 164.87192pt.
+ [7
+
+ <./im/SAM_WIM_WILL_H_new.pdf>] [8
 
 ] [9
 
 ] [10
 
-]
-<im/QCNN_structure.png, id=404, 676.32675pt x 287.27325pt>
-File: im/QCNN_structure.png Graphic file (type png)
-<use im/QCNN_structure.png>
-Package pdftex.def Info: im/QCNN_structure.png  used on input line 152.
-(pdftex.def)             Requested size: 342.2953pt x 145.39403pt.
- [11
+] [11
 
- <./im/QCNN_structure.png>] (weeks_1-3.toc) [12
+] (week_5.toc) [12
 
 ] [13
 
-] [14
-
-] (weeks_1-3.toc) [15
-
-] [16
-
 ]
-<im/phase_loss_comp_linear_m4.pdf, id=615, 705.3834pt x 715.47299pt>
-File: im/phase_loss_comp_linear_m4.pdf Graphic file (type pdf)
-<use im/phase_loss_comp_linear_m4.pdf>
-Package pdftex.def Info: im/phase_loss_comp_linear_m4.pdf  used on input line 2
-34.
-(pdftex.def)             Requested size: 171.14764pt x 173.59479pt.
+<im/Q_amp_linear_H.pdf, id=499, 731.13103pt x 535.84647pt>
+File: im/Q_amp_linear_H.pdf Graphic file (type pdf)
+<use im/Q_amp_linear_H.pdf>
+Package pdftex.def Info: im/Q_amp_linear_H.pdf  used on input line 259.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/QRQ_amp_linear_H.pdf, id=500, 731.13103pt x 589.49017pt>
+File: im/QRQ_amp_linear_H.pdf Graphic file (type pdf)
+<use im/QRQ_amp_linear_H.pdf>
+Package pdftex.def Info: im/QRQ_amp_linear_H.pdf  used on input line 259.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+ [14
 
-Overfull \vbox (4.5242pt too high) detected at line 234
- []
+ <./im/Q_amp_linear_H.pdf> <./im/QRQ_amp_linear_H.pdf>]
+<im/Q_amp_quadratic_H.pdf, id=548, 731.13103pt x 535.81117pt>
+File: im/Q_amp_quadratic_H.pdf Graphic file (type pdf)
+<use im/Q_amp_quadratic_H.pdf>
+Package pdftex.def Info: im/Q_amp_quadratic_H.pdf  used on input line 279.
+(pdftex.def)             Requested size: 171.14764pt x 125.4251pt.
+<im/QRQ_amp_quadratic_H.pdf, id=549, 731.13103pt x 589.4895pt>
+File: im/QRQ_amp_quadratic_H.pdf Graphic file (type pdf)
+<use im/QRQ_amp_quadratic_H.pdf>
+Package pdftex.def Info: im/QRQ_amp_quadratic_H.pdf  used on input line 279.
+(pdftex.def)             Requested size: 171.14764pt x 137.99036pt.
+ [15
 
-[17
+ <./im/Q_amp_quadratic_H.pdf> <./im/QRQ_amp_quadratic_H.pdf>]
+<im/Q_amp_linear_UA.pdf, id=596, 731.13103pt x 535.84647pt>
+File: im/Q_amp_linear_UA.pdf Graphic file (type pdf)
+<use im/Q_amp_linear_UA.pdf>
+Package pdftex.def Info: im/Q_amp_linear_UA.pdf  used on input line 299.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/QRQ_amp_linear_UA.pdf, id=597, 731.13103pt x 589.49017pt>
+File: im/QRQ_amp_linear_UA.pdf Graphic file (type pdf)
+<use im/QRQ_amp_linear_UA.pdf>
+Package pdftex.def Info: im/QRQ_amp_linear_UA.pdf  used on input line 299.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+ [16
 
- <./im/phase_loss_comp_linear_m4.pdf>]
-<im/phase_loss_comp_quadratic_m4.pdf, id=662, 715.47299pt x 715.47299pt>
-File: im/phase_loss_comp_quadratic_m4.pdf Graphic file (type pdf)
-<use im/phase_loss_comp_quadratic_m4.pdf>
-Package pdftex.def Info: im/phase_loss_comp_quadratic_m4.pdf  used on input lin
-e 254.
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
-<im/phase_loss_comp_sin_m3.pdf, id=663, 715.47299pt x 715.47299pt>
-File: im/phase_loss_comp_sin_m3.pdf Graphic file (type pdf)
-<use im/phase_loss_comp_sin_m3.pdf>
-Package pdftex.def Info: im/phase_loss_comp_sin_m3.pdf  used on input line 254.
+ <./im/Q_amp_linear_UA.pdf> <./im/QRQ_amp_linear_UA.pdf>]
+<im/Q_amp_quadratic_UA.pdf, id=647, 731.13103pt x 535.75487pt>
+File: im/Q_amp_quadratic_UA.pdf Graphic file (type pdf)
+<use im/Q_amp_quadratic_UA.pdf>
+Package pdftex.def Info: im/Q_amp_quadratic_UA.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 125.41191pt.
+<im/QRQ_amp_quadratic_UA.pdf, id=648, 731.13103pt x 589.48747pt>
+File: im/QRQ_amp_quadratic_UA.pdf Graphic file (type pdf)
+<use im/QRQ_amp_quadratic_UA.pdf>
+Package pdftex.def Info: im/QRQ_amp_quadratic_UA.pdf  used on input line 319.
+(pdftex.def)             Requested size: 171.14764pt x 137.98988pt.
+ [17
 
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
-
-Overfull \vbox (2.06783pt too high) detected at line 254
- []
-
+ <./im/Q_amp_quadratic_UA.pdf> <./im/QRQ_amp_quadratic_UA.pdf>]
+<im/Q_phase_linear_UA.pdf, id=695, 731.13103pt x 535.84647pt>
+File: im/Q_phase_linear_UA.pdf Graphic file (type pdf)
+<use im/Q_phase_linear_UA.pdf>
+Package pdftex.def Info: im/Q_phase_linear_UA.pdf  used on input line 339.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/RQ_phase_linear_UA.pdf, id=696, 731.13103pt x 535.84647pt>
+File: im/RQ_phase_linear_UA.pdf Graphic file (type pdf)
+<use im/RQ_phase_linear_UA.pdf>
+Package pdftex.def Info: im/RQ_phase_linear_UA.pdf  used on input line 339.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
 [18
 
- <./im/phase_loss_comp_quadratic_m4.pdf> <./im/phase_loss_comp_sin_m3.pdf>]
-[19
+ <./im/Q_phase_linear_UA.pdf> <./im/RQ_phase_linear_UA.pdf>]
+<im/QRQ_phase_linear_UA.pdf, id=743, 731.13103pt x 589.49017pt>
+File: im/QRQ_phase_linear_UA.pdf Graphic file (type pdf)
+<use im/QRQ_phase_linear_UA.pdf>
+Package pdftex.def Info: im/QRQ_phase_linear_UA.pdf  used on input line 359.
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+<im/QRQ_3D_linear_UA.pdf, id=744, 573.66402pt x 462.52798pt>
+File: im/QRQ_3D_linear_UA.pdf Graphic file (type pdf)
+<use im/QRQ_3D_linear_UA.pdf>
+Package pdftex.def Info: im/QRQ_3D_linear_UA.pdf  used on input line 359.
+(pdftex.def)             Requested size: 171.14764pt x 137.99017pt.
+ [19
 
-] (weeks_1-3.toc) [20
+ <./im/QRQ_phase_linear_UA.pdf> <./im/QRQ_3D_linear_UA.pdf>]
+<im/Q_phase_quadratic_UA.pdf, id=796, 731.13103pt x 535.84647pt>
+File: im/Q_phase_quadratic_UA.pdf Graphic file (type pdf)
+<use im/Q_phase_quadratic_UA.pdf>
+Package pdftex.def Info: im/Q_phase_quadratic_UA.pdf  used on input line 379.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+<im/RQ_phase_quadratic_UA.pdf, id=797, 731.13103pt x 535.84647pt>
+File: im/RQ_phase_quadratic_UA.pdf Graphic file (type pdf)
+<use im/RQ_phase_quadratic_UA.pdf>
+Package pdftex.def Info: im/RQ_phase_quadratic_UA.pdf  used on input line 379.
+(pdftex.def)             Requested size: 171.14764pt x 125.43335pt.
+ [20
 
-] [21
+ <./im/Q_phase_quadratic_UA.pdf> <./im/RQ_phase_quadratic_UA.pdf>]
+<im/QRQ_phase_quadratic_UA.pdf, id=844, 731.13103pt x 589.49017pt>
+File: im/QRQ_phase_quadratic_UA.pdf Graphic file (type pdf)
+<use im/QRQ_phase_quadratic_UA.pdf>
+Package pdftex.def Info: im/QRQ_phase_quadratic_UA.pdf  used on input line 399.
 
-]
-<im/amplitude_comp.pdf, id=807, 715.47299pt x 715.47299pt>
-File: im/amplitude_comp.pdf Graphic file (type pdf)
-<use im/amplitude_comp.pdf>
-Package pdftex.def Info: im/amplitude_comp.pdf  used on input line 316.
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
- [22
+(pdftex.def)             Requested size: 171.14764pt x 137.99051pt.
+<im/QRQ_3D_quadratic_UA.pdf, id=845, 573.66402pt x 462.52798pt>
+File: im/QRQ_3D_quadratic_UA.pdf Graphic file (type pdf)
+<use im/QRQ_3D_quadratic_UA.pdf>
+Package pdftex.def Info: im/QRQ_3D_quadratic_UA.pdf  used on input line 399.
+(pdftex.def)             Requested size: 171.14764pt x 137.99017pt.
+ [21
 
- <./im/amplitude_comp.pdf>]
-<im/phase_comp.pdf, id=850, 715.47299pt x 715.47299pt>
-File: im/phase_comp.pdf Graphic file (type pdf)
-<use im/phase_comp.pdf>
-Package pdftex.def Info: im/phase_comp.pdf  used on input line 337.
-(pdftex.def)             Requested size: 171.14764pt x 171.13841pt.
+ <./im/QRQ_phase_quadratic_UA.pdf> <./im/QRQ_3D_quadratic_UA.pdf>] [22
 
-Overfull \vbox (2.06783pt too high) detected at line 337
- []
+] (week_5.toc) [23
 
-[23
+] [24
 
- <./im/phase_comp.pdf>]
-<im/h_comp.pdf, id=887, 1438.17305pt x 715.47299pt>
-File: im/h_comp.pdf Graphic file (type pdf)
-<use im/h_comp.pdf>
-Package pdftex.def Info: im/h_comp.pdf  used on input line 347.
-(pdftex.def)             Requested size: 342.2953pt x 170.28687pt.
- [24
-
- <./im/h_comp.pdf>] (weeks_1-3.toc) [25
+] (week_5.toc)
+[25
 
 ] [26
 
 ]
 \tf@nav=\write6
-\openout6 = `weeks_1-3.nav'.
+\openout6 = `week_5.nav'.
 
 \tf@toc=\write7
-\openout7 = `weeks_1-3.toc'.
+\openout7 = `week_5.toc'.
 
 \tf@snm=\write8
-\openout8 = `weeks_1-3.snm'.
+\openout8 = `week_5.snm'.
 
-
-(weeks_1-3.aux)
-Package rerunfilecheck Info: File `weeks_1-3.out' has not changed.
-(rerunfilecheck)             Checksum: BD39CCD4D4ECB9D5AE5724787A76E44C;1558.
+ (week_5.aux)
+Package rerunfilecheck Info: File `week_5.out' has not changed.
+(rerunfilecheck)             Checksum: 7EC70B4E9C5032AA8349C35BD7209B55;661.
  ) 
 Here is how much of TeX's memory you used:
- 23608 strings out of 478864
- 448506 string characters out of 2848660
- 748197 words of memory out of 3000000
- 40903 multiletter control sequences out of 15000+600000
- 421522 words of font info for 98 fonts, out of 8000000 for 9000
+ 24281 strings out of 478864
+ 460753 string characters out of 2848660
+ 762247 words of memory out of 3000000
+ 41576 multiletter control sequences out of 15000+600000
+ 417250 words of font info for 86 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,124p,416b,776s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 128i,15n,124p,413b,793s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/david/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/User
-s/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-<C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-r17.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmr8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmr9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/david/
-AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/U
-sers/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10
+s/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/david/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/david/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/david/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/
+david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:
+/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.
+pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/david/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmssi10.pfb><C:/Users/david/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/d
+avid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:
+/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8
 .pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmssi9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/david/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/david/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on weeks_1-3.pdf (26 pages, 624517 bytes).
+cm/cmtt9.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/symbols/msbm10.pfb>
+Output written on week_5.pdf (26 pages, 914484 bytes).
 PDF statistics:
- 1109 PDF objects out of 1200 (max. 8388607)
- 65 named destinations out of 1000 (max. 500000)
- 330 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1128 PDF objects out of 1200 (max. 8388607)
+ 57 named destinations out of 1000 (max. 500000)
+ 314 words of extra memory for PDF output out of 10000 (max. 10000000)
 

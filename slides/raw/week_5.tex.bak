@@ -416,7 +416,7 @@ so that we can train the network to generate $\ket{\phi}$ by minimising $|1-\mat
 \item The most important strategy to mitigate barren plateaus seems to be a so-called \alert{warm start}, also known as \alert{smart initialisation}
 \item Common approaches include layerwise training\footnote{\url{https://arxiv.org/pdf/2006.14904}}, training via identity blocks\footnote{\url{https://arxiv.org/pdf/1903.05076}} and training using a fast-and-slow approach\footnote{\url{https://arxiv.org/pdf/2203.02464}}
 \item Implementing these strategies requires signifcant adaptation of the existing code base 
-\item Thus, must first \alert{spend some time restructuring} (and \href{http://localhost:8080/pqcprep.html}{\textcolor{purple}{re-documenting}}) the code  
+\item Thus, must first \alert{spend some time restructuring} (and \href{https://david-f-amorim.github.io/PQC_function_evaluation/pqcprep.html}{\textcolor{purple}{re-documenting}}) the code  
 \end{itemize}
 \end{frame}
 
