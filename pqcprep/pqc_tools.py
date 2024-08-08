@@ -486,7 +486,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
     - **repeat_params** : *str*, *optional*
 
         Keep parameters fixed for different layer types, i.e. use the same parameter values for each instance of a layer type. 
-        Options are `CL` (keep parameters fixed for convolutional layers), `IL` (keep parameters fixed for input layers), `both` 
+        Options are `'CL'` (keep parameters fixed for convolutional layers), `'IL'` (keep parameters fixed for input layers), `'both'` 
         (keep parameters fixed for both convolutional and input layers). 
 
     - **wrap**: *boolean* 

@@ -119,7 +119,10 @@ def vars_to_name_str(arg_dict):
     if arg_dict["repeat_params"] != None and f'({arg_dict["repeat_params"]})' not in arg_dict["meta"]:
         arg_dict["meta"]+=f'({arg_dict["repeat_params"]})' 
 
-    # set WILL information     
+    # set WILL information   
+    if arg_dict["loss_str"] !="WILL" and '--' in arg_dict["meta"]:
+        raise ValueError("The sequence '--' is reserved and may not appear in the meta string.")    
+
     if arg_dict["loss_str"]=="WILL" and '--' not in arg_dict["meta"]:
             arg_dict["meta"] +=f'_{Fraction(arg_dict["WILL_p"]).numerator}--{Fraction(arg_dict["WILL_p"]).denominator}_{Fraction(arg_dict["WILL_q"]).numerator}--{Fraction(arg_dict["WILL_q"]).denominator}'
 

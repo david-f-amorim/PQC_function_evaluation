@@ -201,7 +201,94 @@ def set_WIM_weights(generated_weights, arg_dict):
 
 def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta):
     """
-    Initialise circuit as QNN for training purposes....
+    Train a QCNN to perform function evaluation $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi(j)}$.
+
+    The QCNN is generated using `pqcprep.pqc_tools.generate_network()`. 
+
+    Arguments:
+    ---
+    - **n** : *int*
+
+        Number of qubits in the input register. 
+
+    - **m** : *int*
+
+        Number of qubits in the target register. 
+
+    - **L** : *int*
+
+        Number of layers in the network. 
+
+    - **seed** : *int* 
+
+        Seed for random number generation. 
+
+    - **epochs** : *int* 
+
+        Number of training runs. 
+
+    - **func_str** : *str*
+
+        String specifying the function $\Psi$ to be evaluated. Must be a valid option for the argument `mode` of `pqcprep.psi_tools.psi()`. 
+
+    - **loss_str** : *str* 
+
+        String specifying the loss function minimised by the optimiser. Must be a valid option for the argument `loss_str` of `set_loss_func()`. 
+
+    - **meta** : *str*
+
+        String containing meta information to be included in output file names. 
+
+    - **recover_temp** : *boolean* 
+
+        If True, continue training from TEMP files (should they exist). If False and TEMP files exist they will be overwritten. 
+
+    - **nint** : *int*
+
+        Number of integer qubits in input register. 
+
+    - **mint** : *int*
+
+        Number of integer qubits in target register.  
+
+    - **phase_reduce** : *boolean* 
+
+        If True, reduce $\Psi(j)$ to the interval $(0, 2 \pi]$ i.e. perform the mapping $\Psi \to \Psi \text{mod} 2 \pi$. 
+
+    - **train_superpos** : *boolean*
+
+        If True, train on a superposition of input states. If False, train on randomly sampled individual input states. 
+
+    - **real** : *boolean*
+
+        If True, generate a network only involving CX and Ry rotations, resulting in real amplitudes. 
+
+    - **repeat_params** : *str*, *optional* 
+
+        Keep parameters fixed for different layer types, i.e. use the same parameter values for each instance of a layer type. 
+        Options are `None` (do not keep parameters fixed), `'CL'` (keep parameters fixed for convolutional layers), 
+        `'IL'` (keep parameters fixed for input layers), `'both'` (keep parameters fixed for both convolutional and input layers).    
+
+    - **WILL_p** : *float* 
+
+        The $p$ parameter of the WILL loss function, as described in `set_loss_func()`.
+
+    - **WILL_q** : *float* 
+
+        The $q$ parameter of the WILL loss function, as described in `set_loss_func()`.    
+
+    - **delta** : *float* 
+
+        Hyper-parameter controlling the sampling of input state coefficients when training in superposition (`train_superpos = True`). Must be 
+        between 0 and 1. `delta = 0` corresponds to coefficients fixed at $\\frac{1}{\\sqrt{2^n}}$ while `delta = 1` corresponds to coefficients randomly assuming values on the range $(0,1)$. 
+        Intermediate values of `delta` result in coefficinets being randomly sampled on an interval around $\\frac{1}{\\sqrt{2^n}}$, with the range of the interval 
+        determined by the value of `delta`.     
+
+    Returns:
+    ----
+
+    ... files     
+
     """
     
     # compress arguments into dictionary 
@@ -474,7 +561,19 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
 def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,delta,verbose=True):   
     """
-    Test performance of trained QNN for the various input states
+    Test performance of trained QNN for the various input states ...
+
+    ....
+
+    Arguments: 
+    ---
+
+    Same arguments as `train_QNN()`. See there for a description. 
+
+    Returns:
+    ---
+
+
     """
     # compress arguments into dictionary 
     args =compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta)
@@ -539,7 +638,68 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
 
 def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_temp, nint, repeat_params):
     """
-    Train circuit for amplitude encoding. 
+
+    Train a QCNN to prepare an amplitude distribution: $\ket{0} \mapsto \sum_j A(j) \ket{j}$.
+
+    The QCNN is generated using `pqcprep.pqc_tools.A_generate_network()`. 
+
+    Arguments:
+    ---
+
+    - **n** : *int* 
+
+        Number of qubits in the register. 
+
+    - **L** : *int* 
+
+        Number of layers in the network. 
+
+    - **x_min** : *float* 
+
+        Minimum of function domain.         
+
+    - **x_max** : *float* 
+
+        Maximum of function domain.   
+
+    - **seed** : *int* 
+
+        Seed for random number generation. 
+
+    - **epochs** : *int* 
+
+        Number of training runs. 
+
+    - **func_str** : *str*
+
+        String specifying the function $A$ to be prepared. Must be a valid option for the argument `mode` of `pqcprep.psi_tools.A()`. 
+
+    - **loss_str** : *str* 
+
+        String specifying the loss function minimised by the optimiser. Must be a valid option for the argument `loss_str` of `set_loss_func()`. 
+
+    - **meta** : *str*
+
+        String containing meta information to be included in output file names. 
+
+    - **recover_temp** : *boolean* 
+
+        If True, continue training from TEMP files (should they exist). If False and TEMP files exist they will be overwritten. 
+
+    - **nint** : *int*
+
+        Number of integer qubits in the register.  
+
+    - **repeat_params** : *boolean* 
+
+        If True, keep parameters fixed for different layer types, i.e. use the same parameter values for each instance of a layer type.
+          
+
+    Returns:
+    ---
+
+    ... files ...    
+        
     """
 
     # compress arguments into dictionary 
@@ -706,7 +866,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     # delete temp files
     temp_labels=["weights", "mismatch", "loss"]  
     for i in np.arange(len(temp_labels)):
-        file=os.path.join(DIR,"outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str_ampl(args)}.npy")
+        file=os.path.join(DIR,"ampl_outputs",f"__TEMP{temp_ind}_{temp_labels[i]}{vars_to_name_str_ampl(args)}.npy")
         os.remove(file) if os.path.isfile(file) else None             
 
     # save outputs 
@@ -715,6 +875,6 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     outputs= [generated_weights, mismatch_vals, loss_vals, np.real(state_vector)]
     output_labels=["weights", "mismatch", "loss", "statevec"]  
     for i in np.arange(len(outputs)):
-        np.save(os.path.join(DIR,"outputs", f"{output_labels[i]}{vars_to_name_str_ampl(args)}"), outputs[i])         
+        np.save(os.path.join(DIR,"ampl_outputs", f"{output_labels[i]}{vars_to_name_str_ampl(args)}"), outputs[i])         
 
     return 0

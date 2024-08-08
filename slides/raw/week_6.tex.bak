@@ -157,9 +157,7 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 \item Notably, increasing $\delta$ leads to \alert{thin `stripes'} in the amplitude plots, i.e. sudden changes in amplitude between neighbouring states 
 \item This could suggest a structural \alert{defect in input layer design} 
 \end{itemize}
-Notably, there is a `stripey` texture...
-also, try playing around with control state ... 
-..
+PLAY AROUND WITH CONTROL STATE: TURNS OUT HAD NOT BEEN USING THIS ENTIRE TIME...
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
