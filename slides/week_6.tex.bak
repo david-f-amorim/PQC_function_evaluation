@@ -59,7 +59,7 @@ write doc strings for testQNN, trainQNN, ampl_trainQNN
 
 integrate encode.py into network...
 
-
+make sure to update docs files...
 
 \end{frame}
 
