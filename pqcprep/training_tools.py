@@ -655,7 +655,7 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
         phase_target *= 2 * np.pi 
 
     # get state vector for full phase extraction 
-    state_vec= full_encode(n,m, weights_A_str=None, weights_p=weights, L_ampl=L, L_phase=None,real_p=real,repeat_params=repeat_params,full_state_vec=False, no_UA=True, operators="QRQ")
+    state_vec= full_encode(n,m, weights_A_str=None, weights_p_str=weights, L_A=None, L_p=L,real_p=real,repeat_params=repeat_params,full_state_vec=False, no_UA=True, operators="QRQ")
     amplitude = np.abs(state_vec)
     phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
     phase *= (amplitude > 1e-15).astype(float)  
