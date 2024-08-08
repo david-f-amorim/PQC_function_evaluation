@@ -10,10 +10,10 @@ L_phase = 6
 real_p = True 
 m = 3
 psi_mode="quadratic"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_zeros(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_ctrl1(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-operators="QRQ"
+operators="Q"
 no_UA=True
 
 n = 6
@@ -24,7 +24,7 @@ L_ampl =3
 # plot settings
 comp = False # compare to Hayes 2023  
 show = True # show plots
-pdf = False # save outputs as pdf 
+pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
@@ -32,17 +32,17 @@ no_p = True # don't produce phase plot
 no_h = True # don't produce h plot
 
 no_full_A = False # don't produce full amplitude plot
-no_full_p = False # don't produce full phase plot
+no_full_p = True # don't produce full phase plot
 no_full_3D= True # don't produce full 3D plot
 
-comp_full = True
+comp_full = False
 
 # additional plots 
 A_L_comp = False 
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = False 
+phase_loss_comp = False
 phase_shift_comp = False 
 phase_RP_comp=False 
 
@@ -521,14 +521,18 @@ if phase_loss_comp==True:
     """
     PLOT QCNN PHASE VERSUS TARGET FOR DIFFERENT loss
     """
-    loss_arr =np.array(["SAM","WIM", "WILL"])
-    arr_1 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy"
-    arr_2 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_WIM_(S)(PR)(r).npy"
-    arr_3 ="pqcprep/outputs/weights_6_3(0)_6_600_psi_WILL_(S)(PR)(r)_3-4_2-1.npy"
+    loss_arr =np.array(["0", "0.2", "0.4", "0.6", "0.8", "1"])
+    arr_1 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_(S)(PR)(r)_1680458526.npy"
+    arr_2 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.2_(S)(PR)(r)_1680458526.npy"
+    arr_3 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.4_(S)(PR)(r)_1680458526.npy"
+    arr_4 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.6_(S)(PR)(r)_1680458526.npy"
+    arr_5 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.8_(S)(PR)(r)_1680458526.npy"
+    arr_6 =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.8_(S)(PR)(r)_1680458526.npy"
     
-    weights_arr =np.array([arr_1, arr_2, arr_3])
-    colours = ["red", "blue", "green"]
+    weights_arr =np.array([arr_1, arr_2, arr_3, arr_4, arr_5, arr_6])
+    colours = ["red", "blue", "green", "purple", "orange", "cyan"]
     N = len(weights_arr)
+    cmap = plt.get_cmap('viridis', N)
 
     phase_arr = np.empty(N, dtype="object")
 
@@ -540,7 +544,7 @@ if phase_loss_comp==True:
         phase *= (amplitude > 1e-15).astype(float) 
         phase_arr[i]=phase 
 
-        bar =np.array(list(np.load("outputs/bar"+weights_arr[i][15:],allow_pickle='TRUE').item().values()))
+        bar =np.array(list(np.load("pqcprep/outputs/bar"+weights_arr[i][23:],allow_pickle='TRUE').item().values()))
         mu = np.mean(bar) 
         sigma = np.std(bar)
         norm = np.sum(amplitude**2)
@@ -554,13 +558,12 @@ if phase_loss_comp==True:
         phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode) # set back to previous value for the following
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
-    cmap = plt.get_cmap('Dark2', N)
-
+    
     ax[0].plot(x_arr,phase_target, color="black")
     ax[0].plot(x_arr,phase_rounded, color="gray", ls="--")
     
     for i in np.arange(N):
-        ax[0].scatter(x_arr,phase_arr[i],label=f"{loss_arr[i]}", color=colours[i])
+        ax[0].scatter(x_arr,phase_arr[i],label=f"{loss_arr[i]}", color=cmap(i))
 
     ax[0].set_ylabel(r"$\Psi (f)$", fontsize=fontsize)
     ax[0].legend(fontsize=fontsize, loc='upper left')
@@ -571,7 +574,7 @@ if phase_loss_comp==True:
         phase_target = phase_rounded
 
     for i in np.arange(N):
-        ax[1].scatter(x_arr,phase_target-phase_arr[i],label=f"{loss_arr[i]}", color=colours[i])
+        ax[1].scatter(x_arr,phase_target-phase_arr[i],label=f"{loss_arr[i]}", color=cmap(i))
     
     ax[1].set_ylabel(r"$\Delta \Psi(f)$", fontsize=fontsize)
     ax[1].tick_params(axis="both", labelsize=ticksize)

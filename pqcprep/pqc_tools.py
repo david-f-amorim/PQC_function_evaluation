@@ -141,7 +141,7 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
         for i in qubits[:n]:
             for j in qubits[n:]:
                 if real:
-                    qc.cry(wrap_angle(params[int(param_index)]), qubits[i], qubits[j])
+                    qc.cry(wrap_angle(params[int(param_index)]), qubits[i], qubits[j],ctrl_state=ctrl_state)
                     param_index += 1
                 else:  
                     par = params[int(param_index) : int(param_index + num_par)] 
@@ -156,7 +156,7 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
                 j -=int(np.modf(j/m)[1] * m)
 
             if real:
-                qc.cry(wrap_angle(params[i]), qubits[i], qubits[j+n])
+                qc.cry(wrap_angle(params[i]), qubits[i], qubits[j+n], ctrl_state=ctrl_state)
             else:
                 par = params[int(param_index) : int(param_index + num_par)] 
                 cu3 = U3Gate(wrap_angle(par[0]),wrap_angle(par[1]),wrap_angle(par[2])).control(1, ctrl_state=ctrl_state)

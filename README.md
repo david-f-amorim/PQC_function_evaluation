@@ -10,5 +10,5 @@ The directory 'LEGACY' contains a few additional scripts beyond the core *pqcpre
 David Amorim, 2024. Email: [*2538354a@student.gla.ac.uk*](mailto:2538354a@student.gla.ac.uk) .
 
 
-This project was funded by a Carnegie Vacation Scholarship and supervised by Prof S. Croke (University of Glasgow, School of Physics and Astronomy). 
+This project was funded by a Carnegie Vacation Scholarship and supervised by Prof Sarah Croke (University of Glasgow, School of Physics and Astronomy). 
 

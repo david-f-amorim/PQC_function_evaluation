@@ -113,7 +113,11 @@ This size, $m$, of the ancilla register limits the precision to which $\Psi(j)$ 
 
 # Imprint 
 
+
 David Amorim, 2024. Email: [*2538354a@student.gla.ac.uk*](mailto:2538354a@student.gla.ac.uk) .
+
+
+This project was funded by a Carnegie Vacation Scholarship and supervised by Prof Sarah Croke (University of Glasgow, School of Physics and Astronomy). 
 
 """
 
