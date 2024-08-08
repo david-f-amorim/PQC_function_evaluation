@@ -113,6 +113,8 @@ def psi(x, mode="psi"):
         out = psi_linear(x)
     elif mode=="psi":     
         out = psi_H(x)
+    else:
+        raise ValueError('Unrecognised phase function mode. Options are "psi", "linear", "quadratic", "sine".')    
     
     return out
 
@@ -130,7 +132,7 @@ def psi_linear(x):
     ----
     - **out** : *float*
 
-        $\Psi(x)$.     
+        $\Psi(x) \sim x$.     
 
     """    
     x = x_trans(x)
@@ -152,7 +154,7 @@ def psi_quadratic(x):
     ----
     - **out** : *float*
 
-        $\Psi(x)$.     
+        $\Psi(x) \sim x^2$.     
 
     """    
     x = x_trans(x)
@@ -174,7 +176,7 @@ def psi_sine(x):
     ----
     - **out** : *float*
 
-        $\Psi(x)$.     
+        $\Psi(x) \sim \sin x$.     
 
     """     
     x = x_trans(x)
@@ -227,3 +229,38 @@ def get_phase_target(m, func):
     phase_rounded = 2 * np.pi * phase_reduced_dec
 
     return phase_rounded
+
+
+def A(x, mode="x76"):
+    r"""
+    A wrapper for different amplitude functions. 
+
+    Arguments:
+    ---
+    - **x** : *float* 
+
+        $x$.  
+
+    - **mode** : *str*
+
+        Options are `'x76'` (corresponding to $A(x) \sim x^{-7/6}$), `'uniform'` (corresponding to $A(x) \sim 1$), and `'linear'` (corresponding to $A(x) \sim x$).
+        Default is `'x76'`. 
+
+    Returns:
+    ----
+    - **out** : *float* 
+
+        $A(x)$ for the $A$ selected via `mode`. 
+        
+
+    """
+    if mode=="x76":
+        out = x**(-7/6)
+    elif mode=="uniform":    
+        out = 1
+    elif mode=="linear":
+        out= x   
+    else:
+        raise ValueError('Unrecognised phase function mode. Options are "x76", "uniform", "linear".')     
+
+    return out

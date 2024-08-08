@@ -3,9 +3,7 @@ Collection of functions regarding phase extraction.
 """
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister
-from .pqc_tools import generate_network, A_generate_network 
-from .tools import get_state_vec
-
+from .pqc_tools import generate_network, A_generate_network, get_state_vec 
 
 def extract_phase(n):
     r"""

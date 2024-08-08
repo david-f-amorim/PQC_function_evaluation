@@ -517,7 +517,9 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
     elif repeat_params=="both":
         AA_CL_params=ParameterVector(u"\u03B8_CL_AA", length= int((3 if real==False else 2 ) * (0.5 * m * (m-1))))
         NN_CL_params=ParameterVector(u"\u03B8_CL_NN", length= int((3 if real==False else 2) * m))
-        IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))    
+        IL_params=ParameterVector(u"\u03B8_IL", length= int((3 if real==False else 1) * n))
+    else:
+        raise ValueError("Unrecognised option for 'repeat_params'. Should be None, 'CL', 'IL', or 'both'.")        
         
     # initialise empty input and target registers 
     input_register = QuantumRegister(n, "input")

@@ -12,7 +12,7 @@ def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_r
     Arguments:
     ---- 
 
-    Arguments are the same as those passed to `.train_PLACEHOLDER.train_QNN()`. See the description there.
+    Arguments are the same as those passed to `.training_tools.train_QNN()`. See the description there.
 
 
     Returns:
@@ -51,11 +51,11 @@ def compress_args_ampl(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, nint
     Arguments:
     ---- 
 
-    Arguments are the same as those passed to `.train_PLACEHOLDER.ampl_train_QNN()`. See the description there. 
+    Arguments are the same as those passed to `.training_tools.ampl_train_QNN()`. See the description there. 
 
 
     Returns:
-    ---
+    ----
 
     - **arg_dict** : *dict* 
 

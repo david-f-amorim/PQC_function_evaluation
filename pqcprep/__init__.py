@@ -1,7 +1,7 @@
 """
 ### *pqcprep* provides parametrised quantum circuits (PQCs) for quantum state preparation. 
 
-The aim of *pqcprep* is to implement the algorithm for quantum state preparation described in [Background](#background) via gate-efficient parametrised quantum circuits (PQCs), as desribed in [Approach](#approach). 
+The aim of *pqcprep* is to implement the algorithm for quantum state preparation described in [Background](#background) via gate-efficient parametrised quantum circuits (PQCs), as described in [Approach](#approach). 
 However, the functionality provided as part of the package is general enough to be adapted to a wide range of other applications. 
 
 # Usage 
@@ -111,6 +111,9 @@ Thus, $\hat{U}_\Psi = \hat{Q}_{\Psi}^\dagger \hat{R} \hat{Q}_\Psi$ with $\hat{Q}
 
 This size, $m$, of the ancilla register limits the precision to which $\Psi(j)$ can be encoded to $\sim 2^{1-m} \pi$. 
 
+# Imprint 
+
+David Amorim, 2024. Email: [*2538354a@student.gla.ac.uk*](mailto:2538354a@student.gla.ac.uk) .
 
 """
 
