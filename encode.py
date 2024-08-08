@@ -72,7 +72,7 @@ ampl_target = x_arr**(-7./6)
 ampl_target = ampl_target / np.sqrt(np.sum(ampl_target**2))
 
 # calculate target output for phase 
-phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode)
+phase_target = psi(np.arange(2**n),mode=psi_mode)
 
 # calculate target output for wavefunc 
 h_target = ampl_target * np.exp(2*1.j*np.pi* phase_target)

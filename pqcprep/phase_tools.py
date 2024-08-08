@@ -121,7 +121,6 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     circuit = QuantumCircuit(input_register, target_register) 
 
     # load weights 
-    weights_A = np.load(weights_A_str)
     if type(weights_p_str) !=str:
         weights_p=weights_p_str
     else:    
@@ -130,6 +129,7 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
     if no_UA:
         circuit.h(input_register)
     else:    
+        weights_A = np.load(weights_A_str)
         # encode amplitudes 
         circuit.compose(A_generate_network(n, L_A), input_register, inplace=True)
         circuit = circuit.assign_parameters(weights_A)

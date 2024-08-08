@@ -12,6 +12,7 @@ from torch import Tensor, no_grad
 import sys, time, os, warnings, torch  
 
 from .binary_tools import bin_to_dec, dec_to_bin  
+from .phase_tools import full_encode
 from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
 from .psi_tools import psi, A 
@@ -287,7 +288,20 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
     Returns:
     ----
 
-    ... files     
+    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
+    where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `<TYPE>` is one of: 
+
+    - `weights` : file containing the QCNN weights determined by the optimiser;
+
+    - `loss` : file containing the loss value after each epoch; 
+
+    - `mismatch` : file containg the mismatch value after each epoch; 
+
+    - `grad` : file containing the  squared weight gradient norm after each epoch;  
+
+    - `vargrad` : file containing the variance of the weight gradients after each epoch.   
+
+    TAKE DECISION ON DIR HANDLING LATER !!!    
 
     """
     
@@ -561,7 +575,9 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
 def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,delta,verbose=True):   
     """
-    Test performance of trained QNN for the various input states ...
+    Test performance of a QCNN trained for function evaluation with respect to different metrics. 
+
+    This requires the existence of an appropriate `weights_<NAME_STR>.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`. 
 
     ....
 
@@ -573,6 +589,13 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
     Returns:
     ---
 
+    .... 
+
+    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
+    where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `<TYPE>` is one of: 
+ 
+    
+    TAKE DECISION ON DIR HANDLING LATER !!! 
 
     """
     # compress arguments into dictionary 
@@ -585,7 +608,10 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
     if phase_reduce: mint=0                  
 
     # load weights 
-    weights = np.load(os.path.join(DIR,"outputs",f"weights{name_str}.npy"))
+    if os.path.isfile(os.path.join(DIR,"outputs",f"weights{name_str}.npy")):
+        weights = np.load(os.path.join(DIR,"outputs",f"weights{name_str}.npy"))
+    else:
+        raise ValueError("No appropriate QCNN weights could be found. Check the network configuration as well as the relevant directory.")    
 
     # initialise array to store results 
     mismatch = np.empty(2**n)
@@ -621,16 +647,49 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
         # calculate fidelity and mismatch 
         fidelity = np.abs(np.dot(np.sqrt(target_arr),np.conjugate(state_vector)))**2
         mismatch[i] = 1. - np.sqrt(fidelity) 
-        
-        # save as dictionary 
-        dic = dict(zip(x_arr, mismatch)) 
-        np.save(os.path.join(DIR,"outputs",f"bar{name_str}.npy"), dic)
-    
+            
+    # get phase target 
+    fx_arr_bin = [dec_to_bin(i,m, "unsigned mag", 0) for i in fx_arr]
+    phase_target =  np.array([bin_to_dec(i,"unsigned mag", mint) for i in fx_arr_bin])
+    if phase_reduce:
+        phase_target *= 2 * np.pi 
+
+    # get state vector for full phase extraction 
+    state_vec= full_encode(n,m, weights_ampl=None, weights_p=weights, L_ampl=L, L_phase=None,real_p=real,repeat_params=repeat_params,full_state_vec=False, no_UA=True, operators="QRQ")
+    amplitude = np.abs(state_vec)
+    phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
+    phase *= (amplitude > 1e-15).astype(float)  
+
+    # calculate metrics
+    mu = np.mean(mismatch)
+    sigma = np.std(mismatch) 
+    eps = 1 - np.sum(amplitude**2)
+    chi = np.mean(np.abs(phase - phase_target))
+    omega= 1/(mu+sigma+eps+chi) 
+
+    # save as dictionaries 
+    full_dic = dict(zip(x_arr, mismatch)) 
+    np.save(os.path.join(DIR,"outputs",f"mismatch_by_state_{name_str}.npy"), full_dic) 
+
+    metric_dic = {} 
+    metric_dic["mu"]=mu 
+    metric_dic["sigma"]=sigma   
+    metric_dic["eps"]=eps 
+    metric_dic["chi"]=chi
+    metric_dic["omega"]=omega  
+    np.save(os.path.join(DIR,"outputs",f"metrics_{name_str}.npy"), metric_dic) 
+
     if verbose:
         print("Mismatch by input state:")
         for i in x_arr:
             print(f"\t{np.binary_repr(i,n)}:  {mismatch[i]:.2e} ({signs[i]})")
-        print(f"Mean: {np.mean(mismatch):.2e}; STDEV: {np.std(mismatch):.2e}")    
+        print("-----------------------------------")
+        print(f"Mu: \t{mu:.3e}") 
+        print(f"Sigma: \t{sigma:.3e}") 
+        print(f"Epsilon: \t{eps:.3e}")
+        print(f"Chi: \t{chi:.3e}") 
+        print(f"Omega: \t{omega:.3f}")
+        print("-----------------------------------")
         print("")
         print("")    
 
@@ -698,7 +757,18 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     Returns:
     ---
 
-    ... files ...    
+    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
+    where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str_ampl()` and `<TYPE>` is one of: 
+
+    - `weights` : file containing the QCNN weights determined by the optimiser;
+
+    - `state_vec` : file containing the statevector corresponding to the register after applying the QCNN; 
+
+    - `loss` : file containing the loss value after each training run; 
+
+    - `mismatch` : file containg the mismatch value after each training run.   
+
+    TAKE DECISION ON DIR HANDLING LATER !!!    
         
     """
 
@@ -872,7 +942,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     # save outputs 
     with no_grad():
             generated_weights = model.weight.detach().numpy()
-    outputs= [generated_weights, mismatch_vals, loss_vals, np.real(state_vector)]
+    outputs= [generated_weights, mismatch_vals, loss_vals, state_vector]
     output_labels=["weights", "mismatch", "loss", "statevec"]  
     for i in np.arange(len(outputs)):
         np.save(os.path.join(DIR,"ampl_outputs", f"{output_labels[i]}{vars_to_name_str_ampl(args)}"), outputs[i])         
