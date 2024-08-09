@@ -16,7 +16,6 @@ from .phase_tools import full_encode, phase_from_state
 from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
 from .psi_tools import psi, A 
-from .__init__ import DIR 
 
 #---------------------------------------------------------------------------------------------------
 
