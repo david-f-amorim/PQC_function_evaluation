@@ -51,7 +51,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
 
     # data to plot 
     arrs =["loss", "mismatch", "grad", "vargrad"]
-    labels=["Loss", "Mismatch", r"$|\nabla_\boldsymbol{\theta} W|^2$",r"Var$\partial_\theta W$" ]
+    labels=["Loss", "Mismatch", r"$|\nabla_\boldsymbol{\theta} W|^2$",r"Var($\partial_\theta W$)" ]
 
     for i in np.arange(len(arrs)):
         arr = np.load(os.path.join(DIR, "outputs", f"{arrs[i]}{name_str}.npy"))
@@ -71,7 +71,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
 
     # plot mismatch by state 
     dic = np.load(os.path.join(DIR, "outputs", f"mismatch_by_state{name_str}.npy"),allow_pickle='TRUE').item()
-    mismatch = list(dic.keys())
+    mismatch = list(dic.values())
     x_arr = x_trans_arr(arg_dict["n"])
 
     plt.figure(figsize=figsize)
@@ -87,9 +87,12 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
     if show:
         plt.show()
 
-    # plot extracted phase function         
+    # plot extracted phase function   
+    mint = arg_dict["mint"] if arg_dict["mint"] != None else arg_dict["m"] 
+    if arg_dict["phase_reduce"]:
+        mint = 0      
     phase = np.load(os.path.join(DIR, "outputs", f"phase{name_str}.npy"))
-    phase_target_rounded = get_phase_target(m=arg_dict["m"], psi_mode=arg_dict["func_str"], phase_reduce=arg_dict["phase_reduce"], mint=arg_dict["mint"])
+    phase_target_rounded = get_phase_target(m=arg_dict["m"], psi_mode=arg_dict["func_str"], phase_reduce=arg_dict["phase_reduce"], mint=mint)
     phase_target = psi(np.arange(2**arg_dict["n"]),mode=arg_dict["func_str"])
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})

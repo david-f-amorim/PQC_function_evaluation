@@ -127,6 +127,7 @@ DIR = "pqcprep"
 import os
 
 dirs = ["outputs", "ampl_outputs", "plots", "ampl_plots"]
+""" @private """
 
 for i in range(len(dirs)):
     if not os.path.isdir(os.path.join(DIR, dirs[i])):

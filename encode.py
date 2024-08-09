@@ -6,7 +6,7 @@ from pqcprep.binary_tools import bin_to_dec, dec_to_bin
 from pqcprep.psi_tools import psi, get_phase_target 
 
 # config 
-L_phase = 9
+L_phase = 6
 real_p = True 
 m = 3
 psi_mode="psi"
@@ -31,7 +31,7 @@ pdf = True # save outputs as pdf
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_A =False # don't produce full amplitude plot
