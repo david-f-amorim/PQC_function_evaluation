@@ -172,7 +172,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     x_arr = x_trans_arr(arg_dict["n"])
 
     ampl_vec = np.abs(np.load(os.path.join(DIR, "ampl_outputs", f"statevec{name_str}.npy")))
-    ampl_target = [A(i, mode=arg_dict["func_str"]) for i in x_arr]
+    ampl_target = np.array([A(i, mode=arg_dict["func_str"]) for i in x_arr])
     ampl_target /= np.sqrt(np.sum(ampl_target**2))
 
     fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [1.5, 1]})
