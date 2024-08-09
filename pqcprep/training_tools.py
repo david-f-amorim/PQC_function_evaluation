@@ -579,8 +579,6 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
 
     This requires the existence of an appropriate `weights_<NAME_STR>.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`. 
 
-    ....
-
     Arguments: 
     ---
 
@@ -589,12 +587,21 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
     Returns:
     ---
 
-    .... 
-
-    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
+    The testing output produced is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
     where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `<TYPE>` is one of: 
  
-    
+    - `mismatch_by_state` : file containing the mismatch between the state produced by the network and the desired output state for each of the possible input 
+        register states. Contains a dictionary with the input bit strings as keys and the associated mismatch as values. 
+
+    - `phase` : file containing the phase function encoded by the network when the input register is in an equal superposition of input states. 
+
+    - `metrics` : file containing a dictionary with several metrics evaluating the performance of the network. These metrics are 
+        * `mu` : mean mismatch (mean of the data contained in `mismatch_by_state_<NAME_STR>.npy`); should be zero for ideal performance
+        * `sigma` : mismatch standard deviation (standard deviation of the data contained in `mismatch_by_state_<NAME_STR>.npy`);  should be zero for ideal performance
+        * `eps` : normalisation error on the state vector associated with the data contained in `phase_<NAME_STR>.npy`;  should be zero for ideal performance
+        * `chi` : mean absolute difference between the phase function contained in `phase_<NAME_STR>.npy` and the rounded desired phase function;  should be zero for ideal performance
+        * `omega` : a super-metric defined as `1/(mu + sigma + eps + chi)` ; should be maximal for ideal performance
+
     TAKE DECISION ON DIR HANDLING LATER !!! 
 
     """

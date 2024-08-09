@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  8 AUG 2024 14:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  9 AUG 2024 12:02
 entering extended mode
 **./week_6.tex
 (week_6.tex
@@ -1076,11 +1076,11 @@ File: uesint.fd
 ] [5
 
 ]
-<im/Q_amp_quadratic_0.0_H.pdf, id=227, 731.13103pt x 535.78299pt>
+<im/Q_amp_quadratic_0.0_H.pdf, id=227, 731.13103pt x 535.8344pt>
 File: im/Q_amp_quadratic_0.0_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_0.0_H.pdf>
 Package pdftex.def Info: im/Q_amp_quadratic_0.0_H.pdf  used on input line 107.
-(pdftex.def)             Requested size: 171.14764pt x 125.41849pt.
+(pdftex.def)             Requested size: 171.14764pt x 125.43053pt.
 <im/Q_amp_quadratic_0.2_H.pdf, id=228, 731.13103pt x 535.84647pt>
 File: im/Q_amp_quadratic_0.2_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_0.2_H.pdf>
@@ -1089,40 +1089,40 @@ Package pdftex.def Info: im/Q_amp_quadratic_0.2_H.pdf  used on input line 107.
  [6
 
  <./im/Q_amp_quadratic_0.0_H.pdf> <./im/Q_amp_quadratic_0.2_H.pdf>]
-<im/Q_amp_quadratic_0.4_H.pdf, id=279, 731.13103pt x 535.81743pt>
+<im/Q_amp_quadratic_0.4_H.pdf, id=280, 731.13103pt x 535.79077pt>
 File: im/Q_amp_quadratic_0.4_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_0.4_H.pdf>
 Package pdftex.def Info: im/Q_amp_quadratic_0.4_H.pdf  used on input line 128.
-(pdftex.def)             Requested size: 171.14764pt x 125.42656pt.
-<im/Q_amp_quadratic_0.6_H.pdf, id=280, 731.13103pt x 535.83948pt>
+(pdftex.def)             Requested size: 171.14764pt x 125.42032pt.
+<im/Q_amp_quadratic_0.6_H.pdf, id=281, 731.13103pt x 535.77368pt>
 File: im/Q_amp_quadratic_0.6_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_0.6_H.pdf>
 Package pdftex.def Info: im/Q_amp_quadratic_0.6_H.pdf  used on input line 128.
-(pdftex.def)             Requested size: 171.14764pt x 125.43172pt.
+(pdftex.def)             Requested size: 171.14764pt x 125.4163pt.
  [7
 
  <./im/Q_amp_quadratic_0.4_H.pdf> <./im/Q_amp_quadratic_0.6_H.pdf>]
-<im/Q_amp_quadratic_0.8_H.pdf, id=328, 731.13103pt x 535.84254pt>
+<im/Q_amp_quadratic_0.8_H.pdf, id=329, 731.13103pt x 535.77669pt>
 File: im/Q_amp_quadratic_0.8_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_0.8_H.pdf>
 Package pdftex.def Info: im/Q_amp_quadratic_0.8_H.pdf  used on input line 149.
-(pdftex.def)             Requested size: 171.14764pt x 125.43243pt.
-<im/Q_amp_quadratic_1.0_H.pdf, id=329, 731.13103pt x 535.84236pt>
+(pdftex.def)             Requested size: 171.14764pt x 125.41702pt.
+<im/Q_amp_quadratic_1.0_H.pdf, id=330, 731.13103pt x 535.77724pt>
 File: im/Q_amp_quadratic_1.0_H.pdf Graphic file (type pdf)
 <use im/Q_amp_quadratic_1.0_H.pdf>
 Package pdftex.def Info: im/Q_amp_quadratic_1.0_H.pdf  used on input line 149.
-(pdftex.def)             Requested size: 171.14764pt x 125.43239pt.
+(pdftex.def)             Requested size: 171.14764pt x 125.41714pt.
  [8
 
  <./im/Q_amp_quadratic_0.8_H.pdf> <./im/Q_amp_quadratic_1.0_H.pdf>]
-<im/psi_comp_delta.pdf, id=375, 725.56262pt x 715.47299pt>
-File: im/psi_comp_delta.pdf Graphic file (type pdf)
-<use im/psi_comp_delta.pdf>
-Package pdftex.def Info: im/psi_comp_delta.pdf  used on input line 172.
+<im/psi_comp_delta_L9.pdf, id=376, 725.56262pt x 715.47299pt>
+File: im/psi_comp_delta_L9.pdf Graphic file (type pdf)
+<use im/psi_comp_delta_L9.pdf>
+Package pdftex.def Info: im/psi_comp_delta_L9.pdf  used on input line 173.
 (pdftex.def)             Requested size: 171.14764pt x 168.76938pt.
  [9
 
- <./im/psi_comp_delta.pdf>] (week_6.toc) [10
+ <./im/psi_comp_delta_L9.pdf>] (week_6.toc) [10
 
 ] [11
 
@@ -1146,32 +1146,33 @@ Package rerunfilecheck Info: File `week_6.out' has not changed.
 (rerunfilecheck)             Checksum: 202A2025FE4C4614F9825968C0079F32;424.
  ) 
 Here is how much of TeX's memory you used:
- 24088 strings out of 478864
- 456941 string characters out of 2848660
- 759247 words of memory out of 3000000
- 41434 multiletter control sequences out of 15000+600000
- 412303 words of font info for 66 fonts, out of 8000000 for 9000
+ 24106 strings out of 478864
+ 457160 string characters out of 2848660
+ 760247 words of memory out of 3000000
+ 41443 multiletter control sequences out of 15000+600000
+ 415073 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,124p,413b,791s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
-s/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/david/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/david/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/d
-avid/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/
-Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10
+cmbx10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmex10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmmi10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/david/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/david/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/david/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/david/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users
+/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C
+:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8
 .pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on week_6.pdf (13 pages, 475325 bytes).
+cm/cmss10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmss12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/amsfonts/cm/cmss8.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on week_6.pdf (13 pages, 482495 bytes).
 PDF statistics:
- 594 PDF objects out of 1000 (max. 8388607)
+ 599 PDF objects out of 1000 (max. 8388607)
  30 named destinations out of 1000 (max. 500000)
  258 words of extra memory for PDF output out of 10000 (max. 10000000)
 

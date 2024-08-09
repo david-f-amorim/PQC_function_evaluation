@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from pqcprep.phase_tools import full_encode, phase_from_state
 from pqcprep.binary_tools import bin_to_dec, dec_to_bin
-from pqcprep.psi_tools import psi 
+from pqcprep.psi_tools import psi, get_phase_target 
 
 # config 
-L_phase = 6
+L_phase = 9
 real_p = True 
 m = 3
 psi_mode="psi"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_1.0_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-operators="QRQ"
+operators="Q"
 no_UA=True
 
 n = 6
@@ -21,17 +21,20 @@ weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy"
 ampl_vec = np.load("pqcprep/ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.npy")
 L_ampl =3
 
+mint = 0
+phase_reduce = True
+
 # plot settings
-comp =True # compare to Hayes 2023  
+comp =False # compare to Hayes 2023  
 show = True # show plots
 pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = False # don't produce phase plot 
+no_p = True # don't produce phase plot 
 no_h = True # don't produce h plot
 
-no_full_A = True # don't produce full amplitude plot
+no_full_A =False # don't produce full amplitude plot
 no_full_p = True # don't produce full phase plot
 no_full_3D= True # don't produce full 3D plot
 
@@ -80,10 +83,7 @@ wave_real_target = np.real(h_target)
 wave_im_target = np.imag(h_target)
 
 # calculate target for phase taking into account rounding 
-phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
-phase_reduced_bin = [dec_to_bin(i,m, "unsigned mag", 0) for i in phase_reduced]
-phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
-phase_rounded = 2 * np.pi * phase_reduced_dec
+phase_rounded = get_phase_target(m, psi_mode=psi_mode, phase_reduce=phase_reduce, mint=mint)
 
 # calculate target output for wavefunc taking into account rounding 
 h_target_rounded = ampl_target * np.exp(2*1.j*np.pi* phase_rounded)
@@ -109,7 +109,6 @@ im_wave = np.imag(state_vec)
 
 # print info
 metrics =np.load("pqcprep/outputs/metrics"+weights_phase[23:],allow_pickle='TRUE')
-print(metrics)
 print("-----------------------------------")
 print(f'Mu: \t{metrics.item().get("mu"):.3e}') 
 print(f'Sigma: \t{metrics.item().get("sigma"):.3e}') 
@@ -167,7 +166,6 @@ if no_p==False:
     ax[0].legend(fontsize=fontsize, loc='upper right')
     ax[0].tick_params(axis="both", labelsize=ticksize)
     ax[0].set_xticks([])
-
 
     if comp:
         ax[1].scatter(x_arr,phase_target-psi_LPF,label="GR", color="blue")
@@ -528,7 +526,7 @@ if phase_loss_comp==True:
         phase *= (amplitude > 1e-15).astype(float) 
         phase_arr[i]=phase 
 
-        bar =np.array(list(np.load("pqcprep/outputs/bar"+weights_arr[i][23:],allow_pickle='TRUE').item().values()))
+        bar =np.array(list(np.load("pqcprep/outputs/mismatch_by_state"+weights_arr[i][23:],allow_pickle='TRUE').item().values()))
         mu = np.mean(bar) 
         sigma = np.std(bar)
         norm = np.sum(amplitude**2)

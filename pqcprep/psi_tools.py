@@ -35,6 +35,33 @@ def x_trans(x):
     x_t =x
     return x_t 
 
+
+def x_trans_arr(n):
+    """
+
+    Generate an array of frequency values according to the frequency scaling used for the gravitational wave binary system inspiral
+    in [Hayes 2023](https://arxiv.org/pdf/2306.11073). 
+
+    Arguments:
+    ----
+    - **n** : *int*
+
+        Controls array size: length of the array is `2**n`. 
+
+    Returns:
+    ----
+    - **x_arr** : *array_like*
+
+        Array of values.    
+
+    """
+    x_min = 40
+    x_max = 168 
+    dx = (x_max-x_min)/(2**n) 
+    x_arr = np.arange(x_min, x_max, dx) 
+
+    return x_arr 
+
 def psi_H(x):
     r"""
     The phase function $\Psi$ for the gravitational wave binary system inspiral
@@ -184,8 +211,8 @@ def psi_sine(x):
 
     return out 
 
-def get_phase_target(m, func):
-    """
+def get_phase_target(m, psi_mode, phase_reduce=True, mint=0):
+    r"""
     
     Generate an array of phase function values taking into account rounding due to the limited 
     size of the target register. 
@@ -198,9 +225,17 @@ def get_phase_target(m, func):
 
         Number of qubits in the target register. 
 
-    - **func** : *callable* 
+    - **psi_mode** : *str* 
 
-        Phase function.     
+        String specifying the phase function. Must be one of the options for the `mode` argument of `psi()`.    
+
+    - **phase_reduce** : *boolean*
+
+        If True, phase function is reduced to the interval $[0, 2 \pi]$ before rounding. Default is True.     
+
+    - **mint** : *int* 
+
+        Number of integer qubits. Default is 0.     
 
     Returns:
     ---
@@ -220,13 +255,15 @@ def get_phase_target(m, func):
     x_arr = np.arange(x_min, x_max, dx) 
 
     # calculate target output for phase 
-    phase_target = func(np.linspace(0, 2**n, len(x_arr)))
+    phase_target = psi(np.linspace(0, 2**n, len(x_arr)),mode=psi_mode)
 
     # calculate target for phase taking into account rounding 
-    phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
-    phase_reduced_bin = [dec_to_bin(i,m, "unsigned mag", 0) for i in phase_reduced]
-    phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", 0) for i in phase_reduced_bin])
-    phase_rounded = 2 * np.pi * phase_reduced_dec
+    if phase_reduce:
+        phase_reduced = np.modf(phase_target / (2* np.pi))[0] 
+    phase_reduced_bin = [dec_to_bin(i,m, "unsigned mag", mint) for i in phase_reduced]
+    phase_reduced_dec =  np.array([bin_to_dec(i,"unsigned mag", mint) for i in phase_reduced_bin])
+    if phase_reduce:
+        phase_rounded = 2 * np.pi * phase_reduced_dec
 
     return phase_rounded
 

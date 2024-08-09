@@ -87,7 +87,7 @@ where the \alert{coefficients} $c_j \sim \frac{1}{\sqrt{2^n}}$ are \alert{random
 
 \begin{frame}
 \frametitle{Results}
-Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs):
+Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=\boldsymbol{9}$, $m=3$, SAM, 600 epochs):
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -108,7 +108,7 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 
 \begin{frame}
 \frametitle{Results}
-Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs):
+Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=\boldsymbol{9}$, $m=3$, SAM, 600 epochs):
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -129,7 +129,7 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 
 \begin{frame}
 \frametitle{Results}
-Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=6$, $m=3$, SAM, 600 epochs):
+Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input register in initial state $\hat{H} \ket{0}$ ($L=\boldsymbol{9}$, $m=3$, SAM, 600 epochs):
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -153,17 +153,18 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item It seems that randomised input states ($\delta \neq 0$) actually have an \alert{adverse effect} on performance
-\item Notably, increasing $\delta$ leads to \alert{thin `stripes'} in the amplitude plots, i.e. sudden changes in amplitude between neighbouring states 
-\item This could suggest a structural \alert{defect in input layer design} 
+\item Slightly randomised input states ($\delta = 0.2$)  have a \alert{positive effect} on performance
+\item More significantly randomised input states ($\delta \geq 0.6$) have an \alert{adverse effect}
+\item Notably, no positive effect of non-zero $\delta$ is apparent for $L=6$  
+\item Also notable are the appearance of thin \alert{`stripes'} with increasing $\delta$ which could be linked to input layer structure
+\item Equivalent effects are observed for $\Psi(f) \sim f $ and $\Psi_\text{H23}$
 \end{itemize}
-PLAY AROUND WITH CONTROL STATE: TURNS OUT HAD NOT BEEN USING THIS ENTIRE TIME...
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/psi_comp_delta}
-\caption{Comparing the effect of $\delta$ values for $\Psi(f) \sim f^2$ ($L=6$, $m=3$, SAM, 600 epochs)}
+\includegraphics[width=\textwidth]{im/psi_comp_delta_L9}
+\caption{Comparing the effect of $\delta$ values for $\Psi(f) \sim f^2$ ($L=9$, $m=3$, SAM, 600 epochs)}
 \end{figure}
 \end{column}
 \end{columns}
