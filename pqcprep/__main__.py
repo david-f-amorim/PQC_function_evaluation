@@ -1,8 +1,6 @@
 import argparse, os 
 from .file_tools import check_duplicates, compress_args, compress_args_ampl
-
-global DIR 
-"""@private"""
+from .__init__ import DIR
 
 def main():
 

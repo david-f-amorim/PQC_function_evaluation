@@ -4,7 +4,7 @@ Collection of functions regarding plotting and visualisation.
 
 import numpy as np 
 import matplotlib.pyplot as plt 
-from .__main__ import DIR
+from .__input__ import DIR
 from matplotlib import rcParams
 import os
 from .psi_tools import x_trans_arr, get_phase_target, psi, A 
