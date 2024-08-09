@@ -125,7 +125,10 @@ DIR = "."
 """ @private """
 
 import os
-if not os.path.isdir(os.path.join(DIR, "outputs")):
-    os.mkdir(os.path.join(DIR, "outputs"))
-if not os.path.isdir(os.path.join(DIR, "ampl_outputs")):
-    os.mkdir(os.path.join(DIR, "ampl_outputs"))    
+
+dirs = ["outputs", "ampl_outputs", "plots", "ampl_plots"]
+
+for i in range(len(dir)):
+    if not os.path.isdir(os.path.join(DIR, dirs[i])):
+        os.mkdir(os.path.join(DIR, dirs[i]))
+ 
