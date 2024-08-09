@@ -16,7 +16,7 @@ from .phase_tools import full_encode, phase_from_state
 from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
 from .psi_tools import psi, A 
-from .__input__ import DIR 
+from .__init__ import DIR 
 
 #---------------------------------------------------------------------------------------------------
 
@@ -200,7 +200,7 @@ def set_WIM_weights(generated_weights, arg_dict):
 
     return WIM_weights_arr
 
-def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta):
+def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta, DIR):
     """
     Train a QCNN to perform function evaluation $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi(j)}$.
 
@@ -283,7 +283,11 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
         Hyper-parameter controlling the sampling of input state coefficients when training in superposition (`train_superpos = True`). Must be 
         between 0 and 1. `delta = 0` corresponds to coefficients fixed at $\\frac{1}{\\sqrt{2^n}}$ while `delta = 1` corresponds to coefficients randomly assuming values on the range $(0,1)$. 
         Intermediate values of `delta` result in coefficinets being randomly sampled on an interval around $\\frac{1}{\\sqrt{2^n}}$, with the range of the interval 
-        determined by the value of `delta`.     
+        determined by the value of `delta`.    
+
+    - **DIR** : *str*
+
+        Directory for output files.      
 
     Returns:
     ----
@@ -299,9 +303,7 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
     - `grad` : file containing the  squared weight gradient norm after each epoch;  
 
-    - `vargrad` : file containing the variance of the weight gradients after each epoch.   
-
-    TAKE DECISION ON DIR HANDLING LATER !!!    
+    - `vargrad` : file containing the variance of the weight gradients after each epoch.      
 
     """
     
@@ -573,7 +575,7 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
     return 0 
 
-def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,delta,verbose=True):   
+def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,train_superpos,real,repeat_params,WILL_p, WILL_q,delta,DIR,verbose=True):   
     """
     Test performance of a QCNN trained for function evaluation with respect to different metrics. 
 
@@ -601,8 +603,6 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
         * `eps` : normalisation error on the state vector associated with the data contained in `phase_<NAME_STR>.npy`;  should be zero for ideal performance
         * `chi` : mean absolute difference between the phase function contained in `phase_<NAME_STR>.npy` and the rounded desired phase function;  should be zero for ideal performance
         * `omega` : a super-metric defined as `1/(mu + sigma + eps + chi)` ; should be maximal for ideal performance
-
-    TAKE DECISION ON DIR HANDLING LATER !!! 
 
     """
     # compress arguments into dictionary 
@@ -702,7 +702,7 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
 
     return 0 
 
-def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_temp, nint, repeat_params):
+def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_temp, nint, repeat_params, DIR):
     """
 
     Train a QCNN to prepare an amplitude distribution: $\ket{0} \mapsto \sum_j A(j) \ket{j}$.
@@ -759,6 +759,10 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     - **repeat_params** : *boolean* 
 
         If True, keep parameters fixed for different layer types, i.e. use the same parameter values for each instance of a layer type.
+
+    - **DIR** : *str*
+
+        Directory for output files.     
           
 
     Returns:
@@ -774,8 +778,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
     - `loss` : file containing the loss value after each training run; 
 
     - `mismatch` : file containg the mismatch value after each training run.   
-
-    TAKE DECISION ON DIR HANDLING LATER !!!    
+ 
         
     """
 

@@ -1,6 +1,5 @@
 import argparse, os 
 from .file_tools import check_duplicates, compress_args, compress_args_ampl
-from .__init__ import DIR
 
 def main():
 
@@ -47,8 +46,11 @@ def main():
 
     opt = parser.parse_args()
 
-    # set DIR and creat directories 
+    # set DIR and create directories 
     DIR = opt.DIR if opt.DIR != "." else os.getwd()
+    if not os.path.isdir(DIR):
+        os.mkdir(DIR)
+
     dirs = ["outputs", "ampl_outputs", "plots", "ampl_plots"]
     """ @private """
 
@@ -85,16 +87,16 @@ def main():
 
                         args=compress_args(n=opt.n,m=opt.m,L=opt.L[i],seed=int(opt.seed),epochs=opt.epochs,func_str=opt.f,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, mint=opt.mint, phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real, repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k], delta=opt.delta[l])
                         
-                        dupl_files = check_duplicates(args, ampl=False)
+                        dupl_files = check_duplicates(args,DIR=DIR, ampl=False)
 
                         if dupl_files and opt.ignore_duplicates==False:
                             print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
                         else: 
-                            train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func_str=opt.f, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, repeat_params=opt.repeat_params,WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k],delta=opt.delta[l])
-                            test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),seed=int(opt.seed),epochs=int(opt.epochs), func_str=opt.f, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k], delta=opt.delta[l])   
+                            train_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func_str=opt.f, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos,real=opt.real, repeat_params=opt.repeat_params,WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k],delta=opt.delta[l],DIR=DIR)
+                            test_QNN(n=int(opt.n),m=int(opt.m),L=int(opt.L[i]),seed=int(opt.seed),epochs=int(opt.epochs), func_str=opt.f, loss_str=opt.loss, meta=opt.meta,nint=opt.nint, mint=opt.mint,phase_reduce=opt.phase_reduce, train_superpos=opt.train_superpos, real=opt.real,repeat_params=opt.repeat_params, WILL_p=opt.WILL_p[j], WILL_q=opt.WILL_q[k], delta=opt.delta[l],DIR=DIR)   
 
                             if opt.no_plots == False:
-                                benchmark_plots(args, show=opt.show, pdf=opt.pdf)
+                                benchmark_plots(args,DIR=DIR, show=opt.show, pdf=opt.pdf)
 
     else:
         
@@ -105,15 +107,15 @@ def main():
 
             args=compress_args_ampl(n=opt.n,L=opt.L[i],x_min=int(opt.xmin),x_max=int(opt.xmax), seed=int(opt.seed),epochs=opt.epochs,func_str=opt.f_ampl,loss_str=opt.loss,meta=opt.meta, nint=opt.nint, repeat_params=opt.repeat_params_ampl)
                     
-            dupl_files = check_duplicates(args, ampl=True)
+            dupl_files = check_duplicates(args,DIR=DIR, ampl=True)
             
             if dupl_files and opt.ignore_duplicates==False:
                 print("\nThe required data already exists and will not be recomputed. Use '-I' or '--ignore_duplicates' to override this.\n")
             else: 
-                ampl_train_QNN(n=int(opt.n),x_min=int(opt.xmin),x_max=int(opt.xmax),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func_str=opt.f_ampl, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, repeat_params=opt.repeat_params_ampl)
+                ampl_train_QNN(n=int(opt.n),x_min=int(opt.xmin),x_max=int(opt.xmax),L=int(opt.L[i]), seed=int(opt.seed), epochs=int(opt.epochs), func_str=opt.f_ampl, loss_str=opt.loss, meta=opt.meta, recover_temp=opt.recover, nint=opt.nint, repeat_params=opt.repeat_params_ampl,DIR=DIR)
     
                 if opt.no_plots == False:
-                    benchmark_plots_ampl(args, show=opt.show, pdf=opt.pdf)
+                    benchmark_plots_ampl(args,DIR=DIR, show=opt.show, pdf=opt.pdf)
 
 if __name__ == "__main__":
     main()

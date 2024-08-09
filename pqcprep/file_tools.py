@@ -164,7 +164,7 @@ def vars_to_name_str_ampl(arg_dict):
 
     return name_str 
 
-def check_duplicates(arg_dict, ampl=False):
+def check_duplicates(arg_dict,DIR, ampl=False):
     """
     For a given set of input parameters, check if training and testing results already exist. 
 
@@ -174,6 +174,10 @@ def check_duplicates(arg_dict, ampl=False):
     - **arg_dict** : *dict* 
 
         Dictionary created from variable values using `compress_args()` or `compress_args_ampl()`. 
+    
+    - **DIR** : *str* 
+
+        Parent directory for output files.       
 
     - **ampl** : *boolean* 
 
@@ -199,12 +203,12 @@ def check_duplicates(arg_dict, ampl=False):
     count=0 
 
     for i in range(len(labels)):
-        if os.path.isfile(os.path.join(out_dir, f"{labels[i]}{name}.npy")):
+        if os.path.isfile(os.path.join(DIR,out_dir, f"{labels[i]}{name}.npy")):
             count +=1
 
     return count==len(labels)
     
-def check_temp(arg_dict, ampl=False): 
+def check_temp(arg_dict,DIR, ampl=False): 
     """
     For a given set of input parameters, check if temp files already exist. 
 
@@ -215,10 +219,14 @@ def check_temp(arg_dict, ampl=False):
 
         Dictionary created from variable values using `compress_args()` or `compress_args_ampl()`. 
 
+    - **DIR** : *str* 
+
+        Parent directory for output files.       
+
     - **ampl** : *boolean* 
 
-        If True, check if results exist for the amplitude-only network. Default is False     
-        
+        If True, check if results exist for the amplitude-only network. Default is False   
+
 
     Returns:
     ---
@@ -242,13 +250,13 @@ def check_temp(arg_dict, ampl=False):
 
     for k in range(100,arg_dict["epochs"], step=100):    
         for i in range(len(labels)):
-            if os.path.isfile(os.path.join(out_dir, f"__TEMP{k}_{labels[i]}{name}.npy")):
+            if os.path.isfile(os.path.join(DIR,out_dir, f"__TEMP{k}_{labels[i]}{name}.npy")):
                 count +=1
 
     return count==len(labels)
 
 
-def check_plots(arg_dict, log=True):  
+def check_plots(arg_dict,DIR):  
     """
     For a given set of input parameters, check if plots already exist (excluding compare plots). 
 
@@ -259,11 +267,10 @@ def check_plots(arg_dict, log=True):
 
         Dictionary created from variable values using `compress_args()` or `compress_args_ampl()`. 
 
-    - **log** : *boolean* 
+    - **DIR** : *str* 
 
-        If True, check for log plots. Default is True.     
-        
-
+        Parent directory for output files.          
+    
     Returns:
     ---
     - **exist** : *boolean* 
@@ -274,12 +281,11 @@ def check_plots(arg_dict, log=True):
     name=vars_to_name_str(arg_dict)  
     out_dir="plots"          
     labels=["mismatch", "loss", "bar_mismatch"]
-    log_str= ("" if log==False else "log_")
 
     count=0 
 
     for i in range(len(labels)):
-        if os.path.isfile(os.path.join(out_dir, f"{labels[i]}{name}.npy")):
+        if os.path.isfile(os.path.join(DIR, out_dir, f"{labels[i]}{name}.npy")):
             count +=1
 
     return count==len(labels)

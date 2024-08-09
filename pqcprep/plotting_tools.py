@@ -4,7 +4,6 @@ Collection of functions regarding plotting and visualisation.
 
 import numpy as np 
 import matplotlib.pyplot as plt 
-from .__input__ import DIR
 from matplotlib import rcParams
 import os
 from .psi_tools import x_trans_arr, get_phase_target, psi, A 
@@ -26,7 +25,7 @@ ticksize=22
 figsize=(10,10)
 """ @private """
 
-def benchmark_plots(arg_dict, show=False, pdf=False):
+def benchmark_plots(arg_dict,DIR, show=False, pdf=False):
         
     """
     ...
@@ -44,6 +43,10 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
     - **pdf** : *boolean* 
 
         If True, save plots in pdf format. Default is False. 
+
+    - **DIR** : *str*
+
+        Directory for output files.     
 
     Returns:
     ---
@@ -126,7 +129,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
     return 0
 
 
-def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
+def benchmark_plots_ampl(arg_dict,DIR, show=False, pdf=False):
         
     """
     ...
@@ -144,6 +147,10 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     - **pdf** : *boolean* 
 
         If True, save plots in pdf format. Default is False. 
+
+    - **DIR** : *str*
+
+        Directory for output files.     
 
     Returns:
     ---
