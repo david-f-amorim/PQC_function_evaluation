@@ -171,7 +171,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     # plot amplitude 
     x_arr = x_trans_arr(arg_dict["n"])
 
-    ampl_vec = np.abs(np.load(os.path.join(DIR, "ampl_outputs", f"state_vec{name_str}.npy")))
+    ampl_vec = np.abs(np.load(os.path.join(DIR, "ampl_outputs", f"statevec{name_str}.npy")))
     ampl_target = [A(i, mode=arg_dict["func_str"]) for i in x_arr]
     ampl_target /= np.sqrt(np.sum(ampl_target**2))
 

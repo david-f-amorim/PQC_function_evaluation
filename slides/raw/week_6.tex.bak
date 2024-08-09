@@ -176,6 +176,7 @@ RUN THINGS FOR L=12 TO COMPARE !!
 
 bug fix the benchmark plots, write docs strings, ...
 
+SOMETHING WRONG WITH CALCULATING PHASE_TARGET_ROUNDED!!
 
 then do more complex pltos 
 \end{frame}
