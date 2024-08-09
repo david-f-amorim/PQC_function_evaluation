@@ -12,7 +12,7 @@ from torch import Tensor, no_grad
 import sys, time, os, warnings, torch  
 
 from .binary_tools import bin_to_dec, dec_to_bin  
-from .phase_tools import full_encode
+from .phase_tools import full_encode, phase_from_state
 from .pqc_tools import generate_network, binary_to_encode_param, A_generate_network, get_state_vec  
 from .file_tools import compress_args,compress_args_ampl, vars_to_name_str, vars_to_name_str_ampl 
 from .psi_tools import psi, A 
@@ -656,20 +656,18 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
 
     # get state vector for full phase extraction 
     state_vec= full_encode(n,m, weights_A_str=None, weights_p_str=weights, L_A=None, L_p=L,real_p=real,repeat_params=repeat_params,full_state_vec=False, no_UA=True, operators="QRQ")
-    amplitude = np.abs(state_vec)
-    phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
-    phase *= (amplitude > 1e-15).astype(float)  
+    phase = phase_from_state(state_vec)
 
     # calculate metrics
     mu = np.mean(mismatch)
     sigma = np.std(mismatch) 
-    eps = 1 - np.sum(amplitude**2)
+    eps = 1 - np.sum(np.abs(state_vec)**2)
     chi = np.mean(np.abs(phase - phase_target))
     omega= 1/(mu+sigma+eps+chi) 
 
-    # save as dictionaries 
+    # save outputs
     full_dic = dict(zip(x_arr, mismatch)) 
-    np.save(os.path.join(DIR,"outputs",f"mismatch_by_state_{name_str}.npy"), full_dic) 
+    np.save(os.path.join(DIR,"outputs",f"mismatch_by_state{name_str}.npy"), full_dic) 
 
     metric_dic = {} 
     metric_dic["mu"]=mu 
@@ -677,7 +675,9 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
     metric_dic["eps"]=eps 
     metric_dic["chi"]=chi
     metric_dic["omega"]=omega  
-    np.save(os.path.join(DIR,"outputs",f"metrics_{name_str}.npy"), metric_dic) 
+    np.save(os.path.join(DIR,"outputs",f"metrics{name_str}.npy"), metric_dic) 
+
+    np.save(os.path.join(DIR,"outputs",f"phase{name_str}.npy"), phase) 
 
     if verbose:
         print("Mismatch by input state:")
@@ -686,7 +686,7 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
         print("-----------------------------------")
         print(f"Mu: \t{mu:.3e}") 
         print(f"Sigma: \t{sigma:.3e}") 
-        print(f"Epsilon: \t{eps:.3e}")
+        print(f"Eps: \t{eps:.3e}")
         print(f"Chi: \t{chi:.3e}") 
         print(f"Omega: \t{omega:.3f}")
         print("-----------------------------------")

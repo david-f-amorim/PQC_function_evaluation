@@ -169,3 +169,29 @@ def full_encode(n,m, weights_A_str, weights_p_str,L_A,L_p, real_p, repeat_params
             return state_v, state_vector 
         else:
             return state_v
+
+def phase_from_state(state_vec):
+    r"""
+    Extracts the phase, reduced to the interval $[0, 2 \pi]$, from a statevector. 
+
+    Phases corresponding to near-zero amplitudes are set to zero ("phase blanking").
+
+    Arguments:
+    ---
+    - **state_vec** : *array_like*
+
+        The complex state vector. 
+
+
+    Returns:
+    ----
+    - **phase** : *array_like* 
+
+        The corresponding phase.      
+    """
+    amplitude = np.abs(state_vec)
+    phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < 0).astype(int)
+    phase = np.angle(state_vec) - 2* np.pi * (np.angle(state_vec) > 2*np.pi).astype(int)
+    phase *= (amplitude > 1e-15).astype(float)  
+
+    return phase 

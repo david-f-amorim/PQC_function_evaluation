@@ -1,7 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from matplotlib import rcParams
-from pqcprep.phase_tools import full_encode
+from pqcprep.phase_tools import full_encode, phase_from_state
 from pqcprep.binary_tools import bin_to_dec, dec_to_bin
 from pqcprep.psi_tools import psi 
 
@@ -9,11 +9,11 @@ from pqcprep.psi_tools import psi
 L_phase = 6
 real_p = True 
 m = 3
-psi_mode="quadratic"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_1.0_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+psi_mode="psi"
+weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.0_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
-operators="Q"
+operators="QRQ"
 no_UA=True
 
 n = 6
@@ -22,13 +22,13 @@ ampl_vec = np.load("pqcprep/ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.np
 L_ampl =3
 
 # plot settings
-comp = False # compare to Hayes 2023  
+comp =True # compare to Hayes 2023  
 show = True # show plots
 pdf = True # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
 no_A = True # don't produce amplitude plot 
-no_p = True # don't produce phase plot 
+no_p = False # don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_A = True # don't produce full amplitude plot
@@ -94,44 +94,28 @@ wave_im_target_rounded = np.imag(h_target_rounded)
 ampl_vec_QGAN = np.abs(np.load("pqcprep/ampl_outputs/amp_state_QGAN.npy"))
 ampl_vec_GR = np.abs(np.load("pqcprep/ampl_outputs/amp_state_GR.npy")) 
 
-# load LPF phase [POST-PROCESSING TAKEN FROM HAYES 2023!]
-psi_LPF = np.load("full_encode/psi_LPF.npy")
-nint =1
-nn = 10
-probs = np.argwhere(np.round(np.abs(psi_LPF)**2,15)>0.)[:,1]
-probs = ((probs/(2**nn)) * (2**(nint) + 2**(nint) - 2**(-(nn-nint-1)))) - 2**nint
-psi_LPF = probs
-
-# load LPF waveforms 
+# load LPF phase and waveform
+psi_LPF = np.load("full_encode/psi_LPF_processed.npy")
 h_QGAN = np.load("full_encode/full_state_QGAN.npy")
 h_GR = np.load("full_encode/full_state_GR.npy")
 
 # calculate state vector from QCNNs 
 state_vec, state_vec_full = full_encode(n,m, weights_ampl, weights_phase, L_ampl, L_phase,real_p=real_p,repeat_params=repeat_params,full_state_vec=True, no_UA=no_UA, operators=operators)
-
-amplitude = np.abs(state_vec)
-phase = np.angle(state_vec) + 2* np.pi * (np.angle(state_vec) < -np.pi).astype(int)
-phase *= (amplitude > 1e-15).astype(float) 
+phase = phase_from_state(state_vec)
 
 # get full wavefunction 
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
 
 # print info
-bar =np.array(list(np.load("pqcprep/outputs/bar"+weights_phase[23:],allow_pickle='TRUE').item().values()))
-mu = np.mean(bar) 
-sigma = np.std(bar)
-norm = np.sum(amplitude**2)
-eps = 1 - norm 
-chi = np.mean(np.abs(phase - phase_rounded))
-omega= 1/(mu+sigma+eps+chi)
+metrics =np.load("pqcprep/outputs/metrics"+weights_phase[23:],allow_pickle='TRUE')
+print(metrics)
 print("-----------------------------------")
-print("Norm: ",f"{norm:.5f}")
-print("Epsilon: ",f"{eps:.3e}")
-print("Chi: ",f"{chi:.3e}") 
-print("Mu: ",f"{mu:.3e}") 
-print("Sigma: ",f"{sigma:.3e}") 
-print("Omega: ",f"{omega:.3f}")
+print(f'Mu: \t{metrics.item().get("mu"):.3e}') 
+print(f'Sigma: \t{metrics.item().get("sigma"):.3e}') 
+print(f'Eps: \t{metrics.item().get("eps"):.3e}')
+print(f'Chi: \t{metrics.item().get("chi"):.3e}') 
+print(f'Omega: \t{metrics.item().get("omega"):.3f}')
 print("-----------------------------------")
 
 #------------------------------------------------------------------------------
