@@ -121,7 +121,7 @@ This project was funded by a Carnegie Vacation Scholarship and supervised by Pro
 
 """
 
-DIR = "." 
+DIR = "pqcprep" 
 """ @private """
 
 import os

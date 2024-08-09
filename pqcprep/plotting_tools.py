@@ -54,7 +54,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
     labels=["Loss", "Mismatch", r"$|\nabla_\boldsymbol{\theta} W|^2$",r"Var$\partial_\theta W$" ]
 
     for i in np.arange(len(arrs)):
-        arr = np.load(os.path.join(DIR, "outputs", f"{arrs[i]}{name_str}"))
+        arr = np.load(os.path.join(DIR, "outputs", f"{arrs[i]}{name_str}.npy"))
 
         plt.figure(figsize=figsize)
         plt.xlabel("Epoch", fontsize=fontsize)
@@ -70,7 +70,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
             plt.show()
 
     # plot mismatch by state 
-    dic = np.load(os.path.join(DIR, "outputs", f"mismatch_by_state{name_str}"),allow_pickle='TRUE').item()
+    dic = np.load(os.path.join(DIR, "outputs", f"mismatch_by_state{name_str}.npy"),allow_pickle='TRUE').item()
     mismatch = list(dic.keys())
     x_arr = x_trans_arr(arg_dict["n"])
 
@@ -88,7 +88,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
         plt.show()
 
     # plot extracted phase function         
-    phase = np.load(os.path.join(DIR, "outputs", f"phase{name_str}"))
+    phase = np.load(os.path.join(DIR, "outputs", f"phase{name_str}.npy"))
     phase_target_rounded = get_phase_target(m=arg_dict["m"], psi_mode=arg_dict["func_str"], phase_reduce=arg_dict["phase_reduce"], mint=arg_dict["mint"])
     phase_target = psi(np.arange(2**arg_dict["n"]),mode=arg_dict["func_str"])
 
@@ -150,7 +150,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     labels=["Loss", "Mismatch"]
 
     for i in np.arange(len(arrs)):
-        arr = np.load(os.path.join(DIR, "ampl_outputs", f"{arrs[i]}{name_str}"))
+        arr = np.load(os.path.join(DIR, "ampl_outputs", f"{arrs[i]}{name_str}.npy"))
 
         plt.figure(figsize=figsize)
         plt.xlabel("Epoch", fontsize=fontsize)
@@ -168,7 +168,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     # plot amplitude 
     x_arr = x_trans_arr(arg_dict["n"])
 
-    ampl_vec = np.abs(np.load(os.path.join(DIR, "ampl_outputs", f"state_vec{name_str}")))
+    ampl_vec = np.abs(np.load(os.path.join(DIR, "ampl_outputs", f"state_vec{name_str}.npy")))
     ampl_target = [A(i, mode=arg_dict["func_str"]) for i in x_arr]
     ampl_target /= np.sqrt(np.sum(ampl_target**2))
 
