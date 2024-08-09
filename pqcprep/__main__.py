@@ -65,7 +65,7 @@ def main():
     if opt.ampl==False:
 
         from .training_tools import train_QNN, test_QNN #type: ignore 
-        from .plotting_tools import benchmark_plots, benchmark_plots_ampl #type: ignore 
+        from .plotting_tools import benchmark_plots #type: ignore 
 
         for j in range(len(opt.WILL_p)):
             for k in range(len(opt.WILL_q)):
@@ -88,6 +88,7 @@ def main():
     else:
         
         from .training_tools import  ampl_train_QNN #type: ignore 
+        from .plotting_tools import benchmark_plots_ampl
 
         for i in range(len(opt.L)):
 
