@@ -47,7 +47,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
     """
 
     name_str = vars_to_name_str(arg_dict)
-    pdf_str = ".pdf" if pdf else ""
+    pdf_str = ".pdf" if pdf else ".png"
 
     # data to plot 
     arrs =["loss", "mismatch", "grad", "vargrad"]
@@ -143,7 +143,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
     """
     
     name_str = vars_to_name_str_ampl(arg_dict)
-    pdf_str = ".pdf" if pdf else ""
+    pdf_str = ".pdf" if pdf else ".png"
 
     # data to plot 
     arrs =["loss", "mismatch"]
