@@ -174,9 +174,9 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 RUN THINGS FOR L=12 TO COMPARE !!
 
 
-bug fix the benchmark plots, write docs strings, ...
+write docs strings for benchmark plots
 
-SOMETHING WRONG WITH CALCULATING PHASE_TARGET_ROUNDED!!
+THINK ABOUT HOW TO SETTLE DIR ... have it be specified ? set as current working dir by default ?
 
 then do more complex pltos 
 \end{frame}

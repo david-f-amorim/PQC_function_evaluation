@@ -120,16 +120,3 @@ David Amorim, 2024. Email: [*2538354a@student.gla.ac.uk*](mailto:2538354a@studen
 This project was funded by a Carnegie Vacation Scholarship and supervised by Prof Sarah Croke (University of Glasgow, School of Physics and Astronomy). 
 
 """
-
-DIR = "pqcprep" 
-""" @private """
-
-import os
-
-dirs = ["outputs", "ampl_outputs", "plots", "ampl_plots"]
-""" @private """
-
-for i in range(len(dirs)):
-    if not os.path.isdir(os.path.join(DIR, dirs[i])):
-        os.mkdir(os.path.join(DIR, dirs[i]))
- 

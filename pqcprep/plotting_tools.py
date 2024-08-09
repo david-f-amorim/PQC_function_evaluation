@@ -4,21 +4,27 @@ Collection of functions regarding plotting and visualisation.
 
 import numpy as np 
 import matplotlib.pyplot as plt 
-from .__init__ import DIR
+from .__main__ import DIR
 from matplotlib import rcParams
 import os
 from .psi_tools import x_trans_arr, get_phase_target, psi, A 
 from .file_tools import vars_to_name_str, vars_to_name_str_ampl
 
 # general settings
-rcParams['mathtext.fontset'] = 'stix'
-rcParams['font.family'] = 'STIXGeneral'
-width=0.75
-color='black'
-fontsize=28
+rcParams['mathtext.fontset'] = 'stix' 
+rcParams['font.family'] = 'STIXGeneral' 
+width=0.75 
+""" @private """
+color='black' 
+""" @private """
+fontsize=28 
+""" @private """
 titlesize=32
+""" @private """
 ticksize=22
+""" @private """
 figsize=(10,10)
+""" @private """
 
 def benchmark_plots(arg_dict, show=False, pdf=False):
         
@@ -35,7 +41,7 @@ def benchmark_plots(arg_dict, show=False, pdf=False):
 
         If True, display plots. Default is False. 
 
-    - **pdf** : **boolean* 
+    - **pdf** : *boolean* 
 
         If True, save plots in pdf format. Default is False. 
 
@@ -135,7 +141,7 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
 
         If True, display plots. Default is False. 
 
-    - **pdf** : **boolean* 
+    - **pdf** : *boolean* 
 
         If True, save plots in pdf format. Default is False. 
 
@@ -144,7 +150,6 @@ def benchmark_plots_ampl(arg_dict, show=False, pdf=False):
 
     ....
     """
-    
     name_str = vars_to_name_str_ampl(arg_dict)
     pdf_str = ".pdf" if pdf else ".png"
 

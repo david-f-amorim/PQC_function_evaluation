@@ -1,5 +1,8 @@
-import argparse 
+import argparse, os 
 from .file_tools import check_duplicates, compress_args, compress_args_ampl
+
+global DIR 
+"""@private"""
 
 def main():
 
@@ -42,8 +45,18 @@ def main():
     parser.add_argument('-S','--show', help="Show output plots.", action='store_true')
     parser.add_argument('-P','--pdf', help="Save output plots as PDF.", action='store_true')
     parser.add_argument('-NP','--no_plots', help="Don't produce output plots.", action='store_true')
+    parser.add_argument('-D','--DIR', help="Don't produce output plots.", default=os.getcwd(), type=str)
 
     opt = parser.parse_args()
+
+    # set DIR and creat directories 
+    DIR = opt.DIR if opt.DIR != "." else os.getwd()
+    dirs = ["outputs", "ampl_outputs", "plots", "ampl_plots"]
+    """ @private """
+
+    for i in range(len(dirs)):
+        if not os.path.isdir(os.path.join(DIR, dirs[i])):
+            os.mkdir(os.path.join(DIR, dirs[i]))
 
     # configure arguments
     if opt.gen_seed:
