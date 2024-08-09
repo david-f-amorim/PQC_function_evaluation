@@ -17,17 +17,17 @@ classifiers = [
     "Intended Audience :: Science/Research"
 ]
 keywords = ["quantum computing", "quantum state preparation", "parametrised quantum circuit", "quantum machine learning", "variational quantum algorithm"]
-dependencies = [
-    "qiskit>=1.1.1",
-    "numpy",
-    "matplotlib",
-    "qiskit_aer>=0.14.2",
-    "qiskit_algorithms>=0.3.0", 
-    "qiskit_ibmq_provider>=0.20.2",
-    "qiskit_ignis>=0.7.0",
-    "qiskit_machine_learning>=0.7.2",
-    "torch>=2.0.1" 
-]
+#dependencies = [
+#    "qiskit>=1.1.1",
+#    "numpy",
+#    "matplotlib",
+#    "qiskit_aer>=0.14.2",
+#    "qiskit_algorithms>=0.3.0", 
+#    "qiskit_ibmq_provider>=0.20.2",
+#    "qiskit_ignis>=0.7.0",
+#    "qiskit_machine_learning>=0.7.2",
+#    "torch>=2.0.1" 
+#]
 requires-python = ">=3.9"
 
 [project.urls]
@@ -37,4 +37,5 @@ GitHub = "https://github.com/david-f-amorim/PQC_function_evaluation"
 [project.scripts]
 pqcprep = "pqcprep.__main__:main"
 
-
+[tool.setuptools]
+packages = ["pqcprep"]

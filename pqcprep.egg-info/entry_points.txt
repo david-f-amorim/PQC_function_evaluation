@@ -1,0 +1,2 @@
+[console_scripts]
+pqcprep = pqcprep.__main__:main
