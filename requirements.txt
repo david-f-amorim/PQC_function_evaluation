@@ -1,9 +1,0 @@
-matplotlib
-numpy
-qiskit>=1.1.1
-qiskit_aer>=0.14.2
-qiskit_algorithms>=0.3.0
-qiskit_ibmq_provider>=0.20.2
-qiskit_ignis>=0.7.0
-qiskit_machine_learning>=0.7.2
-torch>=2.0.1

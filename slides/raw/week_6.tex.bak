@@ -172,13 +172,18 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 
 \begin{frame}
 RUN THINGS FOR L=12 TO COMPARE !!
-
+(nearly done with plots .. running delta=1.0 right now)...
+do plots !!
 
 write docs strings for benchmark plots
+FIGURE OUT HOW TO HANDLE IMPORTING RESOURCES... (just function to return arrays ??)
 
-THINK ABOUT HOW TO SETTLE DIR ... have it be specified ? set as current working dir by default ?
+FIGURE OUT WHICH QISKIT IS CREATING IMPORT PROBLEMS... (with qiskit-terra)
 
 then do more complex pltos 
+
+
+document resource tools 
 \end{frame}
 
 \section{Code and Documentation}

@@ -58,6 +58,9 @@
             <li>
                     <a class="function" href="#full_encode">full_encode</a>
             </li>
+            <li>
+                    <a class="function" href="#phase_from_state">phase_from_state</a>
+            </li>
     </ul>
 
 
@@ -252,6 +255,32 @@
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>            <span class="k">return</span> <span class="n">state_v</span><span class="p">,</span> <span class="n">state_vector</span> 
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>            <span class="k">return</span> <span class="n">state_v</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="k">def</span> <span class="nf">phase_from_state</span><span class="p">(</span><span class="n">state_vec</span><span class="p">):</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">    Extracts the phase, reduced to the interval $[0, 2 \pi]$, from a statevector. </span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">    Phases corresponding to near-zero amplitudes are set to zero (&quot;phase blanking&quot;).</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">    ---</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">    - **state_vec** : *array_like*</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">        The complex state vector. </span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    Returns:</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    ----</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    - **phase** : *array_like* </span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        The corresponding phase.      </span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>    <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">phase</span> <span class="o">*=</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mf">1e-15</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">return</span> <span class="n">phase</span> 
 </span></pre></div>
 
 
@@ -529,6 +558,68 @@ evaluation only. Default is <code>'QRQ'</code>.  </p></li>
 
 <p>Array representing the statevector of the input register for the various target register configurations.<br />
 Only returned if <code>full_state_vec</code> is True.</p></li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="phase_from_state">
+                            <input id="phase_from_state-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">phase_from_state</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">state_vec</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="phase_from_state-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#phase_from_state"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="phase_from_state-174"><a href="#phase_from_state-174"><span class="linenos">174</span></a><span class="k">def</span> <span class="nf">phase_from_state</span><span class="p">(</span><span class="n">state_vec</span><span class="p">):</span>
+</span><span id="phase_from_state-175"><a href="#phase_from_state-175"><span class="linenos">175</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="phase_from_state-176"><a href="#phase_from_state-176"><span class="linenos">176</span></a><span class="sd">    Extracts the phase, reduced to the interval $[0, 2 \pi]$, from a statevector. </span>
+</span><span id="phase_from_state-177"><a href="#phase_from_state-177"><span class="linenos">177</span></a>
+</span><span id="phase_from_state-178"><a href="#phase_from_state-178"><span class="linenos">178</span></a><span class="sd">    Phases corresponding to near-zero amplitudes are set to zero (&quot;phase blanking&quot;).</span>
+</span><span id="phase_from_state-179"><a href="#phase_from_state-179"><span class="linenos">179</span></a>
+</span><span id="phase_from_state-180"><a href="#phase_from_state-180"><span class="linenos">180</span></a><span class="sd">    Arguments:</span>
+</span><span id="phase_from_state-181"><a href="#phase_from_state-181"><span class="linenos">181</span></a><span class="sd">    ---</span>
+</span><span id="phase_from_state-182"><a href="#phase_from_state-182"><span class="linenos">182</span></a><span class="sd">    - **state_vec** : *array_like*</span>
+</span><span id="phase_from_state-183"><a href="#phase_from_state-183"><span class="linenos">183</span></a>
+</span><span id="phase_from_state-184"><a href="#phase_from_state-184"><span class="linenos">184</span></a><span class="sd">        The complex state vector. </span>
+</span><span id="phase_from_state-185"><a href="#phase_from_state-185"><span class="linenos">185</span></a>
+</span><span id="phase_from_state-186"><a href="#phase_from_state-186"><span class="linenos">186</span></a>
+</span><span id="phase_from_state-187"><a href="#phase_from_state-187"><span class="linenos">187</span></a><span class="sd">    Returns:</span>
+</span><span id="phase_from_state-188"><a href="#phase_from_state-188"><span class="linenos">188</span></a><span class="sd">    ----</span>
+</span><span id="phase_from_state-189"><a href="#phase_from_state-189"><span class="linenos">189</span></a><span class="sd">    - **phase** : *array_like* </span>
+</span><span id="phase_from_state-190"><a href="#phase_from_state-190"><span class="linenos">190</span></a>
+</span><span id="phase_from_state-191"><a href="#phase_from_state-191"><span class="linenos">191</span></a><span class="sd">        The corresponding phase.      </span>
+</span><span id="phase_from_state-192"><a href="#phase_from_state-192"><span class="linenos">192</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="phase_from_state-193"><a href="#phase_from_state-193"><span class="linenos">193</span></a>    <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span>
+</span><span id="phase_from_state-194"><a href="#phase_from_state-194"><span class="linenos">194</span></a>    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span id="phase_from_state-195"><a href="#phase_from_state-195"><span class="linenos">195</span></a>    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">state_vec</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span id="phase_from_state-196"><a href="#phase_from_state-196"><span class="linenos">196</span></a>    <span class="n">phase</span> <span class="o">*=</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mf">1e-15</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  
+</span><span id="phase_from_state-197"><a href="#phase_from_state-197"><span class="linenos">197</span></a>
+</span><span id="phase_from_state-198"><a href="#phase_from_state-198"><span class="linenos">198</span></a>    <span class="k">return</span> <span class="n">phase</span> 
+</span></pre></div>
+
+
+            <div class="docstring"><p>Extracts the phase, reduced to the interval $[0, 2 \pi]$, from a statevector. </p>
+
+<p>Phases corresponding to near-zero amplitudes are set to zero ("phase blanking").</p>
+
+<h2 id="arguments">Arguments:</h2>
+
+<ul>
+<li><p><strong>state_vec</strong> : <em>array_like</em></p>
+
+<p>The complex state vector. </p></li>
+</ul>
+
+<h2 id="returns">Returns:</h2>
+
+<ul>
+<li><p><strong>phase</strong> : <em>array_like</em> </p>
+
+<p>The corresponding phase.</p></li>
 </ul>
 </div>
 

@@ -23,6 +23,12 @@ Classifier: Intended Audience :: Science/Research
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
+Requires-Dist: qiskit>=1.1.1
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: qiskit_aer>=0.14.2
+Requires-Dist: qiskit_machine_learning>=0.7.2
+Requires-Dist: torch>=2.0.1
 
 ## README
 

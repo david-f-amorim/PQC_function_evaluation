@@ -15,4 +15,5 @@ pqcprep.egg-info/PKG-INFO
 pqcprep.egg-info/SOURCES.txt
 pqcprep.egg-info/dependency_links.txt
 pqcprep.egg-info/entry_points.txt
+pqcprep.egg-info/requires.txt
 pqcprep.egg-info/top_level.txt
