@@ -2,7 +2,7 @@
 ### *pqcprep* provides parametrised quantum circuits (PQCs) for quantum state preparation. 
 
 The aim of *pqcprep* is to implement the algorithm for quantum state preparation described in [Background](#background) via gate-efficient parametrised quantum circuits (PQCs), as described in [Approach](#approach). 
-However, the functionality provided as part of the package is general enough to be adapted to a wide range of other applications. 
+However, the functionality provided as part of the package is general enough to be adapted to a wide range of other applications. A description of how to use the package is given in [Usage](#usage).
 
 # Usage 
 
@@ -32,7 +32,7 @@ When using *pqcprep* via a GitHub clone the command-line tool can be accessed by
 
                 python3 -m pqcprep [-OPTIONS]
 
-when in the same working directory as the downloaded directory `pqcprep`. 
+when in the same working directory as the downloaded directory `/pqcprep`. 
 
 
 The central function of the command-line tool is to construct a PQC for either function evaluation (phase encoding) or amplitude preparation, train it and
@@ -110,6 +110,11 @@ Options requiring one (or more) variable(s) to be passed alongside them, i.e. `-
     Set value of the `q` parameter used by the `WILL` loss function: `-q X` or `--WILL_q X` sets the value of `q`  to `X`. Multiple options can be given and will be executed sequentially, e.g. `-q X Y Z` will 
     train three PQCs with `q` equal to `X`, `Y` and `Z`, respectively. This has no effect unless `-l WILL` is passed (i.e. the `WILL` los function is used). If not provided, a default value of 1 is used. 
 
+- **-RP**, **--repeat_params** : 
+
+    Set value of the `repeat_parameters` option for the function evaluation network: `-RP X` or `--repeat_parameters X` sets the value of `repeat_parameters` to `X`. Note that `X` must be a valid option for the 
+    argument `repeat_parameters` of `pqcprep.training_tools.train_QNN()`. This has no effect if `-A` or `--ampl` is passed. If not provided, the default value of None is taken. 
+
 - **-fA**, **--f_ampl** :   
 
     Set amplitude function to be prepared: `-fA X` or `--f_ampl X` sets the amplitude function to `X`, where `X` must be one of the options for `mode` in `pqcprep.psi_tools.A()`. This has no effect unless `--A` or `--ampl` is passed. 
@@ -136,12 +141,111 @@ Options not requiring values to be passed alongside them, i.e. `-option` :
 
     Show a summary of the various options and exit. 
 
+- **-A**, **--ampl** :
+
+    If passed, the generated PQC performs amplitude preparation, as opposed to function evaluation, corresponding to executing `pqcprep.training_tools.ampl_train_QNN()`. If not 
+    passed (default), the generted PQC performs function evaluation, corresponding to executing `pqcprep.training_tools.train_QNN()`. 
+
+- **-r**, **--real** :
+
+    If passed, the generated PQC only involves CX and Ry gates, resuling in real amplitudes. 
+
+- **-PR**, **--pahse_reduce** :
+
+    If passed, reduce the function to be evaluated to a phase between 0 and 1. This has no effect if `-A` or `--ampl` is passed. 
+
+- **-TS**, **--train_suerpos** :
+
+    If passed, train the function evaluation network with inputs in superposition, as opposed to randomly sampled basis states. This has no effect if `-A` or `--ampl` is passed.
+
+- **-H**, **--hayes** :
+
+    This is a short-hand used to train a circuit aimed at reproducing the results of Hayes 2023. Passing `-H` or `--hayes` is equivalent to passing `-TS -r -n 6 -PR`. 
+    This has no effect is `-A` or `--ampl` is passed. **This option is recommended for most applications**.
+
+- **-gs**, **--gen_seed** : 
+
+    If passed, generate the seed used for random number generation from the current timestamp. This overrides the value specified via `--seed`. 
+
+- **-RPA**, **--repeat_params_ampl** :
+
+    If passed, set the `repeat_params` option of `pqcprep.training_tools.ampl_train_QNN()` to True. This has no effect unless `-A` or `--ampl` is passed.
+
+- **-I**, **--ignore_duplicates** :
+
+    If passed, existing outputs with the same name string will be ignored and overwritten. 
+
+- **-R**, **--recover** :
+
+    If passed, training will be continued from existing TEMP files (for the case of the program being interrupted). If no relevant TEMP files are found the program 
+    will execute normally. 
+
+- **-S**, **--show** :
+
+    If passed, output plots are shown as they are produced. The plots will be saved to file regardless of whether
+    this option is passed or not. This has no effect if `-NP` or `--no_plots` is passed.  
+
+- **-P**, **--pdf** :
+
+    If passed, output plots are saved as PDFs, ass opposed to PNGs. This has no effect if `-NP` or `--no_plots` is passed.  
+
+- **-NP**, **--no_plots** :     
+
+    If passed, no output plots are produced. 
+
 
 ### Examples 
 
+The large number of options that can be passed to the command-line tool allow for a large degree of customisation, at the cost of increased usage complexity. 
+The following examples serve to showcase a few simple uses of the tool. Note that the prompts assume that *pqcprep* has been installed via pip (see above), which enables 
+the command `pqcprep` in the terminal. The examples also hold for installation via GitHub by replacing `pqcprep` with `python3 -m pqcprep` when run in the appropriate directory (see above). 
 
+1. Train a PQC to evaluate a linear phase function using the WIM loss function and otherwise default settings: 
 
+                pqcprep -l WIM -f linear 
 
+2. Train several PQCs, with different numbers of networks layers, to evaluate a quadratic phase function with 4 target qubits, the `-H` flag and otherwise default settings:
+
+                pqcprep -m 4 -l quadratic -L 3 6 9 12 -H
+
+3. Train a PQC to prepare a uniform amplitude function with repeated parameters and output plots saved as PDFs:
+
+                pqcprep -A -fA uniform -P -RPA 
+
+These examples mainly serve to illustrate how options are passed to the command-line tool and do not carry any particular significance in terms of the PQCs produced. 
+
+## Using Module Functions 
+
+While the built-in command-line tool is the most efficient way of generating and training PQCs for state preparation, the detailed analysis and post-processing of the circuits 
+will typically require bespoke functions depending on the application. The package *pqcprep* provides a wide range of functions, ranging from low- to high-level functionality, that can 
+be imported and used for these purposes. A full overview of the provided functions is provided as part of this documentation. 
+
+To import a function `<function>` from the sub-module `<submodule>` use the command
+
+                from pqcprep.<submodule> import <function>
+
+when *pqcprep* is installed via pip (see above). A modified version of this import, taken into account local file paths, has to be used when installing via GitHub. 
+
+The sub-modules included with *pqcprep* are 
+
+- `pqcprep.binary_tools` 
+
+- `pqcprep.file_tools`
+
+- `pqcprep.phase_tools`
+
+- `pqcprep.plotting_tools`
+
+- `pqcprep.pqc_tools`
+
+- `pqcprep.psi_tools`
+
+- `pqcprep.resource_tools`
+
+- `pqcprep.training_tools`
+
+and it is recommended to survey the functions included in each of the submodules when working with the package. 
+                                
 # Approach
 
 The key challenge tackled by *pqcprep* is to construct a PQC that can perform function evaluation: $\ket{j}\ket{0} \mapsto \ket{j} \ket{\Psi'(j)}$, for some analytical function 

@@ -292,7 +292,7 @@
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="k">return</span> <span class="n">WIM_weights_arr</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="k">def</span> <span class="nf">train_QNN</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">L</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span><span class="n">func_str</span><span class="p">,</span><span class="n">loss_str</span><span class="p">,</span><span class="n">meta</span><span class="p">,</span> <span class="n">recover_temp</span><span class="p">,</span> <span class="n">nint</span><span class="p">,</span> <span class="n">mint</span><span class="p">,</span> <span class="n">phase_reduce</span><span class="p">,</span> <span class="n">train_superpos</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">repeat_params</span><span class="p">,</span> <span class="n">WILL_p</span><span class="p">,</span> <span class="n">WILL_q</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">DIR</span><span class="p">):</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    Train a QCNN to perform function evaluation $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi(j)}$.</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    The QCNN is generated using `pqcprep.pqc_tools.generate_network()`. </span>
@@ -345,7 +345,7 @@
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">    - **phase_reduce** : *boolean* </span>
 </span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">        If True, reduce $\Psi(j)$ to the interval $(0, 2 \pi]$ i.e. perform the mapping $\Psi \to \Psi \text{mod} 2 \pi$. </span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">        If True, reduce $\Psi(j)$ to the interval $[0, 2 \pi)$ i.e. perform the mapping $\Psi \to \Psi (\text{mod} \; 2 \pi)$. </span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">    - **train_superpos** : *boolean*</span>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
@@ -378,12 +378,12 @@
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>
 </span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a><span class="sd">    - **DIR** : *str*</span>
 </span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>
-</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="sd">        Directory for output files.      </span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="sd">        Parent directory for output files.      </span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
 </span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">    Returns:</span>
 </span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a><span class="sd">    ----</span>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>
-</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy`</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">    The output produced by the training is saved in binary `.npy` files in the directory `DIR/outputs` using naming convention `&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy`</span>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a><span class="sd">    where `&lt;NAME_STR&gt;` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `&lt;TYPE&gt;` is one of: </span>
 </span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a><span class="sd">    - `weights` : file containing the QCNN weights determined by the optimiser;</span>
@@ -670,7 +670,7 @@
 </span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a><span class="sd">    Test performance of a QCNN trained for function evaluation with respect to different metrics. </span>
 </span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a>
-</span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a><span class="sd">    This requires the existence of an appropriate `weights_&lt;NAME_STR&gt;.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`. </span>
+</span><span id="L-581"><a href="#L-581"><span class="linenos">581</span></a><span class="sd">    This requires the existence of an appropriate `weights_&lt;NAME_STR&gt;.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`, where `&lt;NAME_STR&gt;` is the name string produced by `pqcprep.file_tools.vars_to_name_str()`. </span>
 </span><span id="L-582"><a href="#L-582"><span class="linenos">582</span></a>
 </span><span id="L-583"><a href="#L-583"><span class="linenos">583</span></a><span class="sd">    Arguments: </span>
 </span><span id="L-584"><a href="#L-584"><span class="linenos">584</span></a><span class="sd">    ---</span>
@@ -853,7 +853,7 @@
 </span><span id="L-761"><a href="#L-761"><span class="linenos">761</span></a>
 </span><span id="L-762"><a href="#L-762"><span class="linenos">762</span></a><span class="sd">    - **DIR** : *str*</span>
 </span><span id="L-763"><a href="#L-763"><span class="linenos">763</span></a>
-</span><span id="L-764"><a href="#L-764"><span class="linenos">764</span></a><span class="sd">        Directory for output files.     </span>
+</span><span id="L-764"><a href="#L-764"><span class="linenos">764</span></a><span class="sd">        Parent directory for output files.     </span>
 </span><span id="L-765"><a href="#L-765"><span class="linenos">765</span></a><span class="sd">          </span>
 </span><span id="L-766"><a href="#L-766"><span class="linenos">766</span></a>
 </span><span id="L-767"><a href="#L-767"><span class="linenos">767</span></a><span class="sd">    Returns:</span>
@@ -1345,7 +1345,7 @@ False.     </p></li>
     </div>
     <a class="headerlink" href="#train_QNN"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="train_QNN-203"><a href="#train_QNN-203"><span class="linenos">203</span></a><span class="k">def</span> <span class="nf">train_QNN</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">L</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span><span class="n">func_str</span><span class="p">,</span><span class="n">loss_str</span><span class="p">,</span><span class="n">meta</span><span class="p">,</span> <span class="n">recover_temp</span><span class="p">,</span> <span class="n">nint</span><span class="p">,</span> <span class="n">mint</span><span class="p">,</span> <span class="n">phase_reduce</span><span class="p">,</span> <span class="n">train_superpos</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">repeat_params</span><span class="p">,</span> <span class="n">WILL_p</span><span class="p">,</span> <span class="n">WILL_q</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">DIR</span><span class="p">):</span>
-</span><span id="train_QNN-204"><a href="#train_QNN-204"><span class="linenos">204</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="train_QNN-204"><a href="#train_QNN-204"><span class="linenos">204</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="train_QNN-205"><a href="#train_QNN-205"><span class="linenos">205</span></a><span class="sd">    Train a QCNN to perform function evaluation $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi(j)}$.</span>
 </span><span id="train_QNN-206"><a href="#train_QNN-206"><span class="linenos">206</span></a>
 </span><span id="train_QNN-207"><a href="#train_QNN-207"><span class="linenos">207</span></a><span class="sd">    The QCNN is generated using `pqcprep.pqc_tools.generate_network()`. </span>
@@ -1398,7 +1398,7 @@ False.     </p></li>
 </span><span id="train_QNN-254"><a href="#train_QNN-254"><span class="linenos">254</span></a>
 </span><span id="train_QNN-255"><a href="#train_QNN-255"><span class="linenos">255</span></a><span class="sd">    - **phase_reduce** : *boolean* </span>
 </span><span id="train_QNN-256"><a href="#train_QNN-256"><span class="linenos">256</span></a>
-</span><span id="train_QNN-257"><a href="#train_QNN-257"><span class="linenos">257</span></a><span class="sd">        If True, reduce $\Psi(j)$ to the interval $(0, 2 \pi]$ i.e. perform the mapping $\Psi \to \Psi \text{mod} 2 \pi$. </span>
+</span><span id="train_QNN-257"><a href="#train_QNN-257"><span class="linenos">257</span></a><span class="sd">        If True, reduce $\Psi(j)$ to the interval $[0, 2 \pi)$ i.e. perform the mapping $\Psi \to \Psi (\text{mod} \; 2 \pi)$. </span>
 </span><span id="train_QNN-258"><a href="#train_QNN-258"><span class="linenos">258</span></a>
 </span><span id="train_QNN-259"><a href="#train_QNN-259"><span class="linenos">259</span></a><span class="sd">    - **train_superpos** : *boolean*</span>
 </span><span id="train_QNN-260"><a href="#train_QNN-260"><span class="linenos">260</span></a>
@@ -1431,12 +1431,12 @@ False.     </p></li>
 </span><span id="train_QNN-287"><a href="#train_QNN-287"><span class="linenos">287</span></a>
 </span><span id="train_QNN-288"><a href="#train_QNN-288"><span class="linenos">288</span></a><span class="sd">    - **DIR** : *str*</span>
 </span><span id="train_QNN-289"><a href="#train_QNN-289"><span class="linenos">289</span></a>
-</span><span id="train_QNN-290"><a href="#train_QNN-290"><span class="linenos">290</span></a><span class="sd">        Directory for output files.      </span>
+</span><span id="train_QNN-290"><a href="#train_QNN-290"><span class="linenos">290</span></a><span class="sd">        Parent directory for output files.      </span>
 </span><span id="train_QNN-291"><a href="#train_QNN-291"><span class="linenos">291</span></a>
 </span><span id="train_QNN-292"><a href="#train_QNN-292"><span class="linenos">292</span></a><span class="sd">    Returns:</span>
 </span><span id="train_QNN-293"><a href="#train_QNN-293"><span class="linenos">293</span></a><span class="sd">    ----</span>
 </span><span id="train_QNN-294"><a href="#train_QNN-294"><span class="linenos">294</span></a>
-</span><span id="train_QNN-295"><a href="#train_QNN-295"><span class="linenos">295</span></a><span class="sd">    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy`</span>
+</span><span id="train_QNN-295"><a href="#train_QNN-295"><span class="linenos">295</span></a><span class="sd">    The output produced by the training is saved in binary `.npy` files in the directory `DIR/outputs` using naming convention `&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy`</span>
 </span><span id="train_QNN-296"><a href="#train_QNN-296"><span class="linenos">296</span></a><span class="sd">    where `&lt;NAME_STR&gt;` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `&lt;TYPE&gt;` is one of: </span>
 </span><span id="train_QNN-297"><a href="#train_QNN-297"><span class="linenos">297</span></a>
 </span><span id="train_QNN-298"><a href="#train_QNN-298"><span class="linenos">298</span></a><span class="sd">    - `weights` : file containing the QCNN weights determined by the optimiser;</span>
@@ -1763,7 +1763,7 @@ False.     </p></li>
 <p>Number of integer qubits in target register.  </p></li>
 <li><p><strong>phase_reduce</strong> : <em>boolean</em> </p>
 
-<p>If True, reduce $\Psi(j)$ to the interval $(0, 2 \pi]$ i.e. perform the mapping $\Psi   o \Psi  ext{mod} 2 \pi$. </p></li>
+<p>If True, reduce $\Psi(j)$ to the interval $[0, 2 \pi)$ i.e. perform the mapping $\Psi \to \Psi (\text{mod} \; 2 \pi)$. </p></li>
 <li><p><strong>train_superpos</strong> : <em>boolean</em></p>
 
 <p>If True, train on a superposition of input states. If False, train on randomly sampled individual input states. </p></li>
@@ -1789,12 +1789,12 @@ Intermediate values of <code>delta</code> result in coefficinets being randomly 
 determined by the value of <code>delta</code>.    </p></li>
 <li><p><strong>DIR</strong> : <em>str</em></p>
 
-<p>Directory for output files.      </p></li>
+<p>Parent directory for output files.      </p></li>
 </ul>
 
 <h2 id="returns">Returns:</h2>
 
-<p>The output produced by the training is saved in binary <code>.npy</code> files in the directory <code>DIR/ampl_outputs</code> using naming convention <code>&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy</code>
+<p>The output produced by the training is saved in binary <code>.npy</code> files in the directory <code>DIR/outputs</code> using naming convention <code>&lt;TYPE&gt;_&lt;NAME_STR&gt;.npy</code>
 where <code>&lt;NAME_STR&gt;</code> is the name string produced by <code><a href="file_tools.html#vars_to_name_str">pqcprep.file_tools.vars_to_name_str()</a></code> and <code>&lt;TYPE&gt;</code> is one of: </p>
 
 <ul>
@@ -1823,7 +1823,7 @@ where <code>&lt;NAME_STR&gt;</code> is the name string produced by <code><a href
 </span><span id="test_QNN-579"><a href="#test_QNN-579"><span class="linenos">579</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="test_QNN-580"><a href="#test_QNN-580"><span class="linenos">580</span></a><span class="sd">    Test performance of a QCNN trained for function evaluation with respect to different metrics. </span>
 </span><span id="test_QNN-581"><a href="#test_QNN-581"><span class="linenos">581</span></a>
-</span><span id="test_QNN-582"><a href="#test_QNN-582"><span class="linenos">582</span></a><span class="sd">    This requires the existence of an appropriate `weights_&lt;NAME_STR&gt;.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`. </span>
+</span><span id="test_QNN-582"><a href="#test_QNN-582"><span class="linenos">582</span></a><span class="sd">    This requires the existence of an appropriate `weights_&lt;NAME_STR&gt;.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`, where `&lt;NAME_STR&gt;` is the name string produced by `pqcprep.file_tools.vars_to_name_str()`. </span>
 </span><span id="test_QNN-583"><a href="#test_QNN-583"><span class="linenos">583</span></a>
 </span><span id="test_QNN-584"><a href="#test_QNN-584"><span class="linenos">584</span></a><span class="sd">    Arguments: </span>
 </span><span id="test_QNN-585"><a href="#test_QNN-585"><span class="linenos">585</span></a><span class="sd">    ---</span>
@@ -1950,7 +1950,7 @@ where <code>&lt;NAME_STR&gt;</code> is the name string produced by <code><a href
 
             <div class="docstring"><p>Test performance of a QCNN trained for function evaluation with respect to different metrics. </p>
 
-<p>This requires the existence of an appropriate <code>weights_&lt;NAME_STR&gt;.npy</code> file (as produced by <code><a href="#train_QNN">train_QNN()</a></code>) in the directory <code>DIR/outputs</code>. </p>
+<p>This requires the existence of an appropriate <code>weights_&lt;NAME_STR&gt;.npy</code> file (as produced by <code><a href="#train_QNN">train_QNN()</a></code>) in the directory <code>DIR/outputs</code>, where <code>&lt;NAME_STR&gt;</code> is the name string produced by <code><a href="file_tools.html#vars_to_name_str">pqcprep.file_tools.vars_to_name_str()</a></code>. </p>
 
 <h2 id="arguments">Arguments: </h2>
 
@@ -2050,7 +2050,7 @@ register states. Contains a dictionary with the input bit strings as keys and th
 </span><span id="ampl_train_QNN-762"><a href="#ampl_train_QNN-762"><span class="linenos">762</span></a>
 </span><span id="ampl_train_QNN-763"><a href="#ampl_train_QNN-763"><span class="linenos">763</span></a><span class="sd">    - **DIR** : *str*</span>
 </span><span id="ampl_train_QNN-764"><a href="#ampl_train_QNN-764"><span class="linenos">764</span></a>
-</span><span id="ampl_train_QNN-765"><a href="#ampl_train_QNN-765"><span class="linenos">765</span></a><span class="sd">        Directory for output files.     </span>
+</span><span id="ampl_train_QNN-765"><a href="#ampl_train_QNN-765"><span class="linenos">765</span></a><span class="sd">        Parent directory for output files.     </span>
 </span><span id="ampl_train_QNN-766"><a href="#ampl_train_QNN-766"><span class="linenos">766</span></a><span class="sd">          </span>
 </span><span id="ampl_train_QNN-767"><a href="#ampl_train_QNN-767"><span class="linenos">767</span></a>
 </span><span id="ampl_train_QNN-768"><a href="#ampl_train_QNN-768"><span class="linenos">768</span></a><span class="sd">    Returns:</span>
@@ -2294,7 +2294,7 @@ register states. Contains a dictionary with the input bit strings as keys and th
 <p>If True, keep parameters fixed for different layer types, i.e. use the same parameter values for each instance of a layer type.</p></li>
 <li><p><strong>DIR</strong> : <em>str</em></p>
 
-<p>Directory for output files.     </p></li>
+<p>Parent directory for output files.     </p></li>
 </ul>
 
 <h2 id="returns">Returns:</h2>

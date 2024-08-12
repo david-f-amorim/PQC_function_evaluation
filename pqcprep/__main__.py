@@ -17,28 +17,20 @@ def main():
     parser.add_argument('-d','--delta', help="Value of delta parameter.", default=[0.], type=float, nargs="+")
     parser.add_argument('-p','--WILL_p', help="WILL p parameter.", default=[1],type=float, nargs="+")
     parser.add_argument('-q','--WILL_q', help="WILL q parameter.", default=[1],type=float, nargs="+")
+    parser.add_argument('-RP','--repeat_params', help="Use the same parameter values for different layers", default=None) 
     parser.add_argument('-fA','--f_ampl', help="Amplitude function to learn.", default="x76")
-
     parser.add_argument('--xmin', help="Minimum value of amplitude function domain.", default=40, type=float)
     parser.add_argument('--xmax', help="Maximum value of amplitude function domain.", default=168, type=float)
     parser.add_argument('--seed', help="Seed for random number generation.", default=1680458526,type=int)
 
-    
-
-    parser.add_argument('-RP','--repeat_params', help="Use the same parameter values for different layers", default=None)    
-    parser.add_argument('-RPA','--repeat_params_ampl', help="Use the same parameter values for different layers", action='store_true')
     parser.add_argument('-A','--ampl', help="Train network to prepare amplitude distribution instead of function evaluation.", action='store_true')
     parser.add_argument('-r','--real', help="Output states with real amplitudes only.", action='store_true')
     parser.add_argument('-PR','--phase_reduce', help="Reduce function values to a phase between 0 and 1.", action='store_true')
     parser.add_argument('-TS','--train_superpos', help="Train circuit in superposition. (Automatically activates --phase_reduce).", action='store_true')
-    parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR -f psi. Still set own m.", action='store_true')
+    parser.add_argument('-H','--hayes', help="Train circuit to reproduce Hayes 2023. Sets -TS -r -n 6 -PR. Still set own m.", action='store_true')
     parser.add_argument('-gs','--gen_seed', help="Generate seed from timestamp (Overrides value given with '--seed').", action='store_true')
-    
+    parser.add_argument('-RPA','--repeat_params_ampl', help="Use the same parameter values for different layers", action='store_true')
 
-    
-    
-    
-    
     parser.add_argument('-I','--ignore_duplicates', help="Ignore and overwrite duplicate files.", action='store_true')
     parser.add_argument('-R','--recover', help="Continue training from existing TEMP files.", action='store_true')
     parser.add_argument('-S','--show', help="Show output plots.", action='store_true')

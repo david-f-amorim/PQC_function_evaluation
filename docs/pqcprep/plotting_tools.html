@@ -74,7 +74,7 @@
                     <h1 class="modulename">
 <a href="./../pqcprep.html">pqcprep</a><wbr>.plotting_tools    </h1>
 
-                        <div class="docstring"><p>Collection of functions regarding plotting and visualisation.</p>
+                        <div class="docstring"><p>Collection of functions relating to plotting and visualisation.</p>
 </div>
 
                         <input id="mod-plotting_tools-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -82,7 +82,7 @@
                         <label class="view-source-button" for="mod-plotting_tools-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Collection of functions regarding plotting and visualisation. </span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Collection of functions relating to plotting and visualisation. </span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
@@ -108,34 +108,34 @@
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">&quot;&quot;&quot; @private &quot;&quot;&quot;</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">def</span> <span class="nf">benchmark_plots</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="w">        </span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    ...</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    ---- </span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    - **arg_dict** : *dict* </span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args()`. </span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    - **show** : *boolean* </span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">        If True, display plots. Default is False. </span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    - **pdf** : *boolean* </span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">    - **DIR** : *str*</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">        Directory for output files.     </span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">    Returns:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">    ---</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">    ....    </span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">def</span> <span class="nf">benchmark_plots</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">    Generates plots visualising the outputs produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()`. </span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">    ---- </span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    - **arg_dict** : *dict* </span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args()`. </span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    - **show** : *boolean* </span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">        If True, display plots. Default is False. </span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">    - **pdf** : *boolean* </span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        If True, save plots in pdf format. If False, save plots in png format. Default is False. </span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">    - **DIR** : *str*</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">        Parent directory for output files.     </span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">    Returns:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">    ---</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()` (apart from `metrics_&lt;NAME_STR&gt;.npy`)</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">    in the directory `DIR/plots`. </span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">   </span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="n">name_str</span> <span class="o">=</span> <span class="n">vars_to_name_str</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
@@ -215,33 +215,33 @@
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>    <span class="k">return</span> <span class="mi">0</span>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="k">def</span> <span class="nf">benchmark_plots_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="w">        </span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">    ...</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">     Arguments:</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    ---- </span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    - **arg_dict** : *dict* </span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args_ampl()`. </span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    - **show** : *boolean* </span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">        If True, display plots. Default is False. </span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">    - **pdf** : *boolean* </span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    - **DIR** : *str*</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        Directory for output files.     </span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    Returns:</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">    ---</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">    ....</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="k">def</span> <span class="nf">benchmark_plots_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>    
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">    Generates plots visualising the outputs produced by `pqcprep.training_tools.ampl_train_QNN()`.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">     Arguments:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">    ---- </span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    - **arg_dict** : *dict* </span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args_ampl()`. </span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">    - **show** : *boolean* </span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">        If True, display plots. Default is False. </span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    - **pdf** : *boolean* </span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    - **DIR** : *str*</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        Directory for output files.     </span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    Returns:</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    ---</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.ampl_train_QNN()` </span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">    in the directory `DIR/ampl_plots`.</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="n">name_str</span> <span class="o">=</span> <span class="n">vars_to_name_str_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="n">pdf_str</span> <span class="o">=</span> <span class="s2">&quot;.pdf&quot;</span> <span class="k">if</span> <span class="n">pdf</span> <span class="k">else</span> <span class="s2">&quot;.png&quot;</span>
@@ -308,34 +308,34 @@
 
     </div>
     <a class="headerlink" href="#benchmark_plots"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="benchmark_plots-29"><a href="#benchmark_plots-29"><span class="linenos"> 29</span></a><span class="k">def</span> <span class="nf">benchmark_plots</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="benchmark_plots-30"><a href="#benchmark_plots-30"><span class="linenos"> 30</span></a><span class="w">        </span>
-</span><span id="benchmark_plots-31"><a href="#benchmark_plots-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="benchmark_plots-32"><a href="#benchmark_plots-32"><span class="linenos"> 32</span></a><span class="sd">    ...</span>
-</span><span id="benchmark_plots-33"><a href="#benchmark_plots-33"><span class="linenos"> 33</span></a>
-</span><span id="benchmark_plots-34"><a href="#benchmark_plots-34"><span class="linenos"> 34</span></a><span class="sd">    Arguments:</span>
-</span><span id="benchmark_plots-35"><a href="#benchmark_plots-35"><span class="linenos"> 35</span></a><span class="sd">    ---- </span>
-</span><span id="benchmark_plots-36"><a href="#benchmark_plots-36"><span class="linenos"> 36</span></a><span class="sd">    - **arg_dict** : *dict* </span>
-</span><span id="benchmark_plots-37"><a href="#benchmark_plots-37"><span class="linenos"> 37</span></a>
-</span><span id="benchmark_plots-38"><a href="#benchmark_plots-38"><span class="linenos"> 38</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args()`. </span>
-</span><span id="benchmark_plots-39"><a href="#benchmark_plots-39"><span class="linenos"> 39</span></a>
-</span><span id="benchmark_plots-40"><a href="#benchmark_plots-40"><span class="linenos"> 40</span></a><span class="sd">    - **show** : *boolean* </span>
-</span><span id="benchmark_plots-41"><a href="#benchmark_plots-41"><span class="linenos"> 41</span></a>
-</span><span id="benchmark_plots-42"><a href="#benchmark_plots-42"><span class="linenos"> 42</span></a><span class="sd">        If True, display plots. Default is False. </span>
-</span><span id="benchmark_plots-43"><a href="#benchmark_plots-43"><span class="linenos"> 43</span></a>
-</span><span id="benchmark_plots-44"><a href="#benchmark_plots-44"><span class="linenos"> 44</span></a><span class="sd">    - **pdf** : *boolean* </span>
-</span><span id="benchmark_plots-45"><a href="#benchmark_plots-45"><span class="linenos"> 45</span></a>
-</span><span id="benchmark_plots-46"><a href="#benchmark_plots-46"><span class="linenos"> 46</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
-</span><span id="benchmark_plots-47"><a href="#benchmark_plots-47"><span class="linenos"> 47</span></a>
-</span><span id="benchmark_plots-48"><a href="#benchmark_plots-48"><span class="linenos"> 48</span></a><span class="sd">    - **DIR** : *str*</span>
-</span><span id="benchmark_plots-49"><a href="#benchmark_plots-49"><span class="linenos"> 49</span></a>
-</span><span id="benchmark_plots-50"><a href="#benchmark_plots-50"><span class="linenos"> 50</span></a><span class="sd">        Directory for output files.     </span>
-</span><span id="benchmark_plots-51"><a href="#benchmark_plots-51"><span class="linenos"> 51</span></a>
-</span><span id="benchmark_plots-52"><a href="#benchmark_plots-52"><span class="linenos"> 52</span></a><span class="sd">    Returns:</span>
-</span><span id="benchmark_plots-53"><a href="#benchmark_plots-53"><span class="linenos"> 53</span></a><span class="sd">    ---</span>
-</span><span id="benchmark_plots-54"><a href="#benchmark_plots-54"><span class="linenos"> 54</span></a>
-</span><span id="benchmark_plots-55"><a href="#benchmark_plots-55"><span class="linenos"> 55</span></a><span class="sd">    ....    </span>
-</span><span id="benchmark_plots-56"><a href="#benchmark_plots-56"><span class="linenos"> 56</span></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="benchmark_plots-29"><a href="#benchmark_plots-29"><span class="linenos"> 29</span></a><span class="k">def</span> <span class="nf">benchmark_plots</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  
+</span><span id="benchmark_plots-30"><a href="#benchmark_plots-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="benchmark_plots-31"><a href="#benchmark_plots-31"><span class="linenos"> 31</span></a><span class="sd">    Generates plots visualising the outputs produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()`. </span>
+</span><span id="benchmark_plots-32"><a href="#benchmark_plots-32"><span class="linenos"> 32</span></a>
+</span><span id="benchmark_plots-33"><a href="#benchmark_plots-33"><span class="linenos"> 33</span></a><span class="sd">    Arguments:</span>
+</span><span id="benchmark_plots-34"><a href="#benchmark_plots-34"><span class="linenos"> 34</span></a><span class="sd">    ---- </span>
+</span><span id="benchmark_plots-35"><a href="#benchmark_plots-35"><span class="linenos"> 35</span></a><span class="sd">    - **arg_dict** : *dict* </span>
+</span><span id="benchmark_plots-36"><a href="#benchmark_plots-36"><span class="linenos"> 36</span></a>
+</span><span id="benchmark_plots-37"><a href="#benchmark_plots-37"><span class="linenos"> 37</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args()`. </span>
+</span><span id="benchmark_plots-38"><a href="#benchmark_plots-38"><span class="linenos"> 38</span></a>
+</span><span id="benchmark_plots-39"><a href="#benchmark_plots-39"><span class="linenos"> 39</span></a><span class="sd">    - **show** : *boolean* </span>
+</span><span id="benchmark_plots-40"><a href="#benchmark_plots-40"><span class="linenos"> 40</span></a>
+</span><span id="benchmark_plots-41"><a href="#benchmark_plots-41"><span class="linenos"> 41</span></a><span class="sd">        If True, display plots. Default is False. </span>
+</span><span id="benchmark_plots-42"><a href="#benchmark_plots-42"><span class="linenos"> 42</span></a>
+</span><span id="benchmark_plots-43"><a href="#benchmark_plots-43"><span class="linenos"> 43</span></a><span class="sd">    - **pdf** : *boolean* </span>
+</span><span id="benchmark_plots-44"><a href="#benchmark_plots-44"><span class="linenos"> 44</span></a>
+</span><span id="benchmark_plots-45"><a href="#benchmark_plots-45"><span class="linenos"> 45</span></a><span class="sd">        If True, save plots in pdf format. If False, save plots in png format. Default is False. </span>
+</span><span id="benchmark_plots-46"><a href="#benchmark_plots-46"><span class="linenos"> 46</span></a>
+</span><span id="benchmark_plots-47"><a href="#benchmark_plots-47"><span class="linenos"> 47</span></a><span class="sd">    - **DIR** : *str*</span>
+</span><span id="benchmark_plots-48"><a href="#benchmark_plots-48"><span class="linenos"> 48</span></a>
+</span><span id="benchmark_plots-49"><a href="#benchmark_plots-49"><span class="linenos"> 49</span></a><span class="sd">        Parent directory for output files.     </span>
+</span><span id="benchmark_plots-50"><a href="#benchmark_plots-50"><span class="linenos"> 50</span></a>
+</span><span id="benchmark_plots-51"><a href="#benchmark_plots-51"><span class="linenos"> 51</span></a><span class="sd">    Returns:</span>
+</span><span id="benchmark_plots-52"><a href="#benchmark_plots-52"><span class="linenos"> 52</span></a><span class="sd">    ---</span>
+</span><span id="benchmark_plots-53"><a href="#benchmark_plots-53"><span class="linenos"> 53</span></a>
+</span><span id="benchmark_plots-54"><a href="#benchmark_plots-54"><span class="linenos"> 54</span></a><span class="sd">    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()` (apart from `metrics_&lt;NAME_STR&gt;.npy`)</span>
+</span><span id="benchmark_plots-55"><a href="#benchmark_plots-55"><span class="linenos"> 55</span></a><span class="sd">    in the directory `DIR/plots`. </span>
+</span><span id="benchmark_plots-56"><a href="#benchmark_plots-56"><span class="linenos"> 56</span></a><span class="sd">   </span>
 </span><span id="benchmark_plots-57"><a href="#benchmark_plots-57"><span class="linenos"> 57</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="benchmark_plots-58"><a href="#benchmark_plots-58"><span class="linenos"> 58</span></a>
 </span><span id="benchmark_plots-59"><a href="#benchmark_plots-59"><span class="linenos"> 59</span></a>    <span class="n">name_str</span> <span class="o">=</span> <span class="n">vars_to_name_str</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
@@ -416,7 +416,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>...</p>
+            <div class="docstring"><p>Generates plots visualising the outputs produced by <code><a href="training_tools.html#train_QNN">pqcprep.training_tools.train_QNN()</a></code> and <code><a href="training_tools.html#test_QNN">pqcprep.training_tools.test_QNN()</a></code>. </p>
 
 <h2 id="arguments">Arguments:</h2>
 
@@ -429,15 +429,16 @@
 <p>If True, display plots. Default is False. </p></li>
 <li><p><strong>pdf</strong> : <em>boolean</em> </p>
 
-<p>If True, save plots in pdf format. Default is False. </p></li>
+<p>If True, save plots in pdf format. If False, save plots in png format. Default is False. </p></li>
 <li><p><strong>DIR</strong> : <em>str</em></p>
 
-<p>Directory for output files.     </p></li>
+<p>Parent directory for output files.     </p></li>
 </ul>
 
 <h2 id="returns">Returns:</h2>
 
-<p>....</p>
+<p>Saves plots corresponding to each of the files produced by <code><a href="training_tools.html#train_QNN">pqcprep.training_tools.train_QNN()</a></code> and <code><a href="training_tools.html#test_QNN">pqcprep.training_tools.test_QNN()</a></code> (apart from <code>metrics_&lt;NAME_STR&gt;.npy</code>)
+in the directory <code>DIR/plots</code>.</p>
 </div>
 
 
@@ -453,33 +454,33 @@
 
     </div>
     <a class="headerlink" href="#benchmark_plots_ampl"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="benchmark_plots_ampl-136"><a href="#benchmark_plots_ampl-136"><span class="linenos">136</span></a><span class="k">def</span> <span class="nf">benchmark_plots_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="benchmark_plots_ampl-137"><a href="#benchmark_plots_ampl-137"><span class="linenos">137</span></a><span class="w">        </span>
-</span><span id="benchmark_plots_ampl-138"><a href="#benchmark_plots_ampl-138"><span class="linenos">138</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="benchmark_plots_ampl-139"><a href="#benchmark_plots_ampl-139"><span class="linenos">139</span></a><span class="sd">    ...</span>
-</span><span id="benchmark_plots_ampl-140"><a href="#benchmark_plots_ampl-140"><span class="linenos">140</span></a>
-</span><span id="benchmark_plots_ampl-141"><a href="#benchmark_plots_ampl-141"><span class="linenos">141</span></a><span class="sd">     Arguments:</span>
-</span><span id="benchmark_plots_ampl-142"><a href="#benchmark_plots_ampl-142"><span class="linenos">142</span></a><span class="sd">    ---- </span>
-</span><span id="benchmark_plots_ampl-143"><a href="#benchmark_plots_ampl-143"><span class="linenos">143</span></a><span class="sd">    - **arg_dict** : *dict* </span>
-</span><span id="benchmark_plots_ampl-144"><a href="#benchmark_plots_ampl-144"><span class="linenos">144</span></a>
-</span><span id="benchmark_plots_ampl-145"><a href="#benchmark_plots_ampl-145"><span class="linenos">145</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args_ampl()`. </span>
-</span><span id="benchmark_plots_ampl-146"><a href="#benchmark_plots_ampl-146"><span class="linenos">146</span></a>
-</span><span id="benchmark_plots_ampl-147"><a href="#benchmark_plots_ampl-147"><span class="linenos">147</span></a><span class="sd">    - **show** : *boolean* </span>
-</span><span id="benchmark_plots_ampl-148"><a href="#benchmark_plots_ampl-148"><span class="linenos">148</span></a>
-</span><span id="benchmark_plots_ampl-149"><a href="#benchmark_plots_ampl-149"><span class="linenos">149</span></a><span class="sd">        If True, display plots. Default is False. </span>
-</span><span id="benchmark_plots_ampl-150"><a href="#benchmark_plots_ampl-150"><span class="linenos">150</span></a>
-</span><span id="benchmark_plots_ampl-151"><a href="#benchmark_plots_ampl-151"><span class="linenos">151</span></a><span class="sd">    - **pdf** : *boolean* </span>
-</span><span id="benchmark_plots_ampl-152"><a href="#benchmark_plots_ampl-152"><span class="linenos">152</span></a>
-</span><span id="benchmark_plots_ampl-153"><a href="#benchmark_plots_ampl-153"><span class="linenos">153</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
-</span><span id="benchmark_plots_ampl-154"><a href="#benchmark_plots_ampl-154"><span class="linenos">154</span></a>
-</span><span id="benchmark_plots_ampl-155"><a href="#benchmark_plots_ampl-155"><span class="linenos">155</span></a><span class="sd">    - **DIR** : *str*</span>
-</span><span id="benchmark_plots_ampl-156"><a href="#benchmark_plots_ampl-156"><span class="linenos">156</span></a>
-</span><span id="benchmark_plots_ampl-157"><a href="#benchmark_plots_ampl-157"><span class="linenos">157</span></a><span class="sd">        Directory for output files.     </span>
-</span><span id="benchmark_plots_ampl-158"><a href="#benchmark_plots_ampl-158"><span class="linenos">158</span></a>
-</span><span id="benchmark_plots_ampl-159"><a href="#benchmark_plots_ampl-159"><span class="linenos">159</span></a><span class="sd">    Returns:</span>
-</span><span id="benchmark_plots_ampl-160"><a href="#benchmark_plots_ampl-160"><span class="linenos">160</span></a><span class="sd">    ---</span>
-</span><span id="benchmark_plots_ampl-161"><a href="#benchmark_plots_ampl-161"><span class="linenos">161</span></a>
-</span><span id="benchmark_plots_ampl-162"><a href="#benchmark_plots_ampl-162"><span class="linenos">162</span></a><span class="sd">    ....</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="benchmark_plots_ampl-136"><a href="#benchmark_plots_ampl-136"><span class="linenos">136</span></a><span class="k">def</span> <span class="nf">benchmark_plots_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">,</span><span class="n">DIR</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>    
+</span><span id="benchmark_plots_ampl-137"><a href="#benchmark_plots_ampl-137"><span class="linenos">137</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="benchmark_plots_ampl-138"><a href="#benchmark_plots_ampl-138"><span class="linenos">138</span></a><span class="sd">    Generates plots visualising the outputs produced by `pqcprep.training_tools.ampl_train_QNN()`.</span>
+</span><span id="benchmark_plots_ampl-139"><a href="#benchmark_plots_ampl-139"><span class="linenos">139</span></a>
+</span><span id="benchmark_plots_ampl-140"><a href="#benchmark_plots_ampl-140"><span class="linenos">140</span></a><span class="sd">     Arguments:</span>
+</span><span id="benchmark_plots_ampl-141"><a href="#benchmark_plots_ampl-141"><span class="linenos">141</span></a><span class="sd">    ---- </span>
+</span><span id="benchmark_plots_ampl-142"><a href="#benchmark_plots_ampl-142"><span class="linenos">142</span></a><span class="sd">    - **arg_dict** : *dict* </span>
+</span><span id="benchmark_plots_ampl-143"><a href="#benchmark_plots_ampl-143"><span class="linenos">143</span></a>
+</span><span id="benchmark_plots_ampl-144"><a href="#benchmark_plots_ampl-144"><span class="linenos">144</span></a><span class="sd">        Dictionary containing varialbe information created using `pqcprep.file_tools.compress_args_ampl()`. </span>
+</span><span id="benchmark_plots_ampl-145"><a href="#benchmark_plots_ampl-145"><span class="linenos">145</span></a>
+</span><span id="benchmark_plots_ampl-146"><a href="#benchmark_plots_ampl-146"><span class="linenos">146</span></a><span class="sd">    - **show** : *boolean* </span>
+</span><span id="benchmark_plots_ampl-147"><a href="#benchmark_plots_ampl-147"><span class="linenos">147</span></a>
+</span><span id="benchmark_plots_ampl-148"><a href="#benchmark_plots_ampl-148"><span class="linenos">148</span></a><span class="sd">        If True, display plots. Default is False. </span>
+</span><span id="benchmark_plots_ampl-149"><a href="#benchmark_plots_ampl-149"><span class="linenos">149</span></a>
+</span><span id="benchmark_plots_ampl-150"><a href="#benchmark_plots_ampl-150"><span class="linenos">150</span></a><span class="sd">    - **pdf** : *boolean* </span>
+</span><span id="benchmark_plots_ampl-151"><a href="#benchmark_plots_ampl-151"><span class="linenos">151</span></a>
+</span><span id="benchmark_plots_ampl-152"><a href="#benchmark_plots_ampl-152"><span class="linenos">152</span></a><span class="sd">        If True, save plots in pdf format. Default is False. </span>
+</span><span id="benchmark_plots_ampl-153"><a href="#benchmark_plots_ampl-153"><span class="linenos">153</span></a>
+</span><span id="benchmark_plots_ampl-154"><a href="#benchmark_plots_ampl-154"><span class="linenos">154</span></a><span class="sd">    - **DIR** : *str*</span>
+</span><span id="benchmark_plots_ampl-155"><a href="#benchmark_plots_ampl-155"><span class="linenos">155</span></a>
+</span><span id="benchmark_plots_ampl-156"><a href="#benchmark_plots_ampl-156"><span class="linenos">156</span></a><span class="sd">        Directory for output files.     </span>
+</span><span id="benchmark_plots_ampl-157"><a href="#benchmark_plots_ampl-157"><span class="linenos">157</span></a>
+</span><span id="benchmark_plots_ampl-158"><a href="#benchmark_plots_ampl-158"><span class="linenos">158</span></a><span class="sd">    Returns:</span>
+</span><span id="benchmark_plots_ampl-159"><a href="#benchmark_plots_ampl-159"><span class="linenos">159</span></a><span class="sd">    ---</span>
+</span><span id="benchmark_plots_ampl-160"><a href="#benchmark_plots_ampl-160"><span class="linenos">160</span></a>
+</span><span id="benchmark_plots_ampl-161"><a href="#benchmark_plots_ampl-161"><span class="linenos">161</span></a><span class="sd">    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.ampl_train_QNN()` </span>
+</span><span id="benchmark_plots_ampl-162"><a href="#benchmark_plots_ampl-162"><span class="linenos">162</span></a><span class="sd">    in the directory `DIR/ampl_plots`.</span>
 </span><span id="benchmark_plots_ampl-163"><a href="#benchmark_plots_ampl-163"><span class="linenos">163</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="benchmark_plots_ampl-164"><a href="#benchmark_plots_ampl-164"><span class="linenos">164</span></a>    <span class="n">name_str</span> <span class="o">=</span> <span class="n">vars_to_name_str_ampl</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
 </span><span id="benchmark_plots_ampl-165"><a href="#benchmark_plots_ampl-165"><span class="linenos">165</span></a>    <span class="n">pdf_str</span> <span class="o">=</span> <span class="s2">&quot;.pdf&quot;</span> <span class="k">if</span> <span class="n">pdf</span> <span class="k">else</span> <span class="s2">&quot;.png&quot;</span>
@@ -534,7 +535,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>...</p>
+            <div class="docstring"><p>Generates plots visualising the outputs produced by <code><a href="training_tools.html#ampl_train_QNN">pqcprep.training_tools.ampl_train_QNN()</a></code>.</p>
 
 <h2 id="arguments"> Arguments:</h2>
 
@@ -555,7 +556,8 @@
 
 <h2 id="returns">Returns:</h2>
 
-<p>....</p>
+<p>Saves plots corresponding to each of the files produced by <code><a href="training_tools.html#ampl_train_QNN">pqcprep.training_tools.ampl_train_QNN()</a></code> 
+in the directory <code>DIR/ampl_plots</code>.</p>
 </div>
 
 
