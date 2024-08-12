@@ -64,7 +64,6 @@ When training in superposition, feed in a wider range of input states to ensure 
 Continue re-structuring and re-documenting the code to ensure a smooth handover. 
 \end{alertblock}
 
-TRY AND DO SOME BARREN PLATEAU ???
 
 \end{frame}
 
@@ -171,19 +170,18 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 \end{frame}
 
 \begin{frame}
-RUN THINGS FOR L=12 TO COMPARE !!
-(nearly done with plots .. running delta=1.0 right now)...
-do plots !!
 
-write docs strings for benchmark plots
-FIGURE OUT HOW TO HANDLE IMPORTING RESOURCES... (just function to return arrays ??)
-
-FIGURE OUT WHICH QISKIT IS CREATING IMPORT PROBLEMS... (with qiskit-terra)
-
-then do more complex pltos 
-
-
-document resource tools 
+TO DO:
+\begin{enumerate}[(a)]
+\item read through documentation to check for errors!
+\item integrate encode.py into plotting : waveform plots and full A/p/3d plots !
+\item update doc files on github 
+\item publish to pypi 
+\end{enumerate}
+add some info here ...
+ 
+ 
+ 
 \end{frame}
 
 \section{Code and Documentation}
@@ -191,15 +189,14 @@ document resource tools
 \begin{frame}
 \frametitle{Code and Documentation}
 \begin{itemize}
-\item Continued work on code documentation: now hosted online \href{https://david-f-amorim.github.io/PQC_function_evaluation/pqcprep.html}{\textcolor{purple}{here}}
+\item A majority of time spent this week was on finishing up the code documentation and restructuring
+\item The \alert{documentation} is now \href{https://david-f-amorim.github.io/PQC_function_evaluation/pqcprep.html}{\textcolor{purple}{hosted online}} and has been extended to around \alert{7,500 words} 
+\item A lot of code functionality has been included in a \alert{command-line tool} with more bespoke applications possible using the over \alert{40 custom functions}
+\item This has been \alert{published} as an \href{https://pypi.org/project/pqcprep/}{\textcolor{purple}{official python package}}, \emph{\alert{pqcprep}}, allowing for code to be straight-forwardly installed via \emph{pip} 
+\item These steps ensure that others working on similar projects have \alert{full access to all resources} developed over the course of this project
 \end{itemize}
-TO DO:
-\begin{enumerate}[(a)]
-\item write doc strings for testQNN, trainQNN, ampl\_trainQNN 
-\item make sure to update doc files on github (-o /docs)
-\item add plotting into comman-line feature (re-write plotting\_tools and check\_plots ...) 
-\item integrate encode.py
-\end{enumerate}
+
+
 \end{frame}
 
 \section{Next Steps}

@@ -18,7 +18,7 @@ a range of functions to be used for more bespoke applications.
 This requires `pip`, which should be automatically installed when using python in most cases (see [here](https://pypi.org/project/pip/) for more information). 
 
 
-The source code for *pqcprep* can also be downloaded from GitHub by cloning the directory via 
+The source code for *pqcprep* can also be downloaded from GitHub by cloning the repository via 
 
                 git clone https://github.com/david-f-amorim/PQC_function_evaluation.git 
 
@@ -187,7 +187,7 @@ Options not requiring values to be passed alongside them, i.e. `-option` :
 
 - **-P**, **--pdf** :
 
-    If passed, output plots are saved as PDFs, ass opposed to PNGs. This has no effect if `-NP` or `--no_plots` is passed.  
+    If passed, output plots are saved as PDFs, as opposed to PNGs. This has no effect if `-NP` or `--no_plots` is passed.  
 
 - **-NP**, **--no_plots** :     
 

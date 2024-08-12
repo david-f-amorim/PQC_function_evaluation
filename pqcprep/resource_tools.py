@@ -27,7 +27,7 @@ def load_data_H23(name):
 
         - `'psi_LPF_processed'` : phase function encoded via linear piecewise functions 
 
-        -  `full_state_GR` : full waveform (amplitude and phase) encoded via the Grover-Rudolh algorithm and linear piecewise functions 
+        -  `'full_state_GR'` : full waveform (amplitude and phase) encoded via the Grover-Rudolh algorithm and linear piecewise functions 
 
         - `'full_state_QGAN'` :  full waveform (amplitude and phase) encoded via the QGAN and linear piecewise functions 
 
