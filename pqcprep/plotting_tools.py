@@ -1,5 +1,5 @@
 """
-Collection of functions regarding plotting and visualisation. 
+Collection of functions relating to plotting and visualisation. 
 """
 
 import numpy as np 
@@ -25,10 +25,9 @@ ticksize=22
 figsize=(10,10)
 """ @private """
 
-def benchmark_plots(arg_dict,DIR, show=False, pdf=False):
-        
+def benchmark_plots(arg_dict,DIR, show=False, pdf=False):  
     """
-    ...
+    Generates plots visualising the outputs produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()`. 
 
     Arguments:
     ---- 
@@ -42,17 +41,18 @@ def benchmark_plots(arg_dict,DIR, show=False, pdf=False):
 
     - **pdf** : *boolean* 
 
-        If True, save plots in pdf format. Default is False. 
+        If True, save plots in pdf format. If False, save plots in png format. Default is False. 
 
     - **DIR** : *str*
 
-        Directory for output files.     
+        Parent directory for output files.     
 
     Returns:
     ---
 
-    ....    
-
+    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.train_QNN()` and `pqcprep.training_tools.test_QNN()` (apart from `metrics_<NAME_STR>.npy`)
+    in the directory `DIR/plots`. 
+   
     """
 
     name_str = vars_to_name_str(arg_dict)
@@ -132,10 +132,9 @@ def benchmark_plots(arg_dict,DIR, show=False, pdf=False):
     return 0
 
 
-def benchmark_plots_ampl(arg_dict,DIR, show=False, pdf=False):
-        
+def benchmark_plots_ampl(arg_dict,DIR, show=False, pdf=False):    
     """
-    ...
+    Generates plots visualising the outputs produced by `pqcprep.training_tools.ampl_train_QNN()`.
 
      Arguments:
     ---- 
@@ -158,7 +157,8 @@ def benchmark_plots_ampl(arg_dict,DIR, show=False, pdf=False):
     Returns:
     ---
 
-    ....
+    Saves plots corresponding to each of the files produced by `pqcprep.training_tools.ampl_train_QNN()` 
+    in the directory `DIR/ampl_plots`.
     """
     name_str = vars_to_name_str_ampl(arg_dict)
     pdf_str = ".pdf" if pdf else ".png"

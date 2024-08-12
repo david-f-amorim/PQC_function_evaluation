@@ -1,5 +1,5 @@
 """
-Collection of functions regarding file handling. 
+Collection of functions relating to file handling. 
 """
 
 import os 
@@ -7,7 +7,7 @@ from fractions import Fraction
 
 def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta):
     """
-    Compress a set of variable values used in network training into a dictionary . 
+    Compress a set of variables used for training the function evaluation network into a dictionary . 
 
     Arguments:
     ---- 
@@ -46,7 +46,7 @@ def compress_args(n,m,L, seed, epochs,func_str,loss_str,meta,nint, mint, phase_r
 
 def compress_args_ampl(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, nint, repeat_params):
     """
-    Compress a set of variable values in training the amplitude encoding network into a dictionary . 
+    Compress a set of variables used for training the amplitude encoding network into a dictionary . 
 
     Arguments:
     ---- 
@@ -79,7 +79,7 @@ def compress_args_ampl(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, nint
 
 def vars_to_name_str(arg_dict):
     """
-    Generate a name string from a set of variable values used in network training.
+    Generate a name string from a set of variables used for training the function evaluation network.
 
     Arguments:
     ---- 
@@ -133,13 +133,13 @@ def vars_to_name_str(arg_dict):
 
 def vars_to_name_str_ampl(arg_dict):
     """
-    Generate a name string from a set of variable values used in training the amplitude encoding network. 
+    Generate a name string from a set of variable used for training the amplitude encoding network.
 
     Arguments:
     ---- 
     - **arg_dict** : *dict* 
 
-        Dictionary created from variable values using `compress_args()`. 
+        Dictionary created from variable values using `compress_args_ampl()`. 
 
 
     Returns:
@@ -232,7 +232,7 @@ def check_temp(arg_dict,DIR, ampl=False):
     ---
     - **exist** : *boolean* 
 
-        Returns True if results already exists and False otherwise. 
+        Returns True if results already exist and False otherwise. 
     
     """  
     
@@ -275,7 +275,7 @@ def check_plots(arg_dict,DIR):
     ---
     - **exist** : *boolean* 
 
-        Returns True if results already exists and False otherwise. 
+        Returns True if results already exist and False otherwise. 
     
     """
     name=vars_to_name_str(arg_dict)  

@@ -1,5 +1,5 @@
 """
-Collection of functions regarding phase extraction. 
+Collection of functions relating to phase extraction. 
 """
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister

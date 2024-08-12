@@ -24,7 +24,7 @@ def N_gate(params, real=False):
 
     - **real** : *boolean*
        
-        If True, a two-parameter version of the $\mathcal{N}$ gate is implemented instead, with one of CX gatess and all of the 
+        If True, a two-parameter version of the $\mathcal{N}$ gate is implemented instead, with one of the CX gates and all of the 
         Rz gates removed. This ensures real amplitudes. Default is False.   
              
     Returns:
@@ -104,7 +104,7 @@ def input_layer(n, m, par_label, ctrl_state=0, real=False, params=None, AA=False
 
     - **wrap**: *boolean* 
 
-        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.     
+        If True, map rotation angles to an interval specified by `map_angle()`. Default is False.     
 
     Returns:
     ---
@@ -200,7 +200,7 @@ def conv_layer_NN(m, par_label, real=False, params=None, wrap=False):
 
     - **wrap**: *boolean* 
 
-        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.         
+        If True, map rotation angles to an interval specified by `map_angle()`. Default is False.         
   
     Returns:
     ---
@@ -278,7 +278,7 @@ def conv_layer_AA(m, par_label, real=False, params=None, wrap=False):
 
     - **wrap**: *boolean* 
 
-        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.        
+        If True, map rotation angles to an interval specified by `map_angle()`. Default is False.        
   
     Returns:
     ---
@@ -333,7 +333,7 @@ def digital_encoding(n):
     Set up a parametrised quantum circuit for the digital encoding of a binary number onto 
     a quantum register. 
 
-    The encoding is set by assigning the value `0` to the $i$th parameter of the circuit to 
+    The encoding is set by assigning the value 0 to the $i$th parameter of the circuit to 
     represent a state $\ket{0}$ for the $i$th bit and assigning $\pi$ for the case $\ket{1}$. 
     Values can be assigned to circuit parameters using qiskit's `QuantumCircuit.assign_parameters()`.  
 
@@ -491,7 +491,7 @@ def generate_network(n,m,L, encode=False, toggle_IL=True, initial_IL=True, input
 
     - **wrap**: *boolean* 
 
-        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.     
+        If True, map rotation angles to an interval specified by `map_angle()`. Default is False.     
 
         
     Returns:
@@ -609,7 +609,7 @@ def A_generate_network(n,L, repeat_params=False, wrap=False):
 
     - **wrap**: *boolean* 
 
-        If True, map rotation angles to an interval specified by `map_angles()`. Default is False.      
+        If True, map rotation angles to an interval specified by `map_angle()`. Default is False.      
 
     Returns:
     ---
@@ -649,7 +649,7 @@ def get_state_vec(circuit):
     """
     Get statevector produced by a quantum circuit. 
 
-    Uses the `qiskit.Aer` backend. 
+    Uses the `qiskit_aer` backend. 
 
     Arguments:
     ----

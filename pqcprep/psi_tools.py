@@ -1,5 +1,5 @@
 r"""
-Collection of functions relating to the function $\Psi$ to be evaluated by the QCNN.
+Collection of functions relating to the phase function $\Psi$ to be evaluated by the QCNN.
 """
 import numpy as np 
 from .binary_tools import bin_to_dec, dec_to_bin

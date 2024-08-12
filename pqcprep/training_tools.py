@@ -200,7 +200,7 @@ def set_WIM_weights(generated_weights, arg_dict):
     return WIM_weights_arr
 
 def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mint, phase_reduce, train_superpos, real, repeat_params, WILL_p, WILL_q, delta, DIR):
-    """
+    r"""
     Train a QCNN to perform function evaluation $\ket{j}\ket{0} \mapsto \ket{j}\ket{\Psi(j)}$.
 
     The QCNN is generated using `pqcprep.pqc_tools.generate_network()`. 
@@ -253,7 +253,7 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
     - **phase_reduce** : *boolean* 
 
-        If True, reduce $\Psi(j)$ to the interval $(0, 2 \pi]$ i.e. perform the mapping $\Psi \to \Psi \text{mod} 2 \pi$. 
+        If True, reduce $\Psi(j)$ to the interval $[0, 2 \pi)$ i.e. perform the mapping $\Psi \to \Psi (\text{mod} \; 2 \pi)$. 
 
     - **train_superpos** : *boolean*
 
@@ -286,12 +286,12 @@ def train_QNN(n,m,L, seed, epochs,func_str,loss_str,meta, recover_temp, nint, mi
 
     - **DIR** : *str*
 
-        Directory for output files.      
+        Parent directory for output files.      
 
     Returns:
     ----
 
-    The output produced by the training is saved in binary `.npy` files in the directory `DIR/ampl_outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
+    The output produced by the training is saved in binary `.npy` files in the directory `DIR/outputs` using naming convention `<TYPE>_<NAME_STR>.npy`
     where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str()` and `<TYPE>` is one of: 
 
     - `weights` : file containing the QCNN weights determined by the optimiser;
@@ -578,7 +578,7 @@ def test_QNN(n,m,L,seed,epochs, func_str,loss_str,meta,nint,mint,phase_reduce,tr
     """
     Test performance of a QCNN trained for function evaluation with respect to different metrics. 
 
-    This requires the existence of an appropriate `weights_<NAME_STR>.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`. 
+    This requires the existence of an appropriate `weights_<NAME_STR>.npy` file (as produced by `train_QNN()`) in the directory `DIR/outputs`, where `<NAME_STR>` is the name string produced by `pqcprep.file_tools.vars_to_name_str()`. 
 
     Arguments: 
     ---
@@ -761,7 +761,7 @@ def ampl_train_QNN(n,L,x_min,x_max,seed, epochs,func_str,loss_str,meta, recover_
 
     - **DIR** : *str*
 
-        Directory for output files.     
+        Parent directory for output files.     
           
 
     Returns:
