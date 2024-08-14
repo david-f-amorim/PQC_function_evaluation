@@ -10,28 +10,28 @@ L_phase = 6
 real_p = True 
 m = 3
 psi_mode="psi"
-weights_phase =f"pqcprep/outputs/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.4_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
+weights_phase =f"full_encode/weights_6_{m}(0)_{L_phase}_600_{psi_mode}_SAM_0.4_(S)(PR)(r)_1680458526.npy" #"outputs/weights_6_3(0)_6_600_psi_MM_(S)(PR)(r).npy" 
 
 repeat_params=None
 operators="QRQ"
 no_UA=True
 
 n = 6
-weights_ampl = "pqcprep/ampl_outputs/weights_6_3_600_x76_MM_40_168_zeros.npy" 
-ampl_vec = np.load("pqcprep/ampl_outputs/statevec_6_3_600_x76_MM_40_168_zeros.npy")
+weights_ampl = "full_encode/weights_6_3_600_x76_MM_40_168_zeros.npy" 
+ampl_vec = np.load("full_encode/statevec_6_3_600_x76_MM_40_168_zeros.npy")
 L_ampl =3
 
 mint = 0
 phase_reduce = True
 
 # plot settings
-comp =False # compare to Hayes 2023  
+comp =True # compare to Hayes 2023  
 show = True # show plots
-pdf = True # save outputs as pdf 
+pdf = False # save outputs as pdf 
 delta_round =True #calculate difference from rounded version 
 
-no_A = True # don't produce amplitude plot 
-no_p = False# don't produce phase plot 
+no_A = False # don't produce amplitude plot 
+no_p = True# don't produce phase plot 
 no_h = True # don't produce h plot
 
 no_full_A =True # don't produce full amplitude plot
@@ -45,7 +45,7 @@ A_L_comp = False
 QGAN_comp = False
 phase_round_comp = False
 phase_L_comp = False
-phase_loss_comp = True
+phase_loss_comp = False
 phase_shift_comp = False 
 phase_RP_comp=False 
 
@@ -91,8 +91,8 @@ wave_real_target_rounded = np.real(h_target_rounded)
 wave_im_target_rounded = np.imag(h_target_rounded)
 
 # load amplitude-only statevector (for QCNN, QGAN, GR)
-ampl_vec_QGAN = np.abs(np.load("pqcprep/ampl_outputs/amp_state_QGAN.npy"))
-ampl_vec_GR = np.abs(np.load("pqcprep/ampl_outputs/amp_state_GR.npy")) 
+ampl_vec_QGAN = np.abs(np.load("ampl_outputs/amp_state_QGAN.npy"))
+ampl_vec_GR = np.abs(np.load("ampl_outputs/amp_state_GR.npy")) 
 
 # load LPF phase and waveform
 psi_LPF = np.load("full_encode/psi_LPF_processed.npy")
@@ -106,7 +106,7 @@ phase = phase_from_state(state_vec)
 # get full wavefunction 
 real_wave =np.real(state_vec)
 im_wave = np.imag(state_vec)
-
+"""
 # print info
 metrics =np.load("pqcprep/outputs/metrics"+weights_phase[23:],allow_pickle='TRUE')
 print("-----------------------------------")
@@ -116,7 +116,7 @@ print(f'Eps: \t{metrics.item().get("eps"):.3e}')
 print(f'Chi: \t{metrics.item().get("chi"):.3e}') 
 print(f'Omega: \t{metrics.item().get("omega"):.3f}')
 print("-----------------------------------")
-
+"""
 #------------------------------------------------------------------------------
 if no_A==False:
     """
@@ -126,15 +126,16 @@ if no_A==False:
 
     ax[0].plot(x_arr,ampl_target, color="black")
     if comp:
-        ax[0].scatter(x_arr,ampl_vec_QGAN,label="QGAN", color="green")
+        #ax[0].scatter(x_arr,ampl_vec_QGAN,label="QGAN", color="green")
         ax[0].scatter(x_arr,ampl_vec_GR,label="GR", color="blue")
     ax[0].scatter(x_arr,ampl_vec,label="QCNN", color="red")
 
     ax[0].set_ylabel(r"$\tilde A(f)$", fontsize=fontsize)
     ax[0].legend(fontsize=fontsize, loc='upper right')
     ax[0].tick_params(axis="both", labelsize=ticksize)
-    ax[0].set_xticks([])
-
+    ax[0].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
+    #ax[0].set_xticks([])
+    """
     if comp:
         ax[1].scatter(x_arr,ampl_target-ampl_vec_QGAN,label="QGAN", color="green")
         ax[1].scatter(x_arr,ampl_target-ampl_vec_GR,label="GR", color="blue")
@@ -143,7 +144,8 @@ if no_A==False:
     ax[1].set_ylabel(r"$\Delta \tilde A(f)$", fontsize=fontsize)
     ax[1].tick_params(axis="both", labelsize=ticksize)
     ax[1].set_xlabel(r"$f$ (Hz)", fontsize=fontsize)
-
+    """
+    ax[1].set_visible(False)  
     fig.tight_layout()
     fig.savefig(f"full_encode/amplitude_comp{pdf_str}", bbox_inches='tight', dpi=500)
 

@@ -169,21 +169,6 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 \end{columns}
 \end{frame}
 
-\begin{frame}
-
-TO DO:
-\begin{enumerate}[(a)]
-\item read through documentation to check for errors!
-\item integrate encode.py into plotting :  full A/p/3d plots !
-\item update doc files on github 
-\item publish to pypi 
-\end{enumerate}
-
- 
-ADD A "GOOD" AMPL FILE TO RESOURCES ?... 
- 
- 
-\end{frame}
 
 \section{Code and Documentation}
 
@@ -207,6 +192,7 @@ ADD A "GOOD" AMPL FILE TO RESOURCES ?...
 
 \begin{itemize}
 \item Start work on poster for Carnegie 
+\item something something interference ?
 \end{itemize}
 
 \end{frame}
