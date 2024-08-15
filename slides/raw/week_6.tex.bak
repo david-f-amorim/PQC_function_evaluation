@@ -152,7 +152,7 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\item Slightly randomised input states ($\delta = 0.2$)  have a \alert{positive effect} on performance
+\item Slightly randomised input states ($\delta = 0.2$)  have a \alert{slight positive effect} on performance
 \item More significantly randomised input states ($\delta \geq 0.6$) have an \alert{adverse effect}
 \item Notably, no positive effect of non-zero $\delta$ is apparent for $L=6$  
 \item Also notable are the appearance of thin \alert{`stripes'} with increasing $\delta$ which could be linked to input layer structure
@@ -192,7 +192,7 @@ Amplitudes after applying $\tilde{Q}$ with $\Psi(f) \sim f^2$ and the input regi
 
 \begin{itemize}
 \item Start work on poster for Carnegie 
-\item something something interference ?
+\item ...
 \end{itemize}
 
 \end{frame}

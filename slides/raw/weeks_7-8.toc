@@ -1,0 +1,3 @@
+\babel@toc {UKenglish}{}
+\beamer@sectionintoc {1}{Phase Encoding}{3}{0}{1}
+\beamer@sectionintoc {2}{Handover}{11}{0}{2}
