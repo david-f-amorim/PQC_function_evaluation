@@ -16,6 +16,10 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \hypersetup{colorlinks=false, bookmarks=true}
+\usepackage{tikz}
+\usetikzlibrary{quantikz2}
+\usepackage{adjustbox}
+
 
 
 \usetheme{Madrid}
@@ -67,13 +71,13 @@ Hand over the slides, documentation, code and the poster for the Carnegie Trust.
 \begin{equation}
 j = \sum^{n -1}_{k=0} j_k 2^{k-p}
 \end{equation} 
-\item Consider a \alert{phase function} $\Psi$ over the domain $\Omega = \{ j \}$ and construct an \alert{$M$-fold partition} ($M = 2^g$, $g \leq n \in \mathbb{N}$) into equal sub-domains $\Omega_m$:
+\item Consider a \alert{phase function} $\Psi$ over the domain $\Omega = \{ j \}$ and construct an \alert{$M$-fold partition} ($M = 2^m$, $m \leq n \in \mathbb{N}$) into equal sub-domains $\Omega_u$:
 \begin{equation}
-\Omega = \bigcup_{m=1}^M \Omega_m, \; \; \; \Omega_m \cap \Omega_l = \emptyset, \;  \; \; |\Omega_m| = |\Omega_l|
+\Omega = \bigcup_{u=1}^M \Omega_u, \; \; \; \Omega_u \cap \Omega_v = \emptyset, \;  \; \; |\Omega_u| = |\Omega_v|
 \end{equation}
 \item On each sub-domain, approximate $\Psi$ using a \alert{linear function}:
 \begin{equation}
-\Psi(j) = \alpha_m j + \beta_m, \; \; \; j \in \Omega_m
+\Psi(j) = \alpha_u j + \beta_u, \; \; \; j \in \Omega_u
 \end{equation}
 \end{itemize}
 
@@ -84,7 +88,7 @@ j = \sum^{n -1}_{k=0} j_k 2^{k-p}
 \frametitle{Phase Encoding within a Sub-domain}
 
 \begin{block}{Aim 1}
-For $j \in \Omega_m$ construct an operator $\hat{O}_m$ such that $\ket{j} \mapsto e^{i (\alpha_m j + \beta_m )} \ket{j}$. 
+For $j \in \Omega_u$ construct an \alert{operator $\hat{O}_u$} such that $\ket{j} \mapsto e^{i (\alpha_u j + \beta_u )} \ket{j}$. 
 \end{block}
 
 \begin{itemize}
@@ -97,13 +101,13 @@ e^{i \varphi} & 0 \\ 0 & e^{i \varphi}
 \end{pmatrix}
 \end{equation}
 each acting on the $k$th qubit
-\item Then 
+\item Then \alert{
 \begin{equation}
-\hat{O}_m \equiv \bigotimes^{n-1}_{k=0} \hat{P}^{(k)} (\beta_m / n) \hat{R}^{(k)} \left( \alpha_m 2^{k-p} \right)
-\end{equation}
+\hat{O}_u \equiv \bigotimes^{n-1}_{k=0} \hat{P}^{(k)} (\beta_u / n) \hat{R}^{(k)} \left( \alpha_u 2^{k-p} \right)
+\end{equation}}
 transforms 
 \begin{equation}
-\ket{j} \mapsto \exp \left[ i \left( \sum_{k=0}^{n-1} \alpha_m j_k 2^{k-p} + \beta_m \right) \right] \ket{j} = e^{i (\alpha_m j + \beta_m )} \ket{j}
+\ket{j} \mapsto \exp \left[ i \left( \sum_{k=0}^{n-1} \alpha_u j_k 2^{k-p} + \beta_u \right) \right] \ket{j} = e^{i (\alpha_u j + \beta_u )} \ket{j}
 \end{equation}
 \end{itemize}
 \end{frame}
@@ -111,11 +115,11 @@ transforms
 \begin{frame}
 \frametitle{Selecting the Subdomain}
 \begin{itemize}
-\item It is straight-forward to construct $\hat{O}_m$ for each of the sub-domains $\Omega_m$ 
-\item More challenging is applying the correct $\hat{O}_m$ based on the sub-domain corresponding to each $\ket{j}$
+\item It is straight-forward to construct $\hat{O}_u$ for each of the sub-domains $\Omega_u$ 
+\item More challenging is \alert{applying the correct $\hat{O}_u$} based on the sub-domain corresponding to each $\ket{j}$
 \end{itemize}
 \begin{block}{Aim 2}
-Construct a system of controls such that $\hat{O}_m$ is applied to $\ket{j}$ if and only if $j \in \Omega_m$
+Construct a \alert{system of controls} such that $\hat{O}_u$ is applied to $\ket{j}$ if and only if $j \in \Omega_u$
 \end{block}
 \end{frame}
 
@@ -124,21 +128,26 @@ Construct a system of controls such that $\hat{O}_m$ is applied to $\ket{j}$ if 
 \begin{columns}
 \begin{column}{0.4\textwidth}
 \begin{itemize}
-\item Start with the simplest possible case, a 2-fold partition ($M=2$): 
+\item Start with the simplest possible case, a \alert{2-fold} partition ($M=2$): 
 \begin{equation}
 j \in \begin{cases}
 \Omega_1 & j_0 = 0 \\
 \Omega_2 & j_0 = 1
 \end{cases}
 \end{equation}
-\item Using an ancilla qubit, $\hat{O}_1$ is applied for $j \in \Omega_1$ and $\hat{O}_2$ for $j \in \Omega_2$
+\item Using an \alert{ancilla qubit}, $\hat{O}_1$ is applied for $j \in \Omega_1$ and $\hat{O}_2$ for $j \in \Omega_2$
 \item The ancilla is required since the operation applied to $\ket{j_0}$ is conditional on $\ket{j_0}$ itself 
 \end{itemize}
 \end{column}
 \begin{column}{0.6\textwidth}
 \begin{figure}
 \centering 
-\includegraphics[width=\textwidth]{im/circuit_2-fold}
+\begin{quantikz}[row sep={0.7cm,between origins}]
+\lstick{$\ket{0}_a$}& \targ{} & \ctrl{1} & \targ{} & \ctrl{1} &  \\
+\lstick{$\ket{j_0}$}& \ctrl{-1} & \gate[3]{O_2} & & \gate[3]{O_1} & \rstick[3]{$\ket{j}$} \\
+\lstick{\vdots}&& &&&   \\
+\lstick{$\ket{j_{n-1}}$}&& &&& 
+\end{quantikz}
 \caption{Circuit diagram for $M=2$}
 \end{figure}
 \end{column}
@@ -150,17 +159,25 @@ j \in \begin{cases}
 \begin{columns}
 \begin{column}{0.4\textwidth}
 \begin{itemize}
-\item The approach shown on the previous slide requires $1 \leq  \log_2 M  \leq n $ ancilla qubits
-\item The number of controls required is $\sim \mathcal{O}(M \log M)$ as there are $M$ operators, each controlled by all ancillas 
-\item A `pyramid' network of X gates is applied to the ancillas for case distinction
-\item For $M \sim 2^n$ the gate cost is exponential!
+\item The approach shown on the previous slide requires \alert{$1 \leq  \log_2 M  \leq n $ ancilla qubits}
+\item The number of \alert{controls} required is \alert{$\mathcal{O}(M \log M)$} as there are $M$ operators, each controlled by all ancillas 
+\item For $M \sim 2^n$ the gate cost is exponential
 \end{itemize}
 \end{column}
 \begin{column}{0.6\textwidth}
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{im/circuit_4-fold}
-\caption{Circuit diagram for $M=4$. Note that $j \in \Omega_m$ if $j_0j_1 =m-1$ (e.g. $j\in \Omega_3$ if $j_0 j_1 =10$ ).}
+\begin{adjustbox}{width=\textwidth}
+\begin{quantikz}[row sep={0.7cm,between origins}]
+\lstick{$\ket{0}_a$}& \targ{} && \ctrl{2} &  & \ctrl{1} & \targ{} & \ctrl{2}&  & \ctrl{2} &  \\
+\lstick{$\ket{0}_a$}&& \targ{} & \ctrl{0} & \targ{} & \ctrl{1} & \targ{} & \ctrl{0} & \targ{} &\ctrl{1} &  \\
+\lstick{$\ket{j_0}$}& \ctrl{-2} &   & \gate[4]{O_4} &  & \gate[4]{O_3}  && \gate[4]{O_2}& & \gate[4]{O_1} & \rstick[4]{$\ket{j}$}  \\
+\lstick{$\ket{j_1}$}&& \ctrl{-2} & &  &&  && &&  \\
+\lstick{\vdots}&&& &&&  && && \\
+\lstick{$\ket{j_{n-1}}$}&&& &&& && &&
+\end{quantikz}
+\end{adjustbox}
+\caption{Circuit diagram for $M=4$. Note that $j \in \Omega_u$ if $j_0j_1 =u-1$ (e.g. $j\in \Omega_3$ if $j_0 j_1 =10$).}
 \end{figure}
 \end{column}
 \end{columns}
@@ -169,16 +186,86 @@ j \in \begin{cases}
 \begin{frame}
 \frametitle{A Recursive Approach}
 \begin{itemize}
-\item Since $M=2^g$ for some $g \leq n \in \mathbb{N}$ we can view the partition of $\Omega$ as a recursive process, splitting the domain into halves $g$ times
-\item ....
+\item Since $M=2^m$ for some $m \leq n \in \mathbb{N}$ we can view the partition of $\Omega$ as a recursive process, splitting the domain into halves $m$ times
+\item Associate with each control qubit, $g$, two operators, $\hat{O}^{(g)}_0$ and $\hat{O}^{(g)}_1$ EACH ACTING ON THE REMAINING QUBITS! (CASCADE)
+\item  Is it possible to construct 
+\begin{equation}
+\hat{O}_u = \prod^m_{g=1} \hat{O}^{(g)} ??
+\end{equation} 
+\item DEFINE THE APPROPRIATE O AND U OPERATORS !!!
 \end{itemize}
 
-TRY TO GET RID OF ANCILLAS!! THIS IS ESSENTIALLY A CLASSICAL ALGORITHM! MUST BE POSSIBLE TO DO IT BETTER!!
 \end{frame}
 
 \begin{frame}
-\frametitle{Qiskit Implementation}
+\frametitle{A Recursive Approach}
+\begin{figure}
+\centering
+\begin{adjustbox}{height=0.8\Height}
+\begin{quantikz}[row sep={0.7cm,between origins}, align equals at=3.5]
+\lstick{\vdots}&& &&   \\
+\lstick{$\ket{j_g}$}&   &  & \ctrl{1} &  \\
+\lstick{$\ket{j_{g+1}}$}&  \gate[3]{O^{(g)}_0} & & \gate[3]{O^{(g)\dagger}_0 O^{(g)}_1} &   \\
+\lstick{\vdots}&& &&   \\
+\lstick{$\ket{j_{n-1}}$}&& &&
+\end{quantikz} $\equiv$  \begin{quantikz}[row sep={0.7cm,between origins}, align equals at=3.5]
+\lstick{\vdots}& &  \\
+\lstick{$\ket{j_g}$}     & \ctrl{1} &  \\
+\lstick{$\ket{j_{g+1}}$}  & \gate[3]{O^{(g)}} &   \\
+\lstick{\vdots}& &   \\
+\lstick{$\ket{j_{n-1}}$}& &
+\end{quantikz}
+\end{adjustbox}
+\caption{The controlled operator $\hat{O}^{(g)}$ ($0 \leq g \leq m-1$)}
+\end{figure}
+\begin{figure}
+\centering
+\begin{adjustbox}{height=0.8\Height}
+\begin{quantikz}[row sep={0.7cm,between origins}, align equals at=2.5]
+\lstick{$\ket{j_0}$}&  \gate[3]{U^{(g)}_0}  &  \gate[3]{U^{(g)\dagger}_0 U^{(g)}_1}  &  \\
+\lstick{\vdots}&& &  \\
+\lstick{$\ket{j_{g+1}}$}&  &&   \\
+\lstick{$\ket{j_g}$}&     & \ctrl{-1} &  \\
+\end{quantikz} $\equiv$  \begin{quantikz}[row sep={0.7cm,between origins}, align equals at=2.5]
+\lstick{$\ket{j_0}$}&  \gate[3]{U^{(g)}}   &   \\
+\lstick{\vdots}&&   \\
+\lstick{$\ket{j_{g+1}}$}&  &    \\
+\lstick{$\ket{j_g}$}& \ctrl{-1}    &  \\
+\end{quantikz}
+\end{adjustbox}
+\caption{The controlled operator $\hat{U}^{(g)}$ ($1 \leq g \leq m-1$)}
+\end{figure}
+\end{frame}
 
+\begin{frame}
+\frametitle{A Recursive Approach}
+\begin{figure}
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{quantikz}[row sep={0.7cm,between origins}]
+\lstick{$\ket{j_0}$} & \ctrl{1} & &  \ \ldots\ & & \gate[3]{U^{(m-1)}} &  \ \ldots\   & \gate[1]{U^{(1)}} & \gate{U^{(0)}} &   \rstick[4]{controls}  \\
+\lstick{$\ket{j_1}$}&  \gate[7]{O^{(0)}}  &   \ctrl{1} &  \ \ldots\ && &  \ \ldots\ & \ctrl{-1} & & \\
+\lstick{$\vdots$} & &   \gate[6]{O^{(1)}}&  \ \ldots\ & & &  \ \ldots\ & & &  \\
+\lstick{$\ket{j_{m-1}}$} & & &  \ \ldots\ &   \ctrl{1} & \ctrl{-1}  &  \ \ldots\ &  & & \\
+\lstick{$\ket{j_{m}}$} & & & \ \ldots\ & \gate[4]{O^{(m-1)}} \slice{} &  & \ \ldots\ & & & \rstick[4]{targets} \\
+\lstick{$\ket{j_{m+1}}$}& & &  \ \ldots &  & &  \ \ldots\ & & & \\
+\lstick{\vdots}& & &  \ \ldots\ &  &  & \ \ldots\  & & & \\
+\lstick{$\ket{j_{n-1}}$}& & &  \ \ldots\ & & &  \ \ldots\ & & &
+\end{quantikz}
+\end{adjustbox}
+\caption{Cascaded controls: $2m-1$ controlled operations}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comments Sarah}
+For the other problem, yes this is exactly what I had in mind, this is the right idea. A couple of suggestions:
+\begin{itemize}
+\item I think that you can get rid of the ancillae entirely, and just condition directly on the first few (log M) qubits.
+\item I agree that you should be able to simplify a bit more by thinking about applying the operators recursively.
+\item Sadly it will always scale exponentially if we take $M \sim O(2^n)$. It would be helpful to consider breaking the circuit (conceptually, not literally...) into m = log M qubits (which will be the controls) and n-m remaining qubits (the targets). If m $\ll$ n, how does the complexity scale with m and n?
+\item Finally, how does the complexity of applying the phase in this way compare to the previous method of calculating the phase in an ancilla register, applying the phase, and then uncomputing the result in the ancilla.
+\end{itemize}
 
 \end{frame}
 
