@@ -71,16 +71,40 @@ Hand over the slides, documentation, code and the poster for the Carnegie Trust.
 \begin{equation}
 j = \sum^{n -1}_{k=0} j_k 2^{k-p}
 \end{equation} 
-\item Consider a \alert{phase function} $\Psi$ over the domain $\Omega = \{ j \}$ and construct an \alert{$M$-fold partition} ($M = 2^m$, $m \leq n \in \mathbb{N}$) into equal sub-domains $\Omega_u$:
+\item Consider a \alert{phase function} $\Psi$ over the domain $\mathcal{D} = \{ j \}$ and construct an \alert{$M$-fold partition} ($M = 2^m$, $m \leq n \in \mathbb{N}$) into equal sub-domains $\mathcal{D}_u$:
 \begin{equation}
-\Omega = \bigcup_{u=1}^M \Omega_u, \; \; \; \Omega_u \cap \Omega_v = \emptyset, \;  \; \; |\Omega_u| = |\Omega_v|
+\mathcal{D} = \bigcup_{u=1}^M \mathcal{D}_u, \; \; \; \mathcal{D}_u \cap \mathcal{D}_v = \emptyset, \;  \; \; |\mathcal{D}_u| = |\mathcal{D}_v|
 \end{equation}
 \item On each sub-domain, approximate $\Psi$ using a \alert{linear function}:
 \begin{equation}
-\Psi(j) = \alpha_u j + \beta_u, \; \; \; j \in \Omega_u
+\Psi(j) = \alpha_u j + \beta_u, \; \; \; j \in \mathcal{D}_u
 \end{equation}
 \end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Preliminaries}
+\begin{alertblock}{Aim}
+Construct an appropriate operator to transform 
+\begin{equation}
+\ket{j} \mapsto e^{i \Psi (j)} \ket{j}
+\end{equation}
+via the linear piecewise approximation
+\begin{equation}
+\ket{j} \mapsto e^{i (\alpha_u j + \beta_u)} \ket{j} \; \; \; (j \in \mathcal{D}_u)
+\end{equation}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{General Remarks}
+\begin{itemize}
+\item The $2^m$ pairs of coefficients $(\alpha_u, \beta_u)$ require $2^m$ independent operators $\hat{O}_u$ to implement
+\item Each operator $\hat{O}_u$ will generally involve $n$ controlled rotations 
+\item The choice of $\hat{O}_u$ will generally involve all $m$ control qubits 
+\item Thus, it seems like a \alert{$\sim \mathcal{O}(2^m n m)$ complexity} is to be expected for this algorithm [NO! A N-CONTROLLED OPERATION HAS A COST HIGHER THAN N!!] => READ PAPERS (BOOKMARKED!)
+\item While recursion cannot reduce the required number of independent operators it could simplify circuit structure
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -88,7 +112,7 @@ j = \sum^{n -1}_{k=0} j_k 2^{k-p}
 \frametitle{Phase Encoding within a Sub-domain}
 
 \begin{block}{Aim 1}
-For $j \in \Omega_u$ construct an \alert{operator $\hat{O}_u$} such that $\ket{j} \mapsto e^{i (\alpha_u j + \beta_u )} \ket{j}$. 
+For $j \in \mathcal{D}_u$ construct an \alert{operator $\hat{O}_u$} such that $\ket{j} \mapsto e^{i (\alpha_u j + \beta_u )} \ket{j}$. 
 \end{block}
 
 \begin{itemize}
@@ -115,11 +139,11 @@ transforms
 \begin{frame}
 \frametitle{Selecting the Subdomain}
 \begin{itemize}
-\item It is straight-forward to construct $\hat{O}_u$ for each of the sub-domains $\Omega_u$ 
+\item It is straight-forward to construct $\hat{O}_u$ for each of the sub-domains $\mathcal{D}_u$ 
 \item More challenging is \alert{applying the correct $\hat{O}_u$} based on the sub-domain corresponding to each $\ket{j}$
 \end{itemize}
 \begin{block}{Aim 2}
-Construct a \alert{system of controls} such that $\hat{O}_u$ is applied to $\ket{j}$ if and only if $j \in \Omega_u$
+Construct a \alert{system of controls} such that $\hat{O}_u$ is applied to $\ket{j}$ if and only if $j \in \mathcal{D}_u$
 \end{block}
 \end{frame}
 
@@ -131,11 +155,11 @@ Construct a \alert{system of controls} such that $\hat{O}_u$ is applied to $\ket
 \item Start with the simplest possible case, a \alert{2-fold} partition ($M=2$): 
 \begin{equation}
 j \in \begin{cases}
-\Omega_1 & j_0 = 0 \\
-\Omega_2 & j_0 = 1
+\mathcal{D}_1 & j_0 = 0 \\
+\mathcal{D}_2 & j_0 = 1
 \end{cases}
 \end{equation}
-\item Using an \alert{ancilla qubit}, $\hat{O}_1$ is applied for $j \in \Omega_1$ and $\hat{O}_2$ for $j \in \Omega_2$
+\item Using an \alert{ancilla qubit}, $\hat{O}_1$ is applied for $j \in \mathcal{D}_1$ and $\hat{O}_2$ for $j \in \mathcal{D}_2$
 \item The ancilla is required since the operation applied to $\ket{j_0}$ is conditional on $\ket{j_0}$ itself 
 \end{itemize}
 \end{column}
@@ -160,7 +184,7 @@ j \in \begin{cases}
 \begin{column}{0.4\textwidth}
 \begin{itemize}
 \item The approach shown on the previous slide requires \alert{$1 \leq  \log_2 M  \leq n $ ancilla qubits}
-\item The number of \alert{controls} required is \alert{$\mathcal{O}(M \log M)$} as there are $M$ operators, each controlled by all ancillas 
+\item The number of \alert{controls} required is \alert{$\mathcal{O}(M \log M n)$} as there are $M$ operators, each controlled by all ancillas and each involving $n$ controlled rotations
 \item For $M \sim 2^n$ the gate cost is exponential
 \end{itemize}
 \end{column}
@@ -177,7 +201,7 @@ j \in \begin{cases}
 \lstick{$\ket{j_{n-1}}$}&&& &&& && &&
 \end{quantikz}
 \end{adjustbox}
-\caption{Circuit diagram for $M=4$. Note that $j \in \Omega_u$ if $j_0j_1 =u-1$ (e.g. $j\in \Omega_3$ if $j_0 j_1 =10$).}
+\caption{Circuit diagram for $M=4$. Note that $j \in \mathcal{D}_u$ if $j_0j_1 =u-1$ (e.g. $j\in \mathcal{D}_3$ if $j_0 j_1 =10$).}
 \end{figure}
 \end{column}
 \end{columns}
@@ -186,7 +210,7 @@ j \in \begin{cases}
 \begin{frame}
 \frametitle{A Recursive Approach}
 \begin{itemize}
-\item Since $M=2^m$ for some $m \leq n \in \mathbb{N}$ we can view the partition of $\Omega$ as a recursive process, splitting the domain into halves $m$ times
+\item Since $M=2^m$ for some $m \leq n \in \mathbb{N}$ we can view the partition of $\mathcal{D}$ as a recursive process, splitting the domain into halves $m$ times
 \item Associate with each control qubit, $g$, two operators, $\hat{O}^{(g)}_0$ and $\hat{O}^{(g)}_1$ EACH ACTING ON THE REMAINING QUBITS! (CASCADE)
 \item  Is it possible to construct 
 \begin{equation}
@@ -255,6 +279,13 @@ j \in \begin{cases}
 \end{adjustbox}
 \caption{Cascaded controls: $2m-1$ controlled operations}
 \end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparison}
+\begin{itemize}
+\item ...
+\end{itemize}
 \end{frame}
 
 \begin{frame}
