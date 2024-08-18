@@ -102,7 +102,8 @@ via the linear piecewise approximation
 \item The $2^m$ pairs of coefficients $(\alpha_u, \beta_u)$ require $2^m$ independent operators $\hat{O}_u$ to implement
 \item Each operator $\hat{O}_u$ will generally involve $n$ controlled rotations 
 \item The choice of $\hat{O}_u$ will generally involve all $m$ control qubits 
-\item Thus, it seems like a \alert{$\sim \mathcal{O}(2^m n m)$ complexity} is to be expected for this algorithm [NO! A N-CONTROLLED OPERATION HAS A COST HIGHER THAN N!!] => READ PAPERS (BOOKMARKED!)
+\item Thus, it seems like a \alert{$\sim \mathcal{O}(2^m n m)$ complexity} is to be expected for this algorithm [NO! A N-CONTROLLED OPERATION HAS A COST HIGHER THAN N!!] => READ PAPERS (BOOKMARKED!): Lemma 7.5  / Cor 7.6 Barenco ' linear approximation: Lemma 7.8 Barenco  ; linear with ancilla ?! Corollary 7.12 
+\item 
 \item While recursion cannot reduce the required number of independent operators it could simplify circuit structure
 \end{itemize}
 \end{frame}
@@ -284,7 +285,12 @@ j \in \begin{cases}
 \begin{frame}
 \frametitle{Comparison}
 \begin{itemize}
-\item ...
+\item The current implementation uses $n_l \equiv m$ label qubits (with $2^{n_l} =M$) as well as $n_c$ coefficient qubits  
+\item The label operation, which initialises the label register into the state $\ket{u}$ if $j \in \mathcal{D}_u$ has a CX cost of 
+\begin{equation}
+C_\text{Label}(n, n_l) = 2 n_l (n_l -1) + 2^{n_l +1 } (6 n + n_l +1) 
+\end{equation}
+\item The label gate architecture is proposed in H\"aner 2018 and consists of an incrementing circuit and integer comparator circuits...
 \end{itemize}
 \end{frame}
 
