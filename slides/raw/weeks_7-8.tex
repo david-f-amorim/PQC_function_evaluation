@@ -66,19 +66,16 @@ Hand over the slides, documentation, code and the poster for the Carnegie Trust.
 \frametitle{Preliminaries}
 
 \begin{itemize}
-\item Consider an \alert{$n$-qubit} register with computational basis states $\ket{j} = \ket{j_0 j_1 ... j_{n-1}}$ representing $n$-bit strings
+\item Consider an \alert{$n$-qubit register} with computational basis states $\ket{j} = \ket{j_0 j_1 ... j_{n-1}}$ representing $n$-bit strings
 \item Let \alert{$p$} of the register qubits be \alert{precision qubits} so that 
-\begin{equation}
+\begin{equation} 
 j = \sum^{n -1}_{k=0} j_k 2^{k-p}
-\end{equation} 
-\item Consider a \alert{phase function} $\Psi$ over the domain $\mathcal{D} = \{ j \}$ and construct an \alert{$M$-fold partition} ($M = 2^m$, $m \leq n \in \mathbb{N}$) into equal sub-domains $\mathcal{D}_u$:
-\begin{equation}
-\mathcal{D} = \bigcup_{u=1}^M \mathcal{D}_u, \; \; \; \mathcal{D}_u \cap \mathcal{D}_v = \emptyset, \;  \; \; |\mathcal{D}_u| = |\mathcal{D}_v|
 \end{equation}
-\item On each sub-domain, approximate $\Psi$ using a \alert{linear function}:
+\item Now consider a \alert{phase function} $\Psi$ over the domain $\mathcal{D} = \{ j \}$ and construct an \alert{$M$-fold partition} sub-domains $\mathcal{D}_u$:
 \begin{equation}
-\Psi(j) = \alpha_u j + \beta_u, \; \; \; j \in \mathcal{D}_u
+\mathcal{D} = \bigcup_{u=1}^M \mathcal{D}_u, \; \; \; \mathcal{D}_u \cap \mathcal{D}_v = \emptyset, 
 \end{equation}
+\item Take \alert{$M = 2^m$} with $m \leq n$ and let the sub-domains be equally sized $(|\mathcal{D}_u| = |\mathcal{D}_v|$)
 \end{itemize}
 \end{frame}
 
@@ -97,25 +94,18 @@ via the linear piecewise approximation
 \end{frame}
 
 \begin{frame}
-\frametitle{General Remarks}
+\frametitle{Initial Remarks}
 \begin{itemize}
-\item The $2^m$ pairs of coefficients $(\alpha_u, \beta_u)$ require $2^m$ independent operators $\hat{O}_u$ to implement
-\item Each operator $\hat{O}_u$ will generally involve $n$ controlled rotations 
-\item The choice of $\hat{O}_u$ will generally involve all $m$ control qubits 
-\item Thus, it seems like a \alert{$\sim \mathcal{O}(2^m n m)$ complexity} is to be expected for this algorithm [NO! A N-CONTROLLED OPERATION HAS A COST HIGHER THAN N!!] => READ PAPERS (BOOKMARKED!): Lemma 7.5  / Cor 7.6 Barenco ' linear approximation: Lemma 7.8 Barenco  ; linear with ancilla ?! Corollary 7.12 
-\item 
-\item While recursion cannot reduce the required number of independent operators it could simplify circuit structure
+\item The $2^m$ pairs of coefficients $(\alpha_u, \beta_u)$ require \alert{$2^m$ independent operators} $\hat{O}_u$ to implement the mapping $\ket{j} \mapsto e^{i (\alpha_u j + \beta_u)} \ket{j}$
+\item Each operator $\hat{O}_u$ will generally involve \alert{controlled rotations} on all \alert{$n$ qubits} in the register, with \alert{$m$} qubits acting as \alert{controls}  
+\item Thus, the expected lower bound for controlled rotations is \alert{$\sim \Omega (2^m n)$}
+\item Note that \alert{$m$-controlled operations} require \alert{$\Theta(m^2)$} CNOT gates [\emph{Barenco 1995}\footnote{\url{https://arxiv.org/pdf/quant-ph/9503016}}, Cor 7.6] or \alert{$\Theta(m)$} CNOT gates when using ancillae [\emph{Barenco 1995}, Cor 7.12]
+\item To avoid this additional factor in the gate count and meet the lower bound \alert{only single-controlled operations} will be employed, leading to a more complex control architecture 
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-
-\frametitle{Phase Encoding within a Sub-domain}
-
-\begin{block}{Aim 1}
-For $j \in \mathcal{D}_u$ construct an \alert{operator $\hat{O}_u$} such that $\ket{j} \mapsto e^{i (\alpha_u j + \beta_u )} \ket{j}$. 
-\end{block}
-
+\frametitle{Constructing $\hat{O}_u$}
 \begin{itemize}
 \item Consider the single-qubit operators 
 \begin{equation}
@@ -126,9 +116,13 @@ e^{i \varphi} & 0 \\ 0 & e^{i \varphi}
 \end{pmatrix}
 \end{equation}
 each acting on the $k$th qubit
+\item Now define \alert{
+\begin{equation}
+\hat{U}^{(k)}_u \equiv \hat{P}^{(k)} (\beta_u /n ) \hat{R}^{(k)} (\alpha_u 2^{k-p})
+\end{equation}}
 \item Then \alert{
 \begin{equation}
-\hat{O}_u \equiv \bigotimes^{n-1}_{k=0} \hat{P}^{(k)} (\beta_u / n) \hat{R}^{(k)} \left( \alpha_u 2^{k-p} \right)
+\hat{O}_u \equiv \bigotimes^{n-1}_{k=0} \hat{U}^{(k)}_u
 \end{equation}}
 transforms 
 \begin{equation}
@@ -138,163 +132,14 @@ transforms
 \end{frame}
 
 \begin{frame}
-\frametitle{Selecting the Subdomain}
+\frametitle{The Control Structure}
 \begin{itemize}
 \item It is straight-forward to construct $\hat{O}_u$ for each of the sub-domains $\mathcal{D}_u$ 
-\item More challenging is \alert{applying the correct $\hat{O}_u$} based on the sub-domain corresponding to each $\ket{j}$
-\end{itemize}
-\begin{block}{Aim 2}
-Construct a \alert{system of controls} such that $\hat{O}_u$ is applied to $\ket{j}$ if and only if $j \in \mathcal{D}_u$
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Sample Case: $M=2$}
-\begin{columns}
-\begin{column}{0.4\textwidth}
-\begin{itemize}
-\item Start with the simplest possible case, a \alert{2-fold} partition ($M=2$): 
-\begin{equation}
-j \in \begin{cases}
-\mathcal{D}_1 & j_0 = 0 \\
-\mathcal{D}_2 & j_0 = 1
-\end{cases}
-\end{equation}
-\item Using an \alert{ancilla qubit}, $\hat{O}_1$ is applied for $j \in \mathcal{D}_1$ and $\hat{O}_2$ for $j \in \mathcal{D}_2$
-\item The ancilla is required since the operation applied to $\ket{j_0}$ is conditional on $\ket{j_0}$ itself 
-\end{itemize}
-\end{column}
-\begin{column}{0.6\textwidth}
-\begin{figure}
-\centering 
-\begin{quantikz}[row sep={0.7cm,between origins}]
-\lstick{$\ket{0}_a$}& \targ{} & \ctrl{1} & \targ{} & \ctrl{1} &  \\
-\lstick{$\ket{j_0}$}& \ctrl{-1} & \gate[3]{O_2} & & \gate[3]{O_1} & \rstick[3]{$\ket{j}$} \\
-\lstick{\vdots}&& &&&   \\
-\lstick{$\ket{j_{n-1}}$}&& &&& 
-\end{quantikz}
-\caption{Circuit diagram for $M=2$}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Generalising the Approach}
-\begin{columns}
-\begin{column}{0.4\textwidth}
-\begin{itemize}
-\item The approach shown on the previous slide requires \alert{$1 \leq  \log_2 M  \leq n $ ancilla qubits}
-\item The number of \alert{controls} required is \alert{$\mathcal{O}(M \log M n)$} as there are $M$ operators, each controlled by all ancillas and each involving $n$ controlled rotations
-\item For $M \sim 2^n$ the gate cost is exponential
-\end{itemize}
-\end{column}
-\begin{column}{0.6\textwidth}
-\begin{figure}
-\centering
-\begin{adjustbox}{width=\textwidth}
-\begin{quantikz}[row sep={0.7cm,between origins}]
-\lstick{$\ket{0}_a$}& \targ{} && \ctrl{2} &  & \ctrl{1} & \targ{} & \ctrl{2}&  & \ctrl{2} &  \\
-\lstick{$\ket{0}_a$}&& \targ{} & \ctrl{0} & \targ{} & \ctrl{1} & \targ{} & \ctrl{0} & \targ{} &\ctrl{1} &  \\
-\lstick{$\ket{j_0}$}& \ctrl{-2} &   & \gate[4]{O_4} &  & \gate[4]{O_3}  && \gate[4]{O_2}& & \gate[4]{O_1} & \rstick[4]{$\ket{j}$}  \\
-\lstick{$\ket{j_1}$}&& \ctrl{-2} & &  &&  && &&  \\
-\lstick{\vdots}&&& &&&  && && \\
-\lstick{$\ket{j_{n-1}}$}&&& &&& && &&
-\end{quantikz}
-\end{adjustbox}
-\caption{Circuit diagram for $M=4$. Note that $j \in \mathcal{D}_u$ if $j_0j_1 =u-1$ (e.g. $j\in \mathcal{D}_3$ if $j_0 j_1 =10$).}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{A Recursive Approach}
-\begin{itemize}
-\item Since $M=2^m$ for some $m \leq n \in \mathbb{N}$ we can view the partition of $\mathcal{D}$ as a recursive process, splitting the domain into halves $m$ times
-\item Associate with each control qubit, $g$, two operators, $\hat{O}^{(g)}_0$ and $\hat{O}^{(g)}_1$ EACH ACTING ON THE REMAINING QUBITS! (CASCADE)
-\item  Is it possible to construct 
-\begin{equation}
-\hat{O}_u = \prod^m_{g=1} \hat{O}^{(g)} ??
-\end{equation} 
-\item DEFINE THE APPROPRIATE O AND U OPERATORS !!!
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{A Recursive Approach}
-\begin{figure}
-\centering
-\begin{adjustbox}{height=0.8\Height}
-\begin{quantikz}[row sep={0.7cm,between origins}, align equals at=3.5]
-\lstick{\vdots}&& &&   \\
-\lstick{$\ket{j_g}$}&   &  & \ctrl{1} &  \\
-\lstick{$\ket{j_{g+1}}$}&  \gate[3]{O^{(g)}_0} & & \gate[3]{O^{(g)\dagger}_0 O^{(g)}_1} &   \\
-\lstick{\vdots}&& &&   \\
-\lstick{$\ket{j_{n-1}}$}&& &&
-\end{quantikz} $\equiv$  \begin{quantikz}[row sep={0.7cm,between origins}, align equals at=3.5]
-\lstick{\vdots}& &  \\
-\lstick{$\ket{j_g}$}     & \ctrl{1} &  \\
-\lstick{$\ket{j_{g+1}}$}  & \gate[3]{O^{(g)}} &   \\
-\lstick{\vdots}& &   \\
-\lstick{$\ket{j_{n-1}}$}& &
-\end{quantikz}
-\end{adjustbox}
-\caption{The controlled operator $\hat{O}^{(g)}$ ($0 \leq g \leq m-1$)}
-\end{figure}
-\begin{figure}
-\centering
-\begin{adjustbox}{height=0.8\Height}
-\begin{quantikz}[row sep={0.7cm,between origins}, align equals at=2.5]
-\lstick{$\ket{j_0}$}&  \gate[3]{U^{(g)}_0}  &  \gate[3]{U^{(g)\dagger}_0 U^{(g)}_1}  &  \\
-\lstick{\vdots}&& &  \\
-\lstick{$\ket{j_{g+1}}$}&  &&   \\
-\lstick{$\ket{j_g}$}&     & \ctrl{-1} &  \\
-\end{quantikz} $\equiv$  \begin{quantikz}[row sep={0.7cm,between origins}, align equals at=2.5]
-\lstick{$\ket{j_0}$}&  \gate[3]{U^{(g)}}   &   \\
-\lstick{\vdots}&&   \\
-\lstick{$\ket{j_{g+1}}$}&  &    \\
-\lstick{$\ket{j_g}$}& \ctrl{-1}    &  \\
-\end{quantikz}
-\end{adjustbox}
-\caption{The controlled operator $\hat{U}^{(g)}$ ($1 \leq g \leq m-1$)}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{A Recursive Approach}
-\begin{figure}
-\centering
-\begin{adjustbox}{width=\textwidth}
-\begin{quantikz}[row sep={0.7cm,between origins}]
-\lstick{$\ket{j_0}$} & \ctrl{1} & &  \ \ldots\ & & \gate[3]{U^{(m-1)}} &  \ \ldots\   & \gate[1]{U^{(1)}} & \gate{U^{(0)}} &   \rstick[4]{controls}  \\
-\lstick{$\ket{j_1}$}&  \gate[7]{O^{(0)}}  &   \ctrl{1} &  \ \ldots\ && &  \ \ldots\ & \ctrl{-1} & & \\
-\lstick{$\vdots$} & &   \gate[6]{O^{(1)}}&  \ \ldots\ & & &  \ \ldots\ & & &  \\
-\lstick{$\ket{j_{m-1}}$} & & &  \ \ldots\ &   \ctrl{1} & \ctrl{-1}  &  \ \ldots\ &  & & \\
-\lstick{$\ket{j_{m}}$} & & & \ \ldots\ & \gate[4]{O^{(m-1)}} \slice{} &  & \ \ldots\ & & & \rstick[4]{targets} \\
-\lstick{$\ket{j_{m+1}}$}& & &  \ \ldots &  & &  \ \ldots\ & & & \\
-\lstick{\vdots}& & &  \ \ldots\ &  &  & \ \ldots\  & & & \\
-\lstick{$\ket{j_{n-1}}$}& & &  \ \ldots\ & & &  \ \ldots\ & & &
-\end{quantikz}
-\end{adjustbox}
-\caption{Cascaded controls: $2m-1$ controlled operations}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{A Recursive Approach}
-\begin{itemize}
-\item Consider 
-\begin{equation}
-\hat{U}^{(k)}_u \equiv \hat{P}^{(k)} (\beta_u /n ) \hat{R}^{(k)} (\alpha_u 2^{k-p})
-\end{equation}
-and define 
-\begin{equation}
-\hat{V}^{(k)}_u =\hat{U}^{(k)}_u \prod_{q=1}^{u-1}  \hat{U}^{(k) \dagger}_q
-\end{equation}
-which is equivalent to a single rotation gate 
-\item Use the notation from Barenco 1995 to denote a single-qubit operation $\hat{V}$ controlled by $m$ qubits $\wedge_m (\hat{V})$
+\item More challenging is \alert{applying the correct $\hat{O}_u$} based on the sub-domain corresponding to each $\ket{j}$, which requires \alert{controlling} on the first \alert{$m$ qubits}
+\item In order to achieve this with only \alert{single-controlled operations} a control structure similar to \emph{Barenco 1995} Lemmas 6.1, 7.1 is chosen   
+\item This involves defining $2^m$ \alert{auxiliary operators $\hat{V}^{(k)}_q$} which give the $\hat{U}^{(k)}_u$ when multiplied in appropriate combinations
+\item Since a product of rotation operators corresponds to a sum of rotation angles, the $\hat{V}^{(k)}_q$ can be constructed by solving the appropriate \alert{linear system} in the $\hat{U}^{(k)}_u$
+\item The following two slides show examples of the control structure for \alert{`target qubits'}, i.e. the $n-m$ qubits that do not act as controls
 \end{itemize}
 \end{frame}
 
@@ -306,17 +151,17 @@ which is equivalent to a single rotation gate
 \lstick{$\ket{j_1}$} & & \ctrl{1} & \targ{} & \ctrl{1} & \targ & & & \\
 \lstick{$\ket{j_k}$} & \gate{V_0} & \gate{V_1} & & \gate{V_2} & & \gate{V_3} & \rstick{target} \\
 \end{quantikz}
-\caption{Control structure for $m=2$ ($M=4$) with $2 \leq k < n$. The number of controlled operations is $2^{m+1}-3=5$.}
+\caption{Control structure for $m=2$ ($M=4$) with $2 \leq k < n$. The number of controlled operations is $2^{m+1}-3=5$}
 \end{figure}
 
 \begin{table}
 \centering 
 \begin{tabular}{c | c | c || c | c | c }
 $(j_0 j_1)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1)$ & Operation & Equiv. $\hat{U}$ \\ \hline 
-(00) & $\hat{V}_0$ & $\hat{U}_0$ & (10) & $\hat{V}_0 \hat{V}_2 \hat{V}_3 $ & $\hat{U}_2$ \\
-(01) & $\hat{V}_0 \hat{V}_1 \hat{V}_2$ & $\hat{U}_1$ & (11) & $\hat{V}_0 \hat{V}_1 \hat{V}_3$ & $\hat{U}_3$ 
+(00) & $\hat{V}_0$ & $\hat{U}_0$ & (10) & $\hat{V}_3 \hat{V}_2 \hat{V}_0 $ & $\hat{U}_2$ \\
+(01) & $\hat{V}_2 \hat{V}_1 \hat{V}_0$ & $\hat{U}_1$ & (11) & $\hat{V}_3 \hat{V}_1 \hat{V}_0$ & $\hat{U}_3$ 
 \end{tabular}
-\caption{Operations applied to $\ket{j_k}$ for various control states ORDER REVERSED!!}
+\caption{Operations applied to $\ket{j_k}$ for various control states}
 \end{table}
 \hspace{0.5cm}
 \end{frame}
@@ -332,31 +177,53 @@ $(j_0 j_1)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1)$ & Operation & Equiv. $\
 \lstick{$\ket{j_k}$} &  \gate{V_0} & \gate{V_1} & & \gate{V_2}& & \gate{V_3}& & \gate{V_4}& & \gate{V_5}&& \gate{V_6}&& \gate{V_7} &  \rstick[1]{target} \\
 \end{quantikz}
 \end{adjustbox}
-\caption{Control structure for $m=3$ ($M=8$) with $3 \leq k < n$. The number of controlled operations is $2^{m+1}-3=13$.}
+\caption{Control structure for $m=3$ ($M=8$) with $3 \leq k < n$. The number of controlled operations is $2^{m+1}-3=13$}
 \end{figure}
 
 \begin{table}
 \centering 
 \begin{tabular}{c | c | c || c | c | c }
 $(j_0 j_1 j_2)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1 j_2)$ & Operation & Equiv. $\hat{U}$ \\ \hline 
-(000) & $\hat{V}_0$ & $\hat{U}_0$ & (100) & $\hat{V}_0 \hat{V}_1 \hat{V}_2 \hat{V}_5 \hat{V}_6$ & $\hat{U}_4$ \\
-(001) & $\hat{V}_0 \hat{V}_4 \hat{V}_7$ & $\hat{U}_1$ & (101) & $\hat{V}_0 \hat{V}_1 \hat{V}_2 \hat{V}_4 \hat{V}_7$ & $\hat{U}_5$ \\
-(010) & $\hat{V}_0 \hat{V}_2 \hat{V}_4 \hat{V}_5$ & $\hat{U}_2 $& (110) & $\hat{V}_0 \hat{V}_1 \hat{V}_3 \hat{V}_4 \hat{V}_6  $ & $\hat{U}_6$ \\
-(011) & $\hat{V}_0 \hat{V}_2 \hat{V}_3 \hat{V}_6 \hat{V}_7 $ & $\hat{U}_3$ & (111) & $\hat{V}_0 \hat{V}_1 \hat{V}_3 \hat{V}_5 \hat{V}_7$ & $\hat{U}_7$
+(000) & $\hat{V}_0$ & $\hat{U}_0$ & (100) & $\hat{V}_6 \hat{V}_5 \hat{V}_2 \hat{V}_1 \hat{V}_0$ & $\hat{U}_4$ \\
+(001) & $\hat{V}_7 \hat{V}_4 \hat{V}_0$ & $\hat{U}_1$ & (101) & $\hat{V}_7 \hat{V}_4 \hat{V}_2 \hat{V}_1 \hat{V}_0$ & $\hat{U}_5$ \\
+(010) & $\hat{V}_5 \hat{V}_4 \hat{V}_2 \hat{V}_0$ & $\hat{U}_2 $& (110) & $\hat{V}_6 \hat{V}_4 \hat{V}_3 \hat{V}_1 \hat{V}_0  $ & $\hat{U}_6$ \\
+(011) & $\hat{V}_7 \hat{V}_6 \hat{V}_3 \hat{V}_2 \hat{V}_0 $ & $\hat{U}_3$ & (111) & $\hat{V}_7 \hat{V}_5 \hat{V}_3 \hat{V}_1 \hat{V}_0$ & $\hat{U}_7$
 \end{tabular}
 \caption{Operations applied to $\ket{j_k}$ for various control states}
 \end{table}
 \end{frame}
 
 \begin{frame}
+\frametitle{The Control Structure}
 \begin{itemize}
-\item The control structure required to apply the appropriate $\hat{U}^{(k)}_u$ to the $k$-th target qubit requires $2^{m+1} -3$ CX gates 
-\item As there are $n-m$ target qubits this brings the CX count to $(n-m) (2^{m+1}-3)$ 
-\item Note that the $\hat{U}^{(k)}_u$ are not directly implemented but rather are defined as the product of $\hat{V}^{(k)}_q$
-\item Since a product of rotation operators corresponds to a sum of rotation angles, this defines a linear system of $2^m$ equations (one for each $\hat{U}^{(k)}_u$) involving $2^m$ variables (the $\hat{V}^{(k)}_q$) and hence the $\hat{V}^{(k)}_q$ can be constructed from the $\hat{U}^{(k)}_u$   
-\item Since an $m$-controlled operation requires $m^2$ (or $m$ with ancillae) CX these will be avoided (using single-controlled operations only!) as will have $2^m$ directly ! 
-\item Now think about how to deal with controls themselves...
+\item The control structure required to apply the appropriate $\hat{U}^{(k)}_u$ to the $k$-th target qubit requires \alert{$2^{m+1} -3$ CNOT gates}  
+\item As there are $n-m$ target qubits this brings the CNOT count due to the targets to \alert{$(n-m) (2^{m+1}-3)$} 
+\item Handling the control structure for the $m$ \alert{`control qubits'} requires slightly more care as the operator to be applied to the $l$-th control qubit is conditional on $\ket{j_l}$ itself 
+\item This problem can be addressed by introducing an \alert{ancilla $\ket{0}_a$} and following the procedure:
+\begin{enumerate}[(a)]
+\item Apply a CNOT gate to the ancilla, controlled by $\ket{j_l}$
+\item Apply the same control structure as for the target qubits, with the ancilla as the target 
+\item Apply a SWAP gate between the ancilla and $\ket{j_l}$ 
+\item Apply a CNOT gate to the ancilla, controlled by $\ket{j_l}$
+\end{enumerate}
+\item The final step clears the ancilla, allowing it to be \alert{re-used for all $m$} controls
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{The Control Structure}
+\begin{itemize}
+\item Thus, encoding the phase on each control qubit requires the same structure as before but with an \alert{additional 5 CNOT} gates per control qubit (3 of are part of the SWAP)
+\item The $m$ control qubits thus require \alert{$m 2^{m+2}$ CNOT} gates in addition to the \alert{$(n-m) (2^{m+1} -3)$ CNOTs} for the targets
+\end{itemize}
+\begin{alertblock}{Overall Complexity}
+The CNOT cost of the algorithm presented here is 
+\begin{equation}
+C(n,m) = 2^{m+1} ( n+m) - 3 (n-m), 
+\end{equation}
+corresponding to the lower bound $\mathcal{O}(n2^m)$ on the complexity
+\end{alertblock}
 \end{frame}
 
 \begin{frame}
@@ -386,9 +253,6 @@ C_\text{Total} (n , n_l, n_c) = \mathcal{O}(n^2 + 2^{n_l} [n + n_l^2 n_c] + n_c^
 \begin{frame}
 \frametitle{Handling the Controls}
 \begin{itemize}
-\item Requires a single ancilla 
-\item To encode the phase on the $l$th control, apply a CX gate to the ancilla, controlled by $\ket{j_l}$; use the same control structure as before but with the ancilla as target ; at the end of the control circuit apply a SWAP between ancilla and $\ket{j_l}$ ; finally apply a CX on the ancilla, controlled by $\ket{j_l}$ to reset the ancilla to zero 
-\item Thus, to encode the phase on each control requires the same control structure as before with an additional 5 CX gate (3 in SWAP)
 \item Thus, the $m$ controls require $m (2^{m+2})$ CX giving the total algorithm a CX cost of 
 \begin{equation}
 (n-m) (2^{m+1} -3) + m 2^{m+2} = 2^{m +1} \left( n + m  \right) - 3 (n-m) = n (2^{m+1} -3) + m (2^{m+1} +3)
