@@ -71,7 +71,7 @@ Hand over the slides, documentation, code and the poster for the Carnegie Trust.
 \begin{equation} 
 j = \sum^{n -1}_{k=0} j_k 2^{k-p}
 \end{equation}
-\item Now consider a \alert{phase function} $\Psi$ over the domain $\mathcal{D} = \{ j \}$ and construct an \alert{$M$-fold partition} sub-domains $\mathcal{D}_u$:
+\item Now consider a \alert{phase function} $\Psi$ over the domain $\mathcal{D} = \{ j \}$ and construct an \alert{$M$-fold partition} into sub-domains $\mathcal{D}_u$:
 \begin{equation}
 \mathcal{D} = \bigcup_{u=1}^M \mathcal{D}_u, \; \; \; \mathcal{D}_u \cap \mathcal{D}_v = \emptyset, 
 \end{equation}
@@ -210,9 +210,8 @@ $(j_0 j_1 j_2)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1 j_2)$ & Operation & E
 \end{itemize}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{The Control Structure}
+\frametitle{Gate Cost}
 \begin{itemize}
 \item Thus, encoding the phase on each control qubit requires the same structure as before but with an \alert{additional 5 CNOT} gates per control qubit (3 of are part of the SWAP)
 \item The $m$ control qubits thus require \alert{$m 2^{m+2}$ CNOT} gates in addition to the \alert{$(n-m) (2^{m+1} -3)$ CNOTs} for the targets
@@ -227,55 +226,29 @@ corresponding to the lower bound $\mathcal{O}(n2^m)$ on the complexity
 \end{frame}
 
 \begin{frame}
-\frametitle{Comparison}
+\frametitle{Additional Remarks}
 \begin{itemize}
-\item The current implementation uses $n_l \equiv m$ label qubits (with $2^{n_l} =M$) as well as $n_c$ coefficient qubits  
-\item The label operation (as described in H\"aner 2018), which initialises the label register into the state $\ket{u}$ if $j \in \mathcal{D}_u$ has a CX cost of 
-\begin{equation}
-C_\text{Label}(n, n_l) = \mathcal{O}(2^{n_l} n)
-\end{equation}
-\item The addition and multiplication operations, carried out via QFTs and requiring $n_c$ qubits to store coefficient values, have  gate costs of 
-\begin{equation}
-C_\text{Add}(n, n_c) = C_\text{Mult}(n,n_c) = \mathcal{O}( n^2 + n_c^2)
-\end{equation}
-\item Loading the function coefficients into the register further comes with a cost of 
-\begin{equation}
-C_\text{Load}(n_c,n_l) = \mathcal{O}(n_c 2^{n_l} n_l^2)
-\end{equation}
-with the $n_l^2$ term originating from $n_l$-controlled X gates
-\item Thus, in total the LPF gate cost is 
-\begin{equation}
-C_\text{Total} (n , n_l, n_c) = \mathcal{O}(n^2 + 2^{n_l} [n + n_l^2 n_c] + n_c^2)
-\end{equation}
+\item Generally, when applying a controlled phase gate, the resulting phase shift cannot be unambiguously attributed to either the control or the target 
+\item Here, this \alert{does not pose an issue} as only the overall phase of the $n$-qubit register matters 
+\item \emph{Barenco 1995} \alert{omits the explicit construction} of the control structure for general $m$, only pointing towards the generalisation of the cases $m=2,3$ shown here 
+\item Circuit structure may be \alert{simplified by using SWAP gates} and the ancilla for all $n$ qubits, at the cost of incurring $6(n-m)$ additional CNOT gates    
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Handling the Controls}
+\frametitle{Comparison with the Previous Approach}
 \begin{itemize}
-\item Thus, the $m$ controls require $m (2^{m+2})$ CX giving the total algorithm a CX cost of 
+\item The phase encoding in \emph{Hayes 2023}\footnote{\url{https://arxiv.org/pdf/2306.11073}} uses $n_l$ \alert{label qubits} (with $2^{n_l} =M$) as well as $n_c$ \alert{coefficient qubits} 
+\item The overall gate cost has contributions from the label operation ($\mathcal{O}(2^{n_l}n)$), the addition and multiplication operations ($\mathcal{O}(n^2 + n_c^2)$), as well as loading the coefficients ($\mathcal{O}(n_c 2^{n_l} n_l^2)$):
 \begin{equation}
-(n-m) (2^{m+1} -3) + m 2^{m+2} = 2^{m +1} \left( n + m  \right) - 3 (n-m) = n (2^{m+1} -3) + m (2^{m+1} +3)
+C_\text{Hayes}(n, n_c, n_l) = \mathcal{O}(n^2 + 2^{n_l} [n + n_l^2 n_c] + n_c^2)
 \end{equation}
-\item Hence, for $n \ll m$ the CX gate cost is $\mathcal{O}(n 2^m)$
-\item This is a quadratic speed-up in $n$ as well as a significant reduction in the number of ancillae 
-\item Note that cascading the above to all control qubits results in situations where a qubit with non-zero phase acts as a control for a rotation, with the phases of the target and control ambiguously distributed; however, for the present phase encoding only the product of all qubit phase factors is relevant so that this is not an issue  
+\begin{alertblock}{Complexity Comparison}
+The new approach results in a \alert{quadratic complexity reduction} in $n$, from $\mathcal{O}(n^2)$ to $\mathcal{O}(n)$. The $\mathcal{O}(Mn)$ term remains while the number of ancillae is reduced from $n_c + n_l$ to 1 
+\end{alertblock}
 \end{itemize}
 
 \end{frame}
-
-\begin{frame}
-\frametitle{Comments Sarah}
-For the other problem, yes this is exactly what I had in mind, this is the right idea. A couple of suggestions:
-\begin{itemize}
-\item I think that you can get rid of the ancillae entirely, and just condition directly on the first few (log M) qubits.
-\item I agree that you should be able to simplify a bit more by thinking about applying the operators recursively.
-\item Sadly it will always scale exponentially if we take $M \sim O(2^n)$. It would be helpful to consider breaking the circuit (conceptually, not literally...) into m = log M qubits (which will be the controls) and n-m remaining qubits (the targets). If m $\ll$ n, how does the complexity scale with m and n?
-\item Finally, how does the complexity of applying the phase in this way compare to the previous method of calculating the phase in an ancilla register, applying the phase, and then uncomputing the result in the ancilla.
-\end{itemize}
-
-\end{frame}
-
 
 
 \section{Handover}
