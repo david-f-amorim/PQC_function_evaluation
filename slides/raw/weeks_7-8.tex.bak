@@ -283,6 +283,83 @@ j \in \begin{cases}
 \end{frame}
 
 \begin{frame}
+\frametitle{A Recursive Approach}
+\begin{itemize}
+\item Consider 
+\begin{equation}
+\hat{U}^{(k)}_u \equiv \hat{P}^{(k)} (\beta_u /n ) \hat{R}^{(k)} (\alpha_u 2^{k-p})
+\end{equation}
+and define 
+\begin{equation}
+\hat{V}^{(k)}_u =\hat{U}^{(k)}_u \prod_{q=1}^{u-1}  \hat{U}^{(k) \dagger}_q
+\end{equation}
+which is equivalent to a single rotation gate 
+\item Use the notation from Barenco 1995 to denote a single-qubit operation $\hat{V}$ controlled by $m$ qubits $\wedge_m (\hat{V})$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Case $m=2$ ($M=4$)}
+\begin{figure}
+\begin{quantikz}[row sep={0.7cm,between origins}]
+\lstick{$\ket{j_0}$} & & & \ctrl{1} &  & \ctrl{1} & \ctrl{2} & \rstick[2]{controls}  \\
+\lstick{$\ket{j_1}$} & & \ctrl{1} & \targ{} & \ctrl{1} & \targ & & & \\
+\lstick{$\ket{j_k}$} & \gate{V_0} & \gate{V_1} & & \gate{V_2} & & \gate{V_3} & \rstick{target} \\
+\end{quantikz}
+\caption{Control structure for $m=2$ ($M=4$) with $2 \leq k < n$. The number of controlled operations is $2^{m+1}-3=5$.}
+\end{figure}
+
+\begin{table}
+\centering 
+\begin{tabular}{c | c | c || c | c | c }
+$(j_0 j_1)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1)$ & Operation & Equiv. $\hat{U}$ \\ \hline 
+(00) & $\hat{V}_0$ & $\hat{U}_0$ & (10) & $\hat{V}_0 \hat{V}_2 \hat{V}_3 $ & $\hat{U}_2$ \\
+(01) & $\hat{V}_0 \hat{V}_1 \hat{V}_2$ & $\hat{U}_1$ & (11) & $\hat{V}_0 \hat{V}_1 \hat{V}_3$ & $\hat{U}_3$ 
+\end{tabular}
+\caption{Operations applied to $\ket{j_k}$ for various control states ORDER REVERSED!!}
+\end{table}
+\hspace{0.5cm}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Case $m=3$ ($M=8$)}
+\begin{figure}
+\begin{adjustbox}{width=\textwidth}
+\begin{quantikz}[row sep={0.7cm,between origins}]
+\lstick{$\ket{j_0}$} & &  \ctrl{3} & \ctrl{1} & & \ctrl{1} & & & & \ctrl{2} & & & & \ctrl{2} & &   \rstick[3]{controls} \\
+\lstick{$\ket{j_1}$} &  & &\targ{} & \ctrl{2} & \targ{} & \ctrl{2}& \ctrl{1}&&&& \ctrl{1}&&  & &  \\
+\lstick{$\ket{j_2}$} &  & & &&&& \targ{}& \ctrl{1}& \targ{}& \ctrl{1}& \targ{}& \ctrl{1} & \targ{} & \ctrl{1} &  \\
+\lstick{$\ket{j_k}$} &  \gate{V_0} & \gate{V_1} & & \gate{V_2}& & \gate{V_3}& & \gate{V_4}& & \gate{V_5}&& \gate{V_6}&& \gate{V_7} &  \rstick[1]{target} \\
+\end{quantikz}
+\end{adjustbox}
+\caption{Control structure for $m=3$ ($M=8$) with $3 \leq k < n$. The number of controlled operations is $2^{m+1}-3=13$.}
+\end{figure}
+
+\begin{table}
+\centering 
+\begin{tabular}{c | c | c || c | c | c }
+$(j_0 j_1 j_2)$ & Operation & Equiv. $\hat{U}$ & $(j_0 j_1 j_2)$ & Operation & Equiv. $\hat{U}$ \\ \hline 
+(000) & $\hat{V}_0$ & $\hat{U}_0$ & (100) & $\hat{V}_0 \hat{V}_1 \hat{V}_2 \hat{V}_5 \hat{V}_6$ & $\hat{U}_4$ \\
+(001) & $\hat{V}_0 \hat{V}_4 \hat{V}_7$ & $\hat{U}_1$ & (101) & $\hat{V}_0 \hat{V}_1 \hat{V}_2 \hat{V}_4 \hat{V}_7$ & $\hat{U}_5$ \\
+(010) & $\hat{V}_0 \hat{V}_2 \hat{V}_4 \hat{V}_5$ & $\hat{U}_2 $& (110) & $\hat{V}_0 \hat{V}_1 \hat{V}_3 \hat{V}_4 \hat{V}_6  $ & $\hat{U}_6$ \\
+(011) & $\hat{V}_0 \hat{V}_2 \hat{V}_3 \hat{V}_6 \hat{V}_7 $ & $\hat{U}_3$ & (111) & $\hat{V}_0 \hat{V}_1 \hat{V}_3 \hat{V}_5 \hat{V}_7$ & $\hat{U}_7$
+\end{tabular}
+\caption{Operations applied to $\ket{j_k}$ for various control states}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item The control structure required to apply the appropriate $\hat{U}^{(k)}_u$ to the $k$-th target qubit requires $2^{m+1} -3$ CX gates 
+\item As there are $n-m$ target qubits this brings the CX count to $(n-m) (2^{m+1}-3)$ 
+\item Note that the $\hat{U}^{(k)}_u$ are not directly implemented but rather are defined as the product of $\hat{V}^{(k)}_q$
+\item Since a product of rotation operators corresponds to a sum of rotation angles, this defines a linear system of $2^m$ equations (one for each $\hat{U}^{(k)}_u$) involving $2^m$ variables (the $\hat{V}^{(k)}_q$) and hence the $\hat{V}^{(k)}_q$ can be constructed from the $\hat{U}^{(k)}_u$   
+\item Since an $m$-controlled operation requires $m^2$ (or $m$ with ancillae) CX these will be avoided (using single-controlled operations only!) as will have $2^m$ directly ! 
+\item Now think about how to deal with controls themselves...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Comparison}
 \begin{itemize}
 \item The current implementation uses $n_l \equiv m$ label qubits (with $2^{n_l} =M$) as well as $n_c$ coefficient qubits  
@@ -292,6 +369,23 @@ C_\text{Label}(n, n_l) = 2 n_l (n_l -1) + 2^{n_l +1 } (6 n + n_l +1)
 \end{equation}
 \item The label gate architecture is proposed in H\"aner 2018 and consists of an incrementing circuit and integer comparator circuits...
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Handling the Controls}
+\begin{itemize}
+\item Requires a single ancilla 
+\item To encode the phase on the $l$th control, apply a CX gate to the ancilla, controlled by $\ket{j_l}$; use the same control structure as before but with the ancilla as target ; at the end of the control circuit apply a SWAP between ancilla and $\ket{j_l}$ ; finally apply a CX on the ancilla, controlled by $\ket{j_l}$ to reset the ancilla to zero 
+\item Thus, to encode the phase on each control requires the same control structure as before with an additional 5 CX gate (3 in SWAP)
+\item Thus, the $m$ controls require $m (2^{m+2})$ CX giving the total algorithm a CX cost of 
+\begin{equation}
+(n-m) (2^{m+1} -3) + m 2^{m+2} = 2^{m +1} \left( n + m  \right) - 3 (n-m) = n (2^{m+1} -3) + m (2^{m+1} +3)
+\end{equation}
+\item Hence, for $n \ll m$ the CX gate cost is $\mathcal{O}(n 2^m)$
+\item This is a quadratic speed-up in $n$ as well as a significant reduction in the number of ancillae 
+\item Note that cascading the above
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}
@@ -324,7 +418,7 @@ The code, documentation, slides, and poster are all available on GitHub:
 \begin{itemize}
 \item The source code is found in the directory \alert{\texttt{pqcprep}} 
 \item The slides and poster are found in the directory \alert{\texttt{slides}}
-\item The documentation is hosted externally  \href{https://david-f-amorim.github.io/PQC_function_evaluation/pqcprep.html}{\textcolor{purple}{here}}, which is linked on GitHub
+\item The documentation is hosted externally  \href{https://david-f-amorim.github.io/PQC_function_evaluation/pqcprep.html}{\textcolor{purple}{here}}, which is also linked on GitHub
 \end{itemize}
 
 \end{frame}
