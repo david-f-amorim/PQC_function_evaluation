@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  19 AUG 2024 11:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.9.24)  19 AUG 2024 11:43
 entering extended mode
 **./weeks_7-8.tex
 (weeks_7-8.tex
@@ -1371,7 +1371,7 @@ Overfull \vbox (12.00864pt too high) detected at line 349
 ] [18
 
 ]
-Overfull \hbox (61.28249pt too wide) detected at line 389
+Overfull \hbox (61.28249pt too wide) detected at line 401
 \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 n \OMS/cmsy/m/n/10.95   \OML/cmm/m/it/1
 0.95 m\OT1/cmr/m/n/10.95 )(2[] \OMS/cmsy/m/n/10.95   \OT1/cmr/m/n/10.95 3) + \O
 ML/cmm/m/it/10.95 m\OT1/cmr/m/n/10.95 2[] = 2[] [] \OMS/cmsy/m/n/10.95   \OT1/c
@@ -1382,7 +1382,7 @@ m/n/10.95   \OT1/cmr/m/n/10.95 3) + \OML/cmm/m/it/10.95 m\OT1/cmr/m/n/10.95 (2[
  []
 
 
-Overfull \vbox (50.0587pt too high) detected at line 389
+Overfull \vbox (50.0587pt too high) detected at line 401
  []
 
 [19
@@ -1434,7 +1434,7 @@ ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/david/AppData/Local/Programs/M
 iKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/david/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/david/AppData
 /Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on weeks_7-8.pdf (22 pages, 365499 bytes).
+Output written on weeks_7-8.pdf (22 pages, 366259 bytes).
 PDF statistics:
  779 PDF objects out of 1000 (max. 8388607)
  47 named destinations out of 1000 (max. 500000)
